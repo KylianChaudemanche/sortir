@@ -1,0 +1,175 @@
+package fr.eni.sortir.entities;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+@Entity
+@Table(name="SORTIES")
+public class Sortie implements Serializable {
+	@Id
+	@GeneratedValue
+	@Column(name="no_sortie")
+	private Integer noSortie;
+	private String nom;
+	@Column(name="datedebut")
+	@Temporal(TemporalType.DATE)
+	private Date dateDebut;
+	private Integer duree;
+	@Column(name="datecloture")
+	@Temporal(TemporalType.DATE)
+	private Date dateCloture;
+	@Column(name="nbinscriptionsmax")
+	private Integer nbInscriptionsMax;
+	@Column(name="descriptioninfos")
+	private String descriptionInfos;
+	@Column(name="etatsortie")
+	private Integer etatSortie;
+	@Column(name="urlPhoto")
+	private String urlPhoto;
+	@ManyToOne
+    @JoinColumn(name="etats_no_etat")
+	private Etat etat;
+	@ManyToOne
+    @JoinColumn(name="lieux_no_lieu")
+	private Lieu lieu;
+	@OneToMany(mappedBy = "primaryKey.sortie")
+	private Collection<Inscription> inscriptions = new ArrayList<>();
+	
+	public Sortie() {
+		super();
+	}
+
+	public Sortie(String nom, Date dateDebut, Integer duree, Date dateCloture,
+			Integer nbInscriptionsMax, String descriptionInfos, Integer etatSortie, String urlPhoto, Etat etat,
+			Lieu lieu, Collection<Inscription> inscriptions) {
+		super();
+		this.nom = nom;
+		this.dateDebut = dateDebut;
+		this.duree = duree;
+		this.dateCloture = dateCloture;
+		this.nbInscriptionsMax = nbInscriptionsMax;
+		this.descriptionInfos = descriptionInfos;
+		this.etatSortie = etatSortie;
+		this.urlPhoto = urlPhoto;
+		this.etat = etat;
+		this.lieu = lieu;
+		this.inscriptions = inscriptions;
+	}
+
+	public Integer getNoSortie() {
+		return noSortie;
+	}
+
+	public void setNoSortie(Integer noSortie) {
+		this.noSortie = noSortie;
+	}
+
+	public String getNom() {
+		return nom;
+	}
+
+	public void setNom(String nom) {
+		this.nom = nom;
+	}
+
+	public Date getDateDebut() {
+		return dateDebut;
+	}
+
+	public void setDateDebut(Date dateDebut) {
+		this.dateDebut = dateDebut;
+	}
+
+	public Integer getDuree() {
+		return duree;
+	}
+
+	public void setDuree(Integer duree) {
+		this.duree = duree;
+	}
+
+	public Date getDateCloture() {
+		return dateCloture;
+	}
+
+	public void setDateCloture(Date dateCloture) {
+		this.dateCloture = dateCloture;
+	}
+
+	public Integer getNbInscriptionsMax() {
+		return nbInscriptionsMax;
+	}
+
+	public void setNbInscriptionsMax(Integer nbInscriptionsMax) {
+		this.nbInscriptionsMax = nbInscriptionsMax;
+	}
+
+	public String getDescriptionInfos() {
+		return descriptionInfos;
+	}
+
+	public void setDescriptionInfos(String descriptionInfos) {
+		this.descriptionInfos = descriptionInfos;
+	}
+
+	public Integer getEtatSortie() {
+		return etatSortie;
+	}
+
+	public void setEtatSortie(Integer etatSortie) {
+		this.etatSortie = etatSortie;
+	}
+
+	public String getUrlPhoto() {
+		return urlPhoto;
+	}
+
+	public void setUrlPhoto(String urlPhoto) {
+		this.urlPhoto = urlPhoto;
+	}
+
+	public Etat getEtat() {
+		return etat;
+	}
+
+	public void setEtat(Etat etat) {
+		this.etat = etat;
+	}
+
+	public Lieu getLieu() {
+		return lieu;
+	}
+
+	public void setLieu(Lieu lieu) {
+		this.lieu = lieu;
+	}
+
+	public Collection<Inscription> getInscriptions() {
+		return inscriptions;
+	}
+
+	public void setInscriptions(Collection<Inscription> inscriptions) {
+		this.inscriptions = inscriptions;
+	}
+	
+	public void addInscription(Inscription inscription) {
+		this.inscriptions.add(inscription);
+	}
+	
+	public void removeInscription(Inscription inscription) {
+		this.inscriptions.remove(inscription);
+	}
+}
