@@ -13,7 +13,6 @@ public class Etats implements Serializable {
 	@Id
 	@Column(name="no_etat")
 	private Integer noEtat;
-
 	private String libelle;
 	
 	public Etats() {
