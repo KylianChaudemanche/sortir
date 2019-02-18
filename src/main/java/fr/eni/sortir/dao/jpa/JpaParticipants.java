@@ -81,12 +81,12 @@ public class JpaParticipants extends JpaDao implements ParticipantsDao {
 
 		try {
 			
-			Participants participant = em.find(Participants.class, noParticipants);
+			Participants participants = em.find(Participants.class, noParticipants);
 			
-			if (participant != null) {
+			if (participants != null) {
 				transaction.begin();
 				
-				em.remove(participant);
+				em.remove(participants);
 
 				transaction.commit();
 				
