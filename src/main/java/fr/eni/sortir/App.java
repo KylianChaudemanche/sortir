@@ -4,6 +4,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
+import fr.eni.sortir.dao.DaoFactory;
 import fr.eni.sortir.entities.Etats;
 
 /**
@@ -22,5 +23,6 @@ public class App
     	em.persist(etats);
     	em.getTransaction().commit();
     	em.close();
+
     }
 }

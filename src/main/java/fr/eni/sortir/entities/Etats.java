@@ -1,37 +1,36 @@
 package fr.eni.sortir.entities;
 
+import java.io.Serializable;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
 @Table(name="ETATS")
-public class Etats {
+public class Etats implements Serializable {
 	@Id
-	Integer no_etat;
-	String libelle;
+	@Column(name="no_etat")
+	private Integer noEtat;
+	private String libelle;
 	
 	public Etats() {
 		super();
 	}
-	
-	public Etats(Integer no_etat, String libelle) {
+
+	public Etats(Integer noEtat, String libelle) {
 		super();
-		this.no_etat = no_etat;
-		this.libelle = libelle;
-	}
-	
-	public Etats(String libelle) {
-		super();
+		this.noEtat = noEtat;
 		this.libelle = libelle;
 	}
 
-	public Integer getNo_etat() {
-		return no_etat;
+	public Integer getNoEtat() {
+		return noEtat;
 	}
 
-	public void setNo_etat(Integer no_etat) {
-		this.no_etat = no_etat;
+	public void setNoEtat(Integer noEtat) {
+		this.noEtat = noEtat;
 	}
 
 	public String getLibelle() {
@@ -41,6 +40,4 @@ public class Etats {
 	public void setLibelle(String libelle) {
 		this.libelle = libelle;
 	}
-	
-	
 }
