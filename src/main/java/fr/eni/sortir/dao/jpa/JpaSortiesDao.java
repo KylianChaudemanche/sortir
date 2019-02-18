@@ -81,7 +81,7 @@ public class JpaSortiesDao extends JpaDao implements SortiesDao{
 
 		try {
 			
-			Sorties sorties = em.find(Etats.class, noSorties);
+			Sorties sorties = em.find(Sorties.class, noSorties);
 			
 			if (sorties != null) {
 				transaction.begin();
