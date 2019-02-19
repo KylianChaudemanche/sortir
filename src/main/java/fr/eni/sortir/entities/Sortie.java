@@ -35,8 +35,6 @@ public class Sortie implements Serializable {
 	private Integer nbInscriptionsMax;
 	@Column(name="descriptioninfos")
 	private String descriptionInfos;
-	@Column(name="etatsortie")
-	private Integer etatSortie;
 	@Column(name="urlPhoto")
 	private String urlPhoto;
 	@ManyToOne
@@ -47,14 +45,17 @@ public class Sortie implements Serializable {
 	private Lieu lieu;
 	@OneToMany(mappedBy = "primaryKey.sortie")
 	private Collection<Inscription> inscriptions = new ArrayList<>();
+	@ManyToOne
+	@JoinColumn(name="organisateur")
+	private Participant organisateur;
 	
 	public Sortie() {
 		super();
 	}
 
 	public Sortie(String nom, Date dateDebut, Integer duree, Date dateCloture,
-			Integer nbInscriptionsMax, String descriptionInfos, Integer etatSortie, String urlPhoto, Etat etat,
-			Lieu lieu, Collection<Inscription> inscriptions) {
+			Integer nbInscriptionsMax, String descriptionInfos, String urlPhoto, Etat etat,
+			Lieu lieu, Collection<Inscription> inscriptions, Participant organisateur) {
 		super();
 		this.nom = nom;
 		this.dateDebut = dateDebut;
@@ -62,11 +63,11 @@ public class Sortie implements Serializable {
 		this.dateCloture = dateCloture;
 		this.nbInscriptionsMax = nbInscriptionsMax;
 		this.descriptionInfos = descriptionInfos;
-		this.etatSortie = etatSortie;
 		this.urlPhoto = urlPhoto;
 		this.etat = etat;
 		this.lieu = lieu;
 		this.inscriptions = inscriptions;
+		this.organisateur = organisateur;
 	}
 
 	public Integer getNoSortie() {
@@ -125,14 +126,6 @@ public class Sortie implements Serializable {
 		this.descriptionInfos = descriptionInfos;
 	}
 
-	public Integer getEtatSortie() {
-		return etatSortie;
-	}
-
-	public void setEtatSortie(Integer etatSortie) {
-		this.etatSortie = etatSortie;
-	}
-
 	public String getUrlPhoto() {
 		return urlPhoto;
 	}
@@ -171,5 +164,13 @@ public class Sortie implements Serializable {
 	
 	public void removeInscription(Inscription inscription) {
 		this.inscriptions.remove(inscription);
+	}
+
+	public Participant getOrganisateur() {
+		return organisateur;
+	}
+
+	public void setOrganisateur(Participant organisateur) {
+		this.organisateur = organisateur;
 	}
 }
