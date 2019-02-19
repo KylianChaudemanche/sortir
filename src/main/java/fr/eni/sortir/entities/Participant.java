@@ -3,6 +3,8 @@ package fr.eni.sortir.entities;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
+import java.util.Objects;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -14,40 +16,41 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 @Entity
-@Table(name="PARTICIPANTS")
+@Table(name = "PARTICIPANTS")
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Participant implements Serializable {
 	@Id
 	@GeneratedValue
-	@Column(name="no_participant")
+	@Column(name = "no_participant")
 	private Integer noParticipant;
 	private String pseudo;
 	private String nom;
 	private String prenom;
 	private String telephone;
 	private String mail;
-	@Column(name="mot_de_passe")
+	@Column(name = "mot_de_passe")
 	private String motDePasse;
 	private Boolean administrateur;
 	private Boolean actif;
-	@OneToMany(
-	        mappedBy = "participant",
-	        cascade = CascadeType.ALL,
-	        orphanRemoval = true
-	    )
+	@OneToMany(mappedBy = "participant", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Collection<Inscription> inscriptions = new ArrayList<>();
 	@ManyToOne
-    @JoinColumn(name="sites_no_site")
+	@JoinColumn(name = "sites_no_site")
 	private Site site;
 	@OneToMany(mappedBy = "organisateur")
 	private Collection<Sortie> listSortie = new ArrayList<>();
-	
+
 	public Participant() {
 		super();
 	}
 
-	public Participant(String pseudo, String nom, String prenom, String telephone, String mail,
-			String motDePasse, Boolean administrateur, Boolean actif, Collection<Inscription> inscriptions, Site site, Collection<Sortie> listSortie) {
+	public Participant(String pseudo, String nom, String prenom, String telephone, String mail, String motDePasse,
+			Boolean administrateur, Boolean actif, Collection<Inscription> inscriptions, Site site,
+			Collection<Sortie> listSortie) {
 		super();
 		this.pseudo = pseudo;
 		this.nom = nom;
@@ -141,11 +144,11 @@ public class Participant implements Serializable {
 	public void setInscriptions(Collection<Inscription> inscriptions) {
 		this.inscriptions = inscriptions;
 	}
-	
+
 	public void addInscription(Inscription inscription) {
 		this.inscriptions.add(inscription);
 	}
-	
+
 	public void removeInscription(Inscription inscription) {
 		this.inscriptions.remove(inscription);
 	}
@@ -157,7 +160,7 @@ public class Participant implements Serializable {
 	public void setSite(Site site) {
 		this.site = site;
 	}
-	
+
 	public Collection<Sortie> getListSortie() {
 		return listSortie;
 	}
@@ -165,13 +168,46 @@ public class Participant implements Serializable {
 	public void setListSortie(Collection<Sortie> listSortie) {
 		this.listSortie = listSortie;
 	}
-	
+
 	public void addSortie(Sortie sortie) {
-        Inscription inscription = new Inscription(this, sortie);
-        inscriptions.add(inscription);
-        sortie.getInscriptions().add(inscription);
-    }
-	
+		Inscription inscription = new Inscription(this, sortie);
+		inscriptions.add(inscription);
+		sortie.getInscriptions().add(inscription);
+	}
+
+	public void removeSortie(Sortie sortie) {
+		for (Iterator<Inscription> iterator = inscriptions.iterator(); iterator.hasNext();) {
+			Inscription inscription = iterator.next();
+
+			if (inscription.getParticipant().equals(this) && inscription.getSortie().equals(sortie)) {
+				iterator.remove();
+				inscription.getParticipant().getInscriptions().remove(inscription);
+				inscription.setParticipant(null);
+				inscription.setSortie(null);
+			}
+		}
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+
+		if (o == null || getClass() != o.getClass())
+			return false;
+
+		Participant that = (Participant) o;
+		return Objects.equals(pseudo, that.pseudo) && Objects.equals(nom, that.nom)
+				&& Objects.equals(prenom, that.prenom) && Objects.equals(telephone, that.telephone)
+				&& Objects.equals(mail, that.mail) && Objects.equals(motDePasse, that.motDePasse)
+				&& Objects.equals(administrateur, that.administrateur) && Objects.equals(actif, that.actif);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(pseudo, nom, prenom, telephone, mail, motDePasse, administrateur, actif);
+	}
+
 	@Override
 	public String toString() {
 		return "Participant [noParticipant=" + noParticipant + ", pseudo=" + pseudo + ", nom=" + nom + ", prenom="

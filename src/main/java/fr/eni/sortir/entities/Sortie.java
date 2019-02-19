@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.Objects;
 
 import javax.persistence.CascadeType;
@@ -18,8 +19,12 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 @Entity
 @Table(name = "SORTIES")
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Sortie implements Serializable {
 	@Id
 	@GeneratedValue
@@ -174,6 +179,25 @@ public class Sortie implements Serializable {
 
 	public void removeInscription(Inscription inscription) {
 		this.inscriptions.remove(inscription);
+	}
+	
+	public void addPartcipant(Participant participant) {
+		Inscription inscription = new Inscription(participant, this);
+		inscriptions.add(inscription);
+		participant.getInscriptions().add(inscription);
+	}
+	
+	public void removeParticipant(Participant participant) {
+		for (Iterator<Inscription> iterator = inscriptions.iterator(); iterator.hasNext();) {
+			Inscription inscription = iterator.next();
+
+			if (inscription.getParticipant().equals(participant) && inscription.getSortie().equals(this)) {
+				iterator.remove();
+				inscription.getSortie().getInscriptions().remove(inscription);
+				inscription.setParticipant(null);
+				inscription.setSortie(null);
+			}
+		}
 	}
 
 	@Override
