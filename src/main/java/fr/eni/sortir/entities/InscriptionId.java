@@ -48,4 +48,10 @@ public class InscriptionId implements Serializable {
     public int hashCode() {
         return Objects.hash(noParticipant, noSortie);
     }
+
+	@Override
+	public String toString() {
+		return "InscriptionId [participant=" + noParticipant + ", sortie=" + noSortie + "]";
+	}
+	
 }

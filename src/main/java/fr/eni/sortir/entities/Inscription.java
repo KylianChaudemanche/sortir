@@ -68,7 +68,7 @@ public class Inscription {
 	public void setDateInscription(Date dateInscription) {
 		this.dateInscription = dateInscription;
 	}
-    
+
 	@Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -85,4 +85,9 @@ public class Inscription {
     public int hashCode() {
         return Objects.hash(participant, sortie);
     }
+
+	@Override
+	public String toString() {
+		return "Inscription [primaryKey=" + id + ", dateInscription=" + dateInscription + "]";
+	}
 }

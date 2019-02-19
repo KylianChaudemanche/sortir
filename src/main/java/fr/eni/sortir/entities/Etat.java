@@ -62,4 +62,9 @@ public class Etat implements Serializable {
 	public void setListSortie(Collection<Sortie> listSortie) {
 		this.listSortie = listSortie;
 	}
+
+	@Override
+	public String toString() {
+		return "Etat [noEtat=" + noEtat + ", libelle=" + libelle + ", listSortie=" + listSortie + "]";
+	}
 }

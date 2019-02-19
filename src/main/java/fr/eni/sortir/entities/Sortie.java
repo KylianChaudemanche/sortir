@@ -151,6 +151,14 @@ public class Sortie implements Serializable {
 	public void setLieu(Lieu lieu) {
 		this.lieu = lieu;
 	}
+	
+	public Participant getOrganisateur() {
+		return organisateur;
+	}
+
+	public void setOrganisateur(Participant organisateur) {
+		this.organisateur = organisateur;
+	}
 
 	public Collection<Inscription> getInscriptions() {
 		return inscriptions;
@@ -166,14 +174,6 @@ public class Sortie implements Serializable {
 
 	public void removeInscription(Inscription inscription) {
 		this.inscriptions.remove(inscription);
-	}
-
-	public Participant getOrganisateur() {
-		return organisateur;
-	}
-
-	public void setOrganisateur(Participant organisateur) {
-		this.organisateur = organisateur;
 	}
 
 	@Override
@@ -193,5 +193,13 @@ public class Sortie implements Serializable {
 	@Override
 	public int hashCode() {
 		return Objects.hash(nom, dateDebut, duree, dateCloture, nbInscriptionsMax, descriptionInfos, urlPhoto);
+	}
+	
+	@Override
+	public String toString() {
+		return "Sortie [noSortie=" + noSortie + ", nom=" + nom + ", dateDebut=" + dateDebut + ", duree=" + duree
+				+ ", dateCloture=" + dateCloture + ", nbInscriptionsMax=" + nbInscriptionsMax + ", descriptionInfos="
+				+ descriptionInfos + ", urlPhoto=" + urlPhoto + ", etat=" + etat + ", lieu=" + lieu + ", inscriptions="
+				+ inscriptions + ", organisateur=" + organisateur + "]";
 	}
 }

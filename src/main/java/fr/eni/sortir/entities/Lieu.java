@@ -102,4 +102,11 @@ public class Lieu implements Serializable {
 	public void setListSortie(Collection<Sortie> listSortie) {
 		this.listSortie = listSortie;
 	}
+
+	@Override
+	public String toString() {
+		return "Lieu [noLieu=" + noLieu + ", nomLieu=" + nomLieu + ", adresse=" + adresse + ", latitude=" + latitude
+				+ ", longitude=" + longitude + ", ville=" + ville + "]";
+	}
+	
 }

@@ -67,4 +67,10 @@ public class Ville implements Serializable {
 	public void setListLieu(Collection<Lieu> listLieu) {
 		this.listLieu = listLieu;
 	}
+
+	@Override
+	public String toString() {
+		return "Ville [noVille=" + noVille + ", nomVille=" + nomVille + ", codePostal=" + codePostal + "]";
+	}
+	
 }
