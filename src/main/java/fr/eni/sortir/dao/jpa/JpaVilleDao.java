@@ -12,7 +12,7 @@ import fr.eni.sortir.entities.Ville;
 
 public class JpaVilleDao extends JpaDao implements VilleDao {
 
-	protected JpaVilleDao(EntityManagerFactory emf) {
+	public JpaVilleDao(EntityManagerFactory emf) {
 		super(emf);
 		// TODO Auto-generated constructor stub
 	}

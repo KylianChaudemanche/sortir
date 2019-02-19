@@ -12,7 +12,7 @@ import fr.eni.sortir.entities.Lieu;
 
 public class JpaLieuDao extends JpaDao implements LieuDao{
 	
-	protected JpaLieuDao(EntityManagerFactory emf) {
+	public JpaLieuDao(EntityManagerFactory emf) {
 		super(emf);
 		// TODO Auto-generated constructor stub
 	}
