@@ -1,60 +1,65 @@
 package fr.eni.sortir.entities;
 
 import java.util.Date;
+import java.util.Objects;
 
-import javax.persistence.AssociationOverride;
-import javax.persistence.AssociationOverrides;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.Transient;
+import javax.swing.text.html.HTML.Tag;
 
 @Entity
 @Table(name = "INSCRIPTIONS")
-@AssociationOverrides({
-	@AssociationOverride(name = "primaryKey.participant", 
-		joinColumns = @JoinColumn(name = "no_participant")),
-	@AssociationOverride(name = "primaryKey.sortie", 
-		joinColumns = @JoinColumn(name = "no_sortie")) })
 public class Inscription {
-    // composite-id key
-    private InscriptionId primaryKey = new InscriptionId();
-     
-    // additional fields
+	@EmbeddedId
+	private InscriptionId id;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+    @MapsId("noParticipant")
+    private Participant participant;
+ 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @MapsId("noSortie")
+    private Sortie sortie;
+ 
     @Column(name = "date_inscription")
-    @Temporal(TemporalType.DATE)
-    private Date dateInscription;
- 
-    @EmbeddedId
-    public InscriptionId getPrimaryKey() {
-        return primaryKey;
+    private Date dateInscription = new Date();
+    
+    private Inscription() {}
+    
+    public Inscription(Participant participant, Sortie sortie) {
+        this.participant = participant;
+        this.sortie = sortie;
+        this.id = new InscriptionId(participant.getNoParticipant(), sortie.getNoSortie());
     }
- 
-    public void setPrimaryKey(InscriptionId primaryKey) {
-        this.primaryKey = primaryKey;
-    }
- 
-    @Transient
-    public Participant getParticipant() {
-        return getPrimaryKey().getParticipant();
-    }
- 
-    public void setParticipant(Participant participant) {
-        getPrimaryKey().setParticipant(participant);
-    }
- 
-    @Transient
-    public Sortie getGroup() {
-        return getPrimaryKey().getSortie();
-    }
- 
-    public void setGroup(Sortie sortie) {
-        getPrimaryKey().setSortie(sortie);
-    }
+
+	public InscriptionId getId() {
+		return id;
+	}
+
+	public void setId(InscriptionId id) {
+		this.id = id;
+	}
+
+	public Participant getParticipant() {
+		return participant;
+	}
+
+	public void setParticipant(Participant participant) {
+		this.participant = participant;
+	}
+
+	public Sortie getSortie() {
+		return sortie;
+	}
+
+	public void setSortie(Sortie sortie) {
+		this.sortie = sortie;
+	}
 
 	public Date getDateInscription() {
 		return dateInscription;
@@ -63,4 +68,21 @@ public class Inscription {
 	public void setDateInscription(Date dateInscription) {
 		this.dateInscription = dateInscription;
 	}
+    
+	@Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+ 
+        if (o == null || getClass() != o.getClass())
+            return false;
+ 
+        Inscription that = (Inscription) o;
+        return Objects.equals(participant, that.participant) &&
+               Objects.equals(sortie, that.sortie);
+    }
+ 
+    @Override
+    public int hashCode() {
+        return Objects.hash(participant, sortie);
+    }
 }

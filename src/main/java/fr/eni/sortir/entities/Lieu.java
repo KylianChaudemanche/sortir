@@ -23,7 +23,7 @@ public class Lieu implements Serializable {
 	private Integer noLieu;
 	@Column(name="nom_lieu")
 	private String nomLieu;
-	private String rue;
+	private String adresse;
 	private Float latitude;
 	private Float longitude;
 	@ManyToOne(fetch=FetchType.LAZY)
@@ -36,11 +36,11 @@ public class Lieu implements Serializable {
 		super();
 	}
 
-	public Lieu(String nomLieu, String rue, Float latitude, Float longitude, Ville ville,
+	public Lieu(String nomLieu, String adresse, Float latitude, Float longitude, Ville ville,
 			Collection<Sortie> listSortie) {
 		super();
 		this.nomLieu = nomLieu;
-		this.rue = rue;
+		this.adresse = adresse;
 		this.latitude = latitude;
 		this.longitude = longitude;
 		this.ville = ville;
@@ -63,12 +63,12 @@ public class Lieu implements Serializable {
 		this.nomLieu = nomLieu;
 	}
 
-	public String getRue() {
-		return rue;
+	public String getAdresse() {
+		return adresse;
 	}
 
-	public void setRue(String rue) {
-		this.rue = rue;
+	public void setAdresse(String adresse) {
+		this.adresse = adresse;
 	}
 
 	public Float getLatitude() {

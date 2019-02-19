@@ -1,27 +1,51 @@
 package fr.eni.sortir.entities;
 
 import java.io.Serializable;
+import java.util.Objects;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.ManyToOne;
 
 @Embeddable
 public class InscriptionId implements Serializable {
-	private Participant participant;
-	private Sortie sortie;
+	@Column(name="participants_no_participant")
+	private Integer noParticipant;
+	@Column(name="sorties_no_sortie")
+	private Integer noSortie;
 	
-	@ManyToOne
-	public Participant getParticipant() {
-		return participant;
+	public InscriptionId() {
+		super();
 	}
-	public void setParticipant(Participant participant) {
-		this.participant = participant;
+	
+	public InscriptionId(Integer noParticipant, Integer noSortie) {
+		super();
+		this.noParticipant = noParticipant;
+		this.noSortie = noSortie;
 	}
-	@ManyToOne
-	public Sortie getSortie() {
-		return sortie;
+
+	public Integer getNoParticipant() {
+		return noParticipant;
 	}
-	public void setSortie(Sortie sortie) {
-		this.sortie = sortie;
+
+	public Integer getNoSortie() {
+		return noSortie;
 	}
+	
+	@Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+ 
+        if (o == null || getClass() != o.getClass())
+            return false;
+ 
+        InscriptionId that = (InscriptionId) o;
+        return Objects.equals(noParticipant, that.noParticipant) &&
+               Objects.equals(noSortie, that.noSortie);
+    }
+ 
+    @Override
+    public int hashCode() {
+        return Objects.hash(noParticipant, noSortie);
+    }
 }

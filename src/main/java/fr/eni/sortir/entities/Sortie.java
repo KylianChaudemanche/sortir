@@ -4,7 +4,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Objects;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,45 +19,45 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-@Table(name="SORTIES")
+@Table(name = "SORTIES")
 public class Sortie implements Serializable {
 	@Id
 	@GeneratedValue
-	@Column(name="no_sortie")
+	@Column(name = "no_sortie")
 	private Integer noSortie;
 	private String nom;
-	@Column(name="datedebut")
+	@Column(name = "datedebut")
 	@Temporal(TemporalType.DATE)
 	private Date dateDebut;
 	private Integer duree;
-	@Column(name="datecloture")
+	@Column(name = "datecloture")
 	@Temporal(TemporalType.DATE)
 	private Date dateCloture;
-	@Column(name="nbinscriptionsmax")
+	@Column(name = "nbinscriptionsmax")
 	private Integer nbInscriptionsMax;
-	@Column(name="descriptioninfos")
+	@Column(name = "descriptioninfos")
 	private String descriptionInfos;
-	@Column(name="urlPhoto")
+	@Column(name = "urlPhoto")
 	private String urlPhoto;
 	@ManyToOne
-    @JoinColumn(name="etats_no_etat")
+	@JoinColumn(name = "etats_no_etat")
 	private Etat etat;
 	@ManyToOne
-    @JoinColumn(name="lieux_no_lieu")
+	@JoinColumn(name = "lieux_no_lieu")
 	private Lieu lieu;
-	@OneToMany(mappedBy = "primaryKey.sortie")
+	@OneToMany(mappedBy = "sortie", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Collection<Inscription> inscriptions = new ArrayList<>();
 	@ManyToOne
-	@JoinColumn(name="organisateur")
+	@JoinColumn(name = "organisateur")
 	private Participant organisateur;
-	
+
 	public Sortie() {
 		super();
 	}
 
-	public Sortie(String nom, Date dateDebut, Integer duree, Date dateCloture,
-			Integer nbInscriptionsMax, String descriptionInfos, String urlPhoto, Etat etat,
-			Lieu lieu, Collection<Inscription> inscriptions, Participant organisateur) {
+	public Sortie(String nom, Date dateDebut, Integer duree, Date dateCloture, Integer nbInscriptionsMax,
+			String descriptionInfos, String urlPhoto, Etat etat, Lieu lieu, Collection<Inscription> inscriptions,
+			Participant organisateur) {
 		super();
 		this.nom = nom;
 		this.dateDebut = dateDebut;
@@ -157,11 +159,11 @@ public class Sortie implements Serializable {
 	public void setInscriptions(Collection<Inscription> inscriptions) {
 		this.inscriptions = inscriptions;
 	}
-	
+
 	public void addInscription(Inscription inscription) {
 		this.inscriptions.add(inscription);
 	}
-	
+
 	public void removeInscription(Inscription inscription) {
 		this.inscriptions.remove(inscription);
 	}
@@ -172,5 +174,24 @@ public class Sortie implements Serializable {
 
 	public void setOrganisateur(Participant organisateur) {
 		this.organisateur = organisateur;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
+		Sortie that = (Sortie) o;
+		return Objects.equals(nom, that.nom) && Objects.equals(dateDebut, that.dateDebut)
+				&& Objects.equals(duree, that.duree) && Objects.equals(dateCloture, that.dateCloture)
+				&& Objects.equals(nbInscriptionsMax, that.nbInscriptionsMax)
+				&& Objects.equals(descriptionInfos, that.descriptionInfos)
+				&& Objects.equals(urlPhoto, that.urlPhoto);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(nom, dateDebut, duree, dateCloture, nbInscriptionsMax, descriptionInfos, urlPhoto);
 	}
 }

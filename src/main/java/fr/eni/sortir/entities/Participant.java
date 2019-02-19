@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -29,7 +30,11 @@ public class Participant implements Serializable {
 	private String motDePasse;
 	private Boolean administrateur;
 	private Boolean actif;
-	@OneToMany(mappedBy = "primaryKey.participant")
+	@OneToMany(
+	        mappedBy = "participant",
+	        cascade = CascadeType.ALL,
+	        orphanRemoval = true
+	    )
 	private Collection<Inscription> inscriptions = new ArrayList<>();
 	@ManyToOne
     @JoinColumn(name="sites_no_site")
@@ -160,4 +165,10 @@ public class Participant implements Serializable {
 	public void setListSortie(Collection<Sortie> listSortie) {
 		this.listSortie = listSortie;
 	}
+	
+	public void addSortie(Sortie sortie) {
+        Inscription inscription = new Inscription(this, sortie);
+        inscriptions.add(inscription);
+        sortie.getInscriptions().add(inscription);
+    }
 }
