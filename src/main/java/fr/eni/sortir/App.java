@@ -7,6 +7,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
+import fr.eni.sortir.entities.Lieu;
 import fr.eni.sortir.entities.Participant;
 import fr.eni.sortir.entities.Site;
 import fr.eni.sortir.entities.Ville;
@@ -31,9 +32,11 @@ public class App
 //    	
 //    	Participant participant = new Participant("test", "Henkes", "Kevin", "0299095421", "kevin@henkes.com", "test", true, true, new ArrayList<>(), site);
 //    	em.persist(participant);
-    	
-    	Ville ville = new Ville("Rennes", "35000", new ArrayList<>());
-    	em.persist(ville);
+    	Ville redon = new Ville("REDON","35600",new ArrayList<>());
+    	em.persist(redon);
+    	em.flush();
+    	Lieu lieu = new Lieu("chémoa","saint michel",(float)47.655,(float)-2.07217,redon,new ArrayList<>());
+    	em.persist(lieu);
     	
     	em.getTransaction().commit();
     	em.close();

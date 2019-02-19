@@ -23,7 +23,7 @@ public class Lieu implements Serializable {
 	@Column(name="nom_lieu")
 	private String nomLieu;
 	private String rue;
-	private Float lagitude;
+	private Float latitude;
 	private Float longitude;
 	@ManyToOne
     @JoinColumn(name="villes_no_ville")
@@ -35,12 +35,12 @@ public class Lieu implements Serializable {
 		super();
 	}
 
-	public Lieu(String nomLieu, String rue, Float lagitude, Float longitude, Ville ville,
+	public Lieu(String nomLieu, String rue, Float latitude, Float longitude, Ville ville,
 			Collection<Sortie> listSortie) {
 		super();
 		this.nomLieu = nomLieu;
 		this.rue = rue;
-		this.lagitude = lagitude;
+		this.latitude = latitude;
 		this.longitude = longitude;
 		this.ville = ville;
 		this.listSortie = listSortie;
@@ -71,11 +71,11 @@ public class Lieu implements Serializable {
 	}
 
 	public Float getLagitude() {
-		return lagitude;
+		return latitude;
 	}
 
-	public void setLagitude(Float lagitude) {
-		this.lagitude = lagitude;
+	public void setLagitude(Float latitude) {
+		this.latitude = latitude;
 	}
 
 	public Float getLongitude() {
