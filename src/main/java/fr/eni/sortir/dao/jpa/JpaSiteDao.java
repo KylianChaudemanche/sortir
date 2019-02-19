@@ -14,7 +14,7 @@ import fr.eni.sortir.entities.Site;
 
 public class JpaSiteDao extends JpaDao implements SiteDao  {
 
-	protected JpaSiteDao(EntityManagerFactory emf) {
+	public JpaSiteDao(EntityManagerFactory emf) {
 		super(emf);
 		// TODO Auto-generated constructor stub
 	}
