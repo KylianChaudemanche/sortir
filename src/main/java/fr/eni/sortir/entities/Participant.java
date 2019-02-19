@@ -8,6 +8,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -29,13 +31,16 @@ public class Participant implements Serializable {
 	private Boolean actif;
 	@OneToMany(mappedBy = "primaryKey.participant")
 	private Collection<Inscription> inscriptions = new ArrayList<>();
+	@ManyToOne
+    @JoinColumn(name="sites_no_site")
+	private Site site;
 	
 	public Participant() {
 		super();
 	}
 
-	public Participant(String pseudo, String nom, String prenom, String telephone, String mail, String motDePasse,
-			Boolean administrateur, Boolean actif, Collection<Inscription> inscriptions) {
+	public Participant(String pseudo, String nom, String prenom, String telephone, String mail,
+			String motDePasse, Boolean administrateur, Boolean actif, Collection<Inscription> inscriptions, Site site) {
 		super();
 		this.pseudo = pseudo;
 		this.nom = nom;
@@ -46,6 +51,7 @@ public class Participant implements Serializable {
 		this.administrateur = administrateur;
 		this.actif = actif;
 		this.inscriptions = inscriptions;
+		this.site = site;
 	}
 
 	public Integer getNoParticipant() {
@@ -134,5 +140,13 @@ public class Participant implements Serializable {
 	
 	public void removeInscription(Inscription inscription) {
 		this.inscriptions.remove(inscription);
+	}
+
+	public Site getSite() {
+		return site;
+	}
+
+	public void setSite(Site site) {
+		this.site = site;
 	}
 }
