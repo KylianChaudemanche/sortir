@@ -7,7 +7,6 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 
-import fr.eni.sortir.dao.EtatDao;
 import fr.eni.sortir.dao.InscriptionDao;
 import fr.eni.sortir.entities.Etat;
 import fr.eni.sortir.entities.Inscription;
