@@ -4,7 +4,7 @@ import java.util.Collection;
 
 import fr.eni.sortir.entities.Sortie;
 
-public interface SortiesDao {
+public interface SortieDao {
 	Sortie addSortie(Sortie sorties);
 
 	Sortie findSortie(Integer noSortie);

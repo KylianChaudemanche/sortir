@@ -4,7 +4,7 @@ import java.util.Collection;
 
 import fr.eni.sortir.entities.Participant;
 
-public interface ParticipantsDao {
+public interface ParticipantDao {
 	Participant addParticipant(Participant inscriptions);
 
 	Participant findParticipant(Integer noParticipant);

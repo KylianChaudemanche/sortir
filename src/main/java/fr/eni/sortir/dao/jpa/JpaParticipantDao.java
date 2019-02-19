@@ -7,14 +7,14 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 
-import fr.eni.sortir.dao.ParticipantsDao;
+import fr.eni.sortir.dao.ParticipantDao;
 import fr.eni.sortir.entities.Etat;
 import fr.eni.sortir.entities.Inscription;
 import fr.eni.sortir.entities.Participant;
 
-public class JpaParticipants extends JpaDao implements ParticipantsDao {
+public class JpaParticipantDao extends JpaDao implements ParticipantDao {
 
-	protected JpaParticipants(EntityManagerFactory emf) {
+	protected JpaParticipantDao(EntityManagerFactory emf) {
 		super(emf);
 	}
 

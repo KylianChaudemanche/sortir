@@ -4,7 +4,7 @@ import java.util.Collection;
 
 import fr.eni.sortir.entities.Site;
 
-public interface SitesDao {
+public interface SiteDao {
 	Site addSite(Site sites);
 
 	Site findSite(Integer noSite);

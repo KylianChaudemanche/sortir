@@ -4,7 +4,7 @@ import java.util.Collection;
 
 import fr.eni.sortir.entities.Lieu;
 
-public interface LieuxDao {
+public interface LieuDao {
 
 	Lieu addLieu(Lieu lieu);
 

@@ -4,7 +4,7 @@ import java.util.Collection;
 
 import fr.eni.sortir.entities.Inscription;
 
-public interface InscriptionsDao {
+public interface InscriptionDao {
 	Inscription addInscription(Inscription inscriptions);
 
 	Inscription findInscription(Integer noInscription);

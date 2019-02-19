@@ -7,13 +7,13 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 
-import fr.eni.sortir.dao.SortiesDao;
+import fr.eni.sortir.dao.SortieDao;
 import fr.eni.sortir.entities.Etat;
 import fr.eni.sortir.entities.Sortie;;
 
-public class JpaSortiesDao extends JpaDao implements SortiesDao{
+public class JpaSortieDao extends JpaDao implements SortieDao{
 
-	protected JpaSortiesDao(EntityManagerFactory emf) {
+	protected JpaSortieDao(EntityManagerFactory emf) {
 		super(emf);
 		// TODO Auto-generated constructor stub
 	}

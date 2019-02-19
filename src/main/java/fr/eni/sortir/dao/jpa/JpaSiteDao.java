@@ -7,14 +7,14 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 
-import fr.eni.sortir.dao.SitesDao;
+import fr.eni.sortir.dao.SiteDao;
 import fr.eni.sortir.entities.Inscription;
 import fr.eni.sortir.entities.Participant;
 import fr.eni.sortir.entities.Site;
 
-public class JpaSitesDao extends JpaDao implements SitesDao  {
+public class JpaSiteDao extends JpaDao implements SiteDao  {
 
-	protected JpaSitesDao(EntityManagerFactory emf) {
+	protected JpaSiteDao(EntityManagerFactory emf) {
 		super(emf);
 		// TODO Auto-generated constructor stub
 	}

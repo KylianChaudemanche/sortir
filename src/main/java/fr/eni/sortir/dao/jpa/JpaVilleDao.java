@@ -7,12 +7,12 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 
-import fr.eni.sortir.dao.VillesDao;
+import fr.eni.sortir.dao.VilleDao;
 import fr.eni.sortir.entities.Ville;
 
-public class JpaVillesDao extends JpaDao implements VillesDao {
+public class JpaVilleDao extends JpaDao implements VilleDao {
 
-	protected JpaVillesDao(EntityManagerFactory emf) {
+	protected JpaVilleDao(EntityManagerFactory emf) {
 		super(emf);
 		// TODO Auto-generated constructor stub
 	}

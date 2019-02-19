@@ -4,7 +4,7 @@ import java.util.Collection;
 
 import fr.eni.sortir.entities.Ville;
 
-public interface VillesDao {
+public interface VilleDao {
 	Ville addVille(Ville villes);
 
 	Ville findVille(Integer noVille);

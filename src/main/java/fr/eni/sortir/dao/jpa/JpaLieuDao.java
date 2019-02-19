@@ -7,12 +7,12 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 
-import fr.eni.sortir.dao.LieuxDao;
+import fr.eni.sortir.dao.LieuDao;
 import fr.eni.sortir.entities.Lieu;
 
-public class JpaLieuxDao extends JpaDao implements LieuxDao{
+public class JpaLieuDao extends JpaDao implements LieuDao{
 	
-	protected JpaLieuxDao(EntityManagerFactory emf) {
+	protected JpaLieuDao(EntityManagerFactory emf) {
 		super(emf);
 		// TODO Auto-generated constructor stub
 	}
