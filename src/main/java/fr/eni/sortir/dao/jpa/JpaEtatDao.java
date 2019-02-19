@@ -7,27 +7,27 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 
-import fr.eni.sortir.dao.EtatsDao;
-import fr.eni.sortir.entities.Etats;
+import fr.eni.sortir.dao.EtatDao;
+import fr.eni.sortir.entities.Etat;
 
-public class JpaEtatsDao extends JpaDao implements EtatsDao {
-	public JpaEtatsDao(EntityManagerFactory emf) {
+public class JpaEtatDao extends JpaDao implements EtatDao {
+	public JpaEtatDao(EntityManagerFactory emf) {
 		super(emf);
 	}
 
 	@Override
-	public Etats addEtats(Etats etats) {
+	public Etat addEtat(Etat etat) {
 		EntityManager em = getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = em.getTransaction();
 
 		try {
 			transaction.begin();
-			em.persist(etats);
+			em.persist(etat);
 			transaction.commit();
 			em.flush();
 
-			if (etats.getNoEtat() != 0) {
-				return etats;
+			if (etat.getNoEtat() != 0) {
+				return etat;
 			} else {
 				return null;
 			}
@@ -39,12 +39,12 @@ public class JpaEtatsDao extends JpaDao implements EtatsDao {
 	}
 
 	@Override
-	public Etats findEtats(Integer noEtats) {
+	public Etat findEtat(Integer noEtat) {
 		EntityManager em = getEntityManagerFactory().createEntityManager();
-		Etats etats = em.find(Etats.class, noEtats);
+		Etat etat = em.find(Etat.class, noEtat);
 		try {
-			if (etats != null) {
-				return etats;
+			if (etat != null) {
+				return etat;
 			} else {
 				return null;
 			}
@@ -55,16 +55,16 @@ public class JpaEtatsDao extends JpaDao implements EtatsDao {
 	}
 
 	@Override
-	public Etats updateEtats(Etats etats) {
+	public Etat updateEtat(Etat etat) {
 		EntityManager em = getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = em.getTransaction();
 
 		try {
 			transaction.begin();
-			em.merge(etats);
+			em.merge(etat);
 			transaction.commit();
 
-			return etats;
+			return etat;
 		} finally {
 			if (transaction.isActive())
 				transaction.rollback();
@@ -73,18 +73,18 @@ public class JpaEtatsDao extends JpaDao implements EtatsDao {
 	}
 
 	@Override
-	public Boolean removeEtats(Integer noEtats) {
+	public Boolean removeEtat(Integer noEtat) {
 		EntityManager em = getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = em.getTransaction();
 
 		try {
 			
-			Etats etats = em.find(Etats.class, noEtats);
+			Etat etat = em.find(Etat.class, noEtat);
 			
-			if (etats != null) {
+			if (etat != null) {
 				transaction.begin();
 				
-				em.remove(etats);
+				em.remove(etat);
 
 				transaction.commit();
 				
@@ -101,15 +101,15 @@ public class JpaEtatsDao extends JpaDao implements EtatsDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Collection<Etats> getAllEtats() {
+	public Collection<Etat> getAllEtat() {
 		EntityManager em = getEntityManagerFactory().createEntityManager();
 
 		try {
-			Query query = em.createQuery("SELECT e FROM Etats AS e", Etats.class);
+			Query query = em.createQuery("SELECT e FROM Etats AS e", Etat.class);
 
-			Collection<Etats> listEtats = query.getResultList();
+			Collection<Etat> listEtat = query.getResultList();
 
-			return listEtats;
+			return listEtat;
 		} finally {
 			em.close();
 		}
