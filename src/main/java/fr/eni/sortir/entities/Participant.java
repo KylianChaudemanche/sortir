@@ -34,13 +34,15 @@ public class Participant implements Serializable {
 	@ManyToOne
     @JoinColumn(name="sites_no_site")
 	private Site site;
+	@OneToMany(mappedBy = "organisateur")
+	private Collection<Sortie> listSortie = new ArrayList<>();
 	
 	public Participant() {
 		super();
 	}
 
 	public Participant(String pseudo, String nom, String prenom, String telephone, String mail,
-			String motDePasse, Boolean administrateur, Boolean actif, Collection<Inscription> inscriptions, Site site) {
+			String motDePasse, Boolean administrateur, Boolean actif, Collection<Inscription> inscriptions, Site site, Collection<Sortie> listSortie) {
 		super();
 		this.pseudo = pseudo;
 		this.nom = nom;
@@ -52,6 +54,7 @@ public class Participant implements Serializable {
 		this.actif = actif;
 		this.inscriptions = inscriptions;
 		this.site = site;
+		this.listSortie = listSortie;
 	}
 
 	public Integer getNoParticipant() {
@@ -150,6 +153,7 @@ public class Participant implements Serializable {
 		this.site = site;
 	}
 
+<<<<<<< HEAD
 	@Override
 	public String toString() {
 		return "Participant [noParticipant=" + noParticipant + ", pseudo=" + pseudo + ", nom=" + nom + ", prenom="
@@ -158,4 +162,13 @@ public class Participant implements Serializable {
 				+ ", site=" + site + "]";
 	}
 	
+=======
+	public Collection<Sortie> getListSortie() {
+		return listSortie;
+	}
+
+	public void setListSortie(Collection<Sortie> listSortie) {
+		this.listSortie = listSortie;
+	}
+>>>>>>> fb310f5959e1c77c6ec9f0142b967fec1a9ef4f0
 }

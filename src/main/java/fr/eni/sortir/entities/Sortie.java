@@ -45,14 +45,17 @@ public class Sortie implements Serializable {
 	private Lieu lieu;
 	@OneToMany(mappedBy = "primaryKey.sortie")
 	private Collection<Inscription> inscriptions = new ArrayList<>();
+	@ManyToOne
+	@JoinColumn(name="organisateur")
+	private Participant organisateur;
 	
 	public Sortie() {
 		super();
 	}
 
 	public Sortie(String nom, Date dateDebut, Integer duree, Date dateCloture,
-			Integer nbInscriptionsMax, String descriptionInfos, Integer etatSortie, String urlPhoto,
-			Lieu lieu, Collection<Inscription> inscriptions) {
+			Integer nbInscriptionsMax, String descriptionInfos, String urlPhoto, Etat etat,
+			Lieu lieu, Collection<Inscription> inscriptions, Participant organisateur) {
 		super();
 		this.nom = nom;
 		this.dateDebut = dateDebut;
@@ -64,6 +67,7 @@ public class Sortie implements Serializable {
 		this.etat = etat;
 		this.lieu = lieu;
 		this.inscriptions = inscriptions;
+		this.organisateur = organisateur;
 	}
 
 	public Integer getNoSortie() {
@@ -145,6 +149,14 @@ public class Sortie implements Serializable {
 	public void setLieu(Lieu lieu) {
 		this.lieu = lieu;
 	}
+	
+	public Participant getOrganisateur() {
+		return organisateur;
+	}
+
+	public void setOrganisateur(Participant organisateur) {
+		this.organisateur = organisateur;
+	}
 
 	public Collection<Inscription> getInscriptions() {
 		return inscriptions;
@@ -167,8 +179,7 @@ public class Sortie implements Serializable {
 		return "Sortie [noSortie=" + noSortie + ", nom=" + nom + ", dateDebut=" + dateDebut + ", duree=" + duree
 				+ ", dateCloture=" + dateCloture + ", nbInscriptionsMax=" + nbInscriptionsMax + ", descriptionInfos="
 				+ descriptionInfos + ", urlPhoto=" + urlPhoto + ", etat=" + etat + ", lieu=" + lieu + ", inscriptions="
-				+ inscriptions + "]";
+				+ inscriptions + ", organisateur=" + organisateur + "]";
 	}
-	
 	
 }
