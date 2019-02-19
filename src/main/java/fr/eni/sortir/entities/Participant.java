@@ -149,4 +149,13 @@ public class Participant implements Serializable {
 	public void setSite(Site site) {
 		this.site = site;
 	}
+
+	@Override
+	public String toString() {
+		return "Participant [noParticipant=" + noParticipant + ", pseudo=" + pseudo + ", nom=" + nom + ", prenom="
+				+ prenom + ", telephone=" + telephone + ", mail=" + mail + ", motDePasse=" + motDePasse
+				+ ", administrateur=" + administrateur + ", actif=" + actif + ", inscriptions=" + inscriptions
+				+ ", site=" + site + "]";
+	}
+	
 }

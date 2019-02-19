@@ -32,11 +32,14 @@ public class App
 //    	
 //    	Participant participant = new Participant("test", "Henkes", "Kevin", "0299095421", "kevin@henkes.com", "test", true, true, new ArrayList<>(), site);
 //    	em.persist(participant);
-    	Ville redon = new Ville("REDON","35600",new ArrayList<>());
+    	/*Ville redon = new Ville("REDON","35600",new ArrayList<>());
     	em.persist(redon);
     	em.flush();
     	Lieu lieu = new Lieu("chémoa","saint michel",(float)47.655,(float)-2.07217,redon,new ArrayList<>());
     	em.persist(lieu);
+    	*/
+    	Lieu chemoa = em.find(Lieu.class, 3);
+    	System.out.println(chemoa.toString());
     	
     	em.getTransaction().commit();
     	em.close();

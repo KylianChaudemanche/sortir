@@ -24,4 +24,9 @@ public class InscriptionId implements Serializable {
 	public void setSortie(Sortie sortie) {
 		this.sortie = sortie;
 	}
+	@Override
+	public String toString() {
+		return "InscriptionId [participant=" + participant + ", sortie=" + sortie + "]";
+	}
+	
 }

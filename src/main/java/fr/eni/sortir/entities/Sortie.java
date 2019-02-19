@@ -35,8 +35,6 @@ public class Sortie implements Serializable {
 	private Integer nbInscriptionsMax;
 	@Column(name="descriptioninfos")
 	private String descriptionInfos;
-	@Column(name="etatsortie")
-	private Integer etatSortie;
 	@Column(name="urlPhoto")
 	private String urlPhoto;
 	@ManyToOne
@@ -53,7 +51,7 @@ public class Sortie implements Serializable {
 	}
 
 	public Sortie(String nom, Date dateDebut, Integer duree, Date dateCloture,
-			Integer nbInscriptionsMax, String descriptionInfos, Integer etatSortie, String urlPhoto, Etat etat,
+			Integer nbInscriptionsMax, String descriptionInfos, Integer etatSortie, String urlPhoto,
 			Lieu lieu, Collection<Inscription> inscriptions) {
 		super();
 		this.nom = nom;
@@ -62,7 +60,6 @@ public class Sortie implements Serializable {
 		this.dateCloture = dateCloture;
 		this.nbInscriptionsMax = nbInscriptionsMax;
 		this.descriptionInfos = descriptionInfos;
-		this.etatSortie = etatSortie;
 		this.urlPhoto = urlPhoto;
 		this.etat = etat;
 		this.lieu = lieu;
@@ -125,14 +122,6 @@ public class Sortie implements Serializable {
 		this.descriptionInfos = descriptionInfos;
 	}
 
-	public Integer getEtatSortie() {
-		return etatSortie;
-	}
-
-	public void setEtatSortie(Integer etatSortie) {
-		this.etatSortie = etatSortie;
-	}
-
 	public String getUrlPhoto() {
 		return urlPhoto;
 	}
@@ -172,4 +161,14 @@ public class Sortie implements Serializable {
 	public void removeInscription(Inscription inscription) {
 		this.inscriptions.remove(inscription);
 	}
+
+	@Override
+	public String toString() {
+		return "Sortie [noSortie=" + noSortie + ", nom=" + nom + ", dateDebut=" + dateDebut + ", duree=" + duree
+				+ ", dateCloture=" + dateCloture + ", nbInscriptionsMax=" + nbInscriptionsMax + ", descriptionInfos="
+				+ descriptionInfos + ", urlPhoto=" + urlPhoto + ", etat=" + etat + ", lieu=" + lieu + ", inscriptions="
+				+ inscriptions + "]";
+	}
+	
+	
 }

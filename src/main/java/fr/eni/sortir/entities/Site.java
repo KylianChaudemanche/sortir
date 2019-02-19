@@ -57,4 +57,10 @@ public class Site implements Serializable {
 	public void setListInscrit(Collection<Participant> listInscrit) {
 		this.listInscrit = listInscrit;
 	}
+
+	@Override
+	public String toString() {
+		return "Site [noSite=" + noSite + ", nomSite=" + nomSite + "]";
+	}
+	
 }

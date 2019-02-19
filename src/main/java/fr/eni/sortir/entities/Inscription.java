@@ -63,4 +63,9 @@ public class Inscription {
 	public void setDateInscription(Date dateInscription) {
 		this.dateInscription = dateInscription;
 	}
+
+	@Override
+	public String toString() {
+		return "Inscription [primaryKey=" + primaryKey + ", dateInscription=" + dateInscription + "]";
+	}
 }
