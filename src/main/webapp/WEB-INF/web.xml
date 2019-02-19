@@ -7,14 +7,4 @@
 	<welcome-file-list>
 		<welcome-file>login.jsp</welcome-file>
 	</welcome-file-list>
-
-	<servlet>
-		<description>Login jsp</description>
-		<servlet-name>login</servlet-name>
-		<jsp-file>/WEB-INF/login.jsp</jsp-file>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>login</servlet-name>
-		<url-pattern>/</url-pattern>
-	</servlet-mapping>
 </web-app>
