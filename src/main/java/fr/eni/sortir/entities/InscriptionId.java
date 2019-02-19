@@ -9,9 +9,7 @@ import javax.persistence.ManyToOne;
 
 @Embeddable
 public class InscriptionId implements Serializable {
-	@Column(name="participants_no_participant")
 	private Integer noParticipant;
-	@Column(name="sorties_no_sortie")
 	private Integer noSortie;
 	
 	public InscriptionId() {

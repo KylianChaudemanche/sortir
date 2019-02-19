@@ -39,14 +39,18 @@ public class App
     	
     	//Etat etat = em.find(Etat.class, 1);
     	//Lieu lieu = em.find(Lieu.class, 1);
-    	Participant organisateur = em.find(Participant.class, 2);
+    	//Participant organisateur = em.find(Participant.class, 2);
 
     	//Sortie sortie = new Sortie("test", new Date(), 60, new Date(), 60, "test", "test", etat, lieu, new ArrayList<>(), organisateur);
-    	Sortie sortie = em.find(Sortie.class, 2);
+    	//Sortie sortie = em.find(Sortie.class, 2);
     	//Inscription inscription = new Inscription();
     	
-    	sortie.getInscriptions();
-    	em.persist(sortie);
+    	Participant participant = em.find(Participant.class, 2);
+    	Sortie sortie = em.find(Sortie.class, 2);
+    	sortie.removeParticipant(participant);
+    	em.persist(participant);
+
+    	
     	em.getTransaction().commit();
     	em.close();
 

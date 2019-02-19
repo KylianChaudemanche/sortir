@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.Table;
@@ -20,10 +21,12 @@ public class Inscription {
 	
 	@ManyToOne(fetch = FetchType.LAZY)
     @MapsId("noParticipant")
+	@JoinColumn(name="participants_no_participant")
     private Participant participant;
  
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("noSortie")
+    @JoinColumn(name="sorties_no_sortie")
     private Sortie sortie;
  
     @Column(name = "date_inscription")
