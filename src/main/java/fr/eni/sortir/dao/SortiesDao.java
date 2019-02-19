@@ -2,16 +2,16 @@ package fr.eni.sortir.dao;
 
 import java.util.Collection;
 
-import fr.eni.sortir.entities.Sorties;
+import fr.eni.sortir.entities.Sortie;
 
 public interface SortiesDao {
-	Sorties addSorties(Sorties sorties);
+	Sortie addSortie(Sortie sorties);
 
-	Sorties findSorties(Integer noSorties);
+	Sortie findSortie(Integer noSortie);
 
-	Sorties updateSorties(Sorties sorties);
+	Sortie updateSortie(Sortie sorties);
 
-	Boolean removeSorties(Integer noSorties);
+	Boolean removeSortie(Integer noSortie);
 
-	Collection<Sorties> getAllSorties();
+	Collection<Sortie> getAllSortie();
 }

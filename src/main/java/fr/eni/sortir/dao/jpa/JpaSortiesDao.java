@@ -8,8 +8,8 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 
 import fr.eni.sortir.dao.SortiesDao;
-import fr.eni.sortir.entities.Etats;
-import fr.eni.sortir.entities.Sorties;;
+import fr.eni.sortir.entities.Etat;
+import fr.eni.sortir.entities.Sortie;;
 
 public class JpaSortiesDao extends JpaDao implements SortiesDao{
 
@@ -19,18 +19,18 @@ public class JpaSortiesDao extends JpaDao implements SortiesDao{
 	}
 
 	@Override
-	public Sorties addSorties(Sorties sorties) {
+	public Sortie addSortie(Sortie sortie) {
 		EntityManager em = getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = em.getTransaction();
 
 		try {
 			transaction.begin();
-			em.persist(sorties);
+			em.persist(sortie);
 			transaction.commit();
 			em.flush();
 
-			if (sorties.getNoSortie() != 0) {
-				return sorties;
+			if (sortie.getNoSortie() != 0) {
+				return sortie;
 			} else {
 				return null;
 			}
@@ -42,12 +42,12 @@ public class JpaSortiesDao extends JpaDao implements SortiesDao{
 	}
 
 	@Override
-	public Sorties findSorties(Integer noSorties) {
+	public Sortie findSortie(Integer noSortie) {
 		EntityManager em = getEntityManagerFactory().createEntityManager();
-		Sorties sorties = em.find(Sorties.class, noSorties);
+		Sortie sortie = em.find(Sortie.class, noSortie);
 		try {
-			if (sorties != null) {
-				return sorties;
+			if (sortie != null) {
+				return sortie;
 			} else {
 				return null;
 			}
@@ -57,16 +57,16 @@ public class JpaSortiesDao extends JpaDao implements SortiesDao{
 	}
 
 	@Override
-	public Sorties updateSorties(Sorties sorties) {
+	public Sortie updateSortie(Sortie sortie) {
 		EntityManager em = getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = em.getTransaction();
 
 		try {
 			transaction.begin();
-			em.merge(sorties);
+			em.merge(sortie);
 			transaction.commit();
 
-			return sorties;
+			return sortie;
 		} finally {
 			if (transaction.isActive())
 				transaction.rollback();
@@ -75,18 +75,18 @@ public class JpaSortiesDao extends JpaDao implements SortiesDao{
 	}
 
 	@Override
-	public Boolean removeSorties(Integer noSorties) {
+	public Boolean removeSortie(Integer noSortie) {
 		EntityManager em = getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = em.getTransaction();
 
 		try {
 			
-			Sorties sorties = em.find(Sorties.class, noSorties);
+			Sortie sortie = em.find(Sortie.class, noSortie);
 			
-			if (sorties != null) {
+			if (sortie != null) {
 				transaction.begin();
 				
-				em.remove(sorties);
+				em.remove(sortie);
 
 				transaction.commit();
 				
@@ -102,15 +102,15 @@ public class JpaSortiesDao extends JpaDao implements SortiesDao{
 	}
 
 	@Override
-	public Collection<Sorties> getAllSorties() {
+	public Collection<Sortie> getAllSortie() {
 		EntityManager em = getEntityManagerFactory().createEntityManager();
 
 		try {
-			Query query = em.createQuery("SELECT s FROM Sorties AS s", Sorties.class);
+			Query query = em.createQuery("SELECT s FROM Sortie AS s", Sortie.class);
 
-			Collection<Sorties> listSorties = query.getResultList();
+			Collection<Sortie> listSortie = query.getResultList();
 
-			return listSorties;
+			return listSortie;
 		} finally {
 			em.close();
 		}

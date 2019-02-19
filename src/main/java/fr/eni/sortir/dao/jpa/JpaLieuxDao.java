@@ -8,7 +8,7 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 
 import fr.eni.sortir.dao.LieuxDao;
-import fr.eni.sortir.entities.Lieux;
+import fr.eni.sortir.entities.Lieu;
 
 public class JpaLieuxDao extends JpaDao implements LieuxDao{
 	
@@ -18,18 +18,18 @@ public class JpaLieuxDao extends JpaDao implements LieuxDao{
 	}
 
 	@Override
-	public Lieux addLieux(Lieux lieux) {
+	public Lieu addLieu(Lieu lieu) {
 		EntityManager em = getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = em.getTransaction();
 
 		try {
 			transaction.begin();
-			em.persist(lieux);
+			em.persist(lieu);
 			transaction.commit();
 			em.flush();
 
-			if (lieux.getNoLieux() != 0) {
-				return lieux;
+			if (lieu.getNoLieu() != 0) {
+				return lieu;
 			} else {
 				return null;
 			}
@@ -41,12 +41,12 @@ public class JpaLieuxDao extends JpaDao implements LieuxDao{
 	}
 
 	@Override
-	public Lieux findLieux(Integer noLieux) {
+	public Lieu findLieu(Integer noLieu) {
 		EntityManager em = getEntityManagerFactory().createEntityManager();
-		Lieux lieux = em.find(Lieux.class, noLieux);
+		Lieu lieu = em.find(Lieu.class, noLieu);
 		try {
-			if (lieux != null) {
-				return lieux;
+			if (lieu != null) {
+				return lieu;
 			} else {
 				return null;
 			}
@@ -56,16 +56,16 @@ public class JpaLieuxDao extends JpaDao implements LieuxDao{
 	}
 
 	@Override
-	public Lieux updateLieux(Lieux lieux) {
+	public Lieu updateLieu(Lieu lieu) {
 		EntityManager em = getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = em.getTransaction();
 
 		try {
 			transaction.begin();
-			em.merge(lieux);
+			em.merge(lieu);
 			transaction.commit();
 
-			return lieux;
+			return lieu;
 		} finally {
 			if (transaction.isActive())
 				transaction.rollback();
@@ -74,18 +74,18 @@ public class JpaLieuxDao extends JpaDao implements LieuxDao{
 	}
 
 	@Override
-	public Boolean removeLieux(Integer noLieux) {
+	public Boolean removeLieu(Integer noLieu) {
 		EntityManager em = getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = em.getTransaction();
 
 		try {
 			
-			Lieux lieux = em.find(Lieux.class, noLieux);
+			Lieu lieu = em.find(Lieu.class, noLieu);
 			
-			if (lieux != null) {
+			if (lieu != null) {
 				transaction.begin();
 				
-				em.remove(lieux);
+				em.remove(lieu);
 
 				transaction.commit();
 				
@@ -101,15 +101,15 @@ public class JpaLieuxDao extends JpaDao implements LieuxDao{
 	}
 
 	@Override
-	public Collection<Lieux> getAllLieux() {
+	public Collection<Lieu> getAllLieu() {
 		EntityManager em = getEntityManagerFactory().createEntityManager();
 
 		try {
-			Query query = em.createQuery("SELECT v FROM Lieux AS v", Lieux.class);
+			Query query = em.createQuery("SELECT l FROM Lieu AS l", Lieu.class);
 
-			Collection<Lieux> listLieux = query.getResultList();
+			Collection<Lieu> listLieu = query.getResultList();
 
-			return listLieux;
+			return listLieu;
 		} finally {
 			em.close();
 		}

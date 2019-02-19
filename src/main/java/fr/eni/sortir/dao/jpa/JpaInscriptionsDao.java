@@ -7,10 +7,10 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 
-import fr.eni.sortir.dao.EtatsDao;
+import fr.eni.sortir.dao.EtatDao;
 import fr.eni.sortir.dao.InscriptionsDao;
-import fr.eni.sortir.entities.Etats;
-import fr.eni.sortir.entities.Inscriptions;
+import fr.eni.sortir.entities.Etat;
+import fr.eni.sortir.entities.Inscription;
 
 public class JpaInscriptionsDao extends JpaDao implements InscriptionsDao {
 	public JpaInscriptionsDao(EntityManagerFactory emf) {
@@ -18,18 +18,18 @@ public class JpaInscriptionsDao extends JpaDao implements InscriptionsDao {
 	}
 
 	@Override
-	public Inscriptions addInscriptions(Inscriptions inscriptions) {
+	public Inscription addInscription(Inscription inscription) {
 		EntityManager em = getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = em.getTransaction();
 
 		try {
 			transaction.begin();
-			em.persist(inscriptions);
+			em.persist(inscription);
 			transaction.commit();
 			em.flush();
 
-			if ((inscriptions.getNoSortie() != 0) && (inscriptions.getNoParticipant() != 0)) {
-				return inscriptions;
+			if ((inscription.getSortie() != null) && (inscription.getParticipant() != null)) {
+				return inscription;
 			} else {
 				return null;
 			}
@@ -41,9 +41,9 @@ public class JpaInscriptionsDao extends JpaDao implements InscriptionsDao {
 	}
 
 	@Override
-	public Inscriptions findInscriptions(Integer noInscriptions) {
+	public Inscription findInscription(Integer noInscription) {
 		EntityManager em = getEntityManagerFactory().createEntityManager();
-		Inscriptions inscriptions = em.find(Inscriptions.class, noInscriptions);
+		Inscription inscriptions = em.find(Inscription.class, noInscription);
 		try {
 			if (inscriptions != null) {
 				return inscriptions;
@@ -56,16 +56,16 @@ public class JpaInscriptionsDao extends JpaDao implements InscriptionsDao {
 	}
 
 	@Override
-	public Inscriptions updateInscriptions(Inscriptions inscriptions) {
+	public Inscription updateInscription(Inscription inscription) {
 		EntityManager em = getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = em.getTransaction();
 
 		try {
 			transaction.begin();
-			em.merge(inscriptions);
+			em.merge(inscription);
 			transaction.commit();
 
-			return inscriptions;
+			return inscription;
 		} finally {
 			if (transaction.isActive())
 				transaction.rollback();
@@ -74,13 +74,13 @@ public class JpaInscriptionsDao extends JpaDao implements InscriptionsDao {
 	}
 
 	@Override
-	public Boolean removeInscriptions(Integer noInscriptions) {
+	public Boolean removeInscription(Integer noInscription) {
 		EntityManager em = getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = em.getTransaction();
 
 		try {
 			
-			Etats etats = em.find(Etats.class, noInscriptions);
+			Etat etats = em.find(Etat.class, noInscription);
 			
 			if (etats != null) {
 				transaction.begin();
@@ -101,13 +101,13 @@ public class JpaInscriptionsDao extends JpaDao implements InscriptionsDao {
 	}
 
 	@Override
-	public Collection<Inscriptions> getAllInscriptions() {
+	public Collection<Inscription> getAllInscription() {
 		EntityManager em = getEntityManagerFactory().createEntityManager();
 
 		try {
-			Query query = em.createQuery("SELECT e FROM Inscriptions AS e", Inscriptions.class);
+			Query query = em.createQuery("SELECT i FROM Inscription AS i", Inscription.class);
 
-			Collection<Inscriptions> listInscriptions = query.getResultList();
+			Collection<Inscription> listInscriptions = query.getResultList();
 
 			return listInscriptions;
 		} finally {

@@ -8,9 +8,9 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 
 import fr.eni.sortir.dao.SitesDao;
-import fr.eni.sortir.entities.Inscriptions;
-import fr.eni.sortir.entities.Participants;
-import fr.eni.sortir.entities.Sites;
+import fr.eni.sortir.entities.Inscription;
+import fr.eni.sortir.entities.Participant;
+import fr.eni.sortir.entities.Site;
 
 public class JpaSitesDao extends JpaDao implements SitesDao  {
 
@@ -20,18 +20,18 @@ public class JpaSitesDao extends JpaDao implements SitesDao  {
 	}
 
 	@Override
-	public Sites addSites(Sites sites) {
+	public Site addSite(Site site) {
 		EntityManager em = getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = em.getTransaction();
 
 		try {
 			transaction.begin();
-			em.persist(sites);
+			em.persist(site);
 			transaction.commit();
 			em.flush();
 
-			if (sites.getNoSite() != 0) {
-				return sites;
+			if (site.getNoSite() != 0) {
+				return site;
 			} else {
 				return null;
 			}
@@ -43,12 +43,12 @@ public class JpaSitesDao extends JpaDao implements SitesDao  {
 	}
 
 	@Override
-	public Sites findSites(Integer noSites) {
+	public Site findSite(Integer noSite) {
 		EntityManager em = getEntityManagerFactory().createEntityManager();
-		Sites sites = em.find(Sites.class, noSites);
+		Site site = em.find(Site.class, noSite);
 		try {
-			if (sites != null) {
-				return sites;
+			if (site != null) {
+				return site;
 			} else {
 				return null;
 			}
@@ -58,16 +58,16 @@ public class JpaSitesDao extends JpaDao implements SitesDao  {
 	}
 
 	@Override
-	public Sites updateSites(Sites sites) {
+	public Site updateSite(Site site) {
 		EntityManager em = getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = em.getTransaction();
 
 		try {
 			transaction.begin();
-			em.merge(sites);
+			em.merge(site);
 			transaction.commit();
 
-			return sites;
+			return site;
 		} finally {
 			if (transaction.isActive())
 				transaction.rollback();
@@ -76,18 +76,18 @@ public class JpaSitesDao extends JpaDao implements SitesDao  {
 	}
 
 	@Override
-	public Boolean removeSites(Integer noSites) {
+	public Boolean removeSite(Integer noSite) {
 		EntityManager em = getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = em.getTransaction();
 
 		try {
 			
-			Sites sites = em.find(Sites.class, noSites);
+			Site site = em.find(Site.class, noSite);
 			
-			if (sites != null) {
+			if (site != null) {
 				transaction.begin();
 				
-				em.remove(sites);
+				em.remove(site);
 
 				transaction.commit();
 				
@@ -103,15 +103,15 @@ public class JpaSitesDao extends JpaDao implements SitesDao  {
 	}
 
 	@Override
-	public Collection<Sites> getAllSites() {
+	public Collection<Site> getAllSite() {
 		EntityManager em = getEntityManagerFactory().createEntityManager();
 
 		try {
-			Query query = em.createQuery("SELECT e FROM Participants AS e", Inscriptions.class);
+			Query query = em.createQuery("SELECT s FROM Sites AS s", Inscription.class);
 
-			Collection<Sites> listSites = query.getResultList();
+			Collection<Site> listSite = query.getResultList();
 
-			return listSites;
+			return listSite;
 		} finally {
 			em.close();
 		}

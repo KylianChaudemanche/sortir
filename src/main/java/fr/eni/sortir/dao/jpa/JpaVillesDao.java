@@ -7,9 +7,8 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 
-import fr.eni.sortir.dao.SortiesDao;
 import fr.eni.sortir.dao.VillesDao;
-import fr.eni.sortir.entities.Villes;
+import fr.eni.sortir.entities.Ville;
 
 public class JpaVillesDao extends JpaDao implements VillesDao {
 
@@ -19,18 +18,18 @@ public class JpaVillesDao extends JpaDao implements VillesDao {
 	}
 
 	@Override
-	public Villes addVilles(Villes villes) {
+	public Ville addVille(Ville ville) {
 		EntityManager em = getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = em.getTransaction();
 
 		try {
 			transaction.begin();
-			em.persist(villes);
+			em.persist(ville);
 			transaction.commit();
 			em.flush();
 
-			if (villes.getNoVille() != 0) {
-				return villes;
+			if (ville.getNoVille() != 0) {
+				return ville;
 			} else {
 				return null;
 			}
@@ -42,12 +41,12 @@ public class JpaVillesDao extends JpaDao implements VillesDao {
 	}
 
 	@Override
-	public Villes findVilles(Integer noVilles) {
+	public Ville findVille(Integer noVille) {
 		EntityManager em = getEntityManagerFactory().createEntityManager();
-		Villes villes = em.find(Villes.class, noVilles);
+		Ville ville = em.find(Ville.class, noVille);
 		try {
-			if (villes != null) {
-				return villes;
+			if (ville != null) {
+				return ville;
 			} else {
 				return null;
 			}
@@ -57,16 +56,16 @@ public class JpaVillesDao extends JpaDao implements VillesDao {
 	}
 
 	@Override
-	public Villes updateVilles(Villes villes) {
+	public Ville updateVille(Ville ville) {
 		EntityManager em = getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = em.getTransaction();
 
 		try {
 			transaction.begin();
-			em.merge(villes);
+			em.merge(ville);
 			transaction.commit();
 
-			return villes;
+			return ville;
 		} finally {
 			if (transaction.isActive())
 				transaction.rollback();
@@ -75,18 +74,18 @@ public class JpaVillesDao extends JpaDao implements VillesDao {
 	}
 
 	@Override
-	public Boolean removeVilles(Integer noVilles) {
+	public Boolean removeVille(Integer noVille) {
 		EntityManager em = getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = em.getTransaction();
 
 		try {
 			
-			Villes villes = em.find(Villes.class, noVilles);
+			Ville ville = em.find(Ville.class, noVille);
 			
-			if (villes != null) {
+			if (ville != null) {
 				transaction.begin();
 				
-				em.remove(villes);
+				em.remove(ville);
 
 				transaction.commit();
 				
@@ -102,15 +101,15 @@ public class JpaVillesDao extends JpaDao implements VillesDao {
 	}
 
 	@Override
-	public Collection<Villes> getAllVilles() {
+	public Collection<Ville> getAllVille() {
 		EntityManager em = getEntityManagerFactory().createEntityManager();
 
 		try {
-			Query query = em.createQuery("SELECT v FROM Villes AS v", Villes.class);
+			Query query = em.createQuery("SELECT v FROM Ville AS v", Ville.class);
 
-			Collection<Villes> listVilles = query.getResultList();
+			Collection<Ville> listVille = query.getResultList();
 
-			return listVilles;
+			return listVille;
 		} finally {
 			em.close();
 		}

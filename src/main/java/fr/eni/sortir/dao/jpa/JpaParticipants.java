@@ -8,9 +8,9 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 
 import fr.eni.sortir.dao.ParticipantsDao;
-import fr.eni.sortir.entities.Etats;
-import fr.eni.sortir.entities.Inscriptions;
-import fr.eni.sortir.entities.Participants;
+import fr.eni.sortir.entities.Etat;
+import fr.eni.sortir.entities.Inscription;
+import fr.eni.sortir.entities.Participant;
 
 public class JpaParticipants extends JpaDao implements ParticipantsDao {
 
@@ -19,18 +19,18 @@ public class JpaParticipants extends JpaDao implements ParticipantsDao {
 	}
 
 	@Override
-	public Participants addParticipants(Participants participants) {
+	public Participant addParticipant(Participant participant) {
 		EntityManager em = getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = em.getTransaction();
 
 		try {
 			transaction.begin();
-			em.persist(participants);
+			em.persist(participant);
 			transaction.commit();
 			em.flush();
 
-			if (participants.getNoParticipant() != 0) {
-				return participants;
+			if (participant.getNoParticipant() != 0) {
+				return participant;
 			} else {
 				return null;
 			}
@@ -42,12 +42,12 @@ public class JpaParticipants extends JpaDao implements ParticipantsDao {
 	}
 
 	@Override
-	public Participants findParticipants(Integer noParticipants) {
+	public Participant findParticipant(Integer noParticipant) {
 		EntityManager em = getEntityManagerFactory().createEntityManager();
-		Participants participants = em.find(Participants.class, noParticipants);
+		Participant participant = em.find(Participant.class, noParticipant);
 		try {
-			if (participants != null) {
-				return participants;
+			if (participant != null) {
+				return participant;
 			} else {
 				return null;
 			}
@@ -57,16 +57,16 @@ public class JpaParticipants extends JpaDao implements ParticipantsDao {
 	}
 
 	@Override
-	public Participants updateParticipants(Participants participants) {
+	public Participant updateParticipant(Participant participant) {
 		EntityManager em = getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = em.getTransaction();
 
 		try {
 			transaction.begin();
-			em.merge(participants);
+			em.merge(participant);
 			transaction.commit();
 
-			return participants;
+			return participant;
 		} finally {
 			if (transaction.isActive())
 				transaction.rollback();
@@ -75,18 +75,18 @@ public class JpaParticipants extends JpaDao implements ParticipantsDao {
 	}
 
 	@Override
-	public Boolean removeParticipants(Integer noParticipants) {
+	public Boolean removeParticipant(Integer noParticipant) {
 		EntityManager em = getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = em.getTransaction();
 
 		try {
 			
-			Participants participants = em.find(Participants.class, noParticipants);
+			Participant participant = em.find(Participant.class, noParticipant);
 			
-			if (participants != null) {
+			if (participant != null) {
 				transaction.begin();
 				
-				em.remove(participants);
+				em.remove(participant);
 
 				transaction.commit();
 				
@@ -102,15 +102,15 @@ public class JpaParticipants extends JpaDao implements ParticipantsDao {
 	}
 
 	@Override
-	public Collection<Participants> getAllParticipants() {
+	public Collection<Participant> getAllParticipant() {
 		EntityManager em = getEntityManagerFactory().createEntityManager();
 
 		try {
-			Query query = em.createQuery("SELECT e FROM Participants AS e", Inscriptions.class);
+			Query query = em.createQuery("SELECT p FROM Participant AS p", Inscription.class);
 
-			Collection<Participants> listParticipants = query.getResultList();
+			Collection<Participant> listParticipant = query.getResultList();
 
-			return listParticipants;
+			return listParticipant;
 		} finally {
 			em.close();
 		}

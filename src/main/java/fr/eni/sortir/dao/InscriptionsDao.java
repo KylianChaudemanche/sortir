@@ -2,16 +2,16 @@ package fr.eni.sortir.dao;
 
 import java.util.Collection;
 
-import fr.eni.sortir.entities.Inscriptions;
+import fr.eni.sortir.entities.Inscription;
 
 public interface InscriptionsDao {
-	Inscriptions addInscriptions(Inscriptions inscriptions);
+	Inscription addInscription(Inscription inscriptions);
 
-	Inscriptions findInscriptions(Integer noInscriptions);
+	Inscription findInscription(Integer noInscription);
 
-	Inscriptions updateInscriptions(Inscriptions inscriptions);
+	Inscription updateInscription(Inscription inscriptions);
 
-	Boolean removeInscriptions(Integer noInscriptions);
+	Boolean removeInscription(Integer noInscription);
 
-	Collection<Inscriptions> getAllInscriptions(); 
+	Collection<Inscription> getAllInscription(); 
 }

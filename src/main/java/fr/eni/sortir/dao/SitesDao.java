@@ -2,16 +2,16 @@ package fr.eni.sortir.dao;
 
 import java.util.Collection;
 
-import fr.eni.sortir.entities.Sites;
+import fr.eni.sortir.entities.Site;
 
 public interface SitesDao {
-	Sites addSites(Sites sites);
+	Site addSite(Site sites);
 
-	Sites findSites(Integer noSites);
+	Site findSite(Integer noSite);
 
-	Sites updateSites(Sites sites);
+	Site updateSite(Site sites);
 
-	Boolean removeSites(Integer noSites);
+	Boolean removeSite(Integer noSite);
 
-	Collection<Sites> getAllSites();
+	Collection<Site> getAllSite();
 }

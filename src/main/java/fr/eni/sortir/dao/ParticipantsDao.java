@@ -2,16 +2,16 @@ package fr.eni.sortir.dao;
 
 import java.util.Collection;
 
-import fr.eni.sortir.entities.Participants;
+import fr.eni.sortir.entities.Participant;
 
 public interface ParticipantsDao {
-	Participants addParticipants(Participants inscriptions);
+	Participant addParticipant(Participant inscriptions);
 
-	Participants findParticipants(Integer noParticipants);
+	Participant findParticipant(Integer noParticipant);
 
-	Participants updateParticipants(Participants participants);
+	Participant updateParticipant(Participant participants);
 
-	Boolean removeParticipants(Integer noParticipants);
+	Boolean removeParticipant(Integer noParticipant);
 
-	Collection<Participants> getAllParticipants(); 
+	Collection<Participant> getAllParticipant(); 
 }

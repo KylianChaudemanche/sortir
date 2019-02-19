@@ -2,16 +2,16 @@ package fr.eni.sortir.dao;
 
 import java.util.Collection;
 
-import fr.eni.sortir.entities.Villes;
+import fr.eni.sortir.entities.Ville;
 
 public interface VillesDao {
-	Villes addVilles(Villes villes);
+	Ville addVille(Ville villes);
 
-	Villes findVilles(Integer noVilles);
+	Ville findVille(Integer noVille);
 
-	Villes updateVilles(Villes villes);
+	Ville updateVille(Ville villes);
 
-	Boolean removeVilles(Integer noVilles);
+	Boolean removeVille(Integer noVille);
 
-	Collection<Villes> getAllVilles();
+	Collection<Ville> getAllVille();
 }
