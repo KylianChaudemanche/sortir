@@ -17,6 +17,7 @@
 			<property name="hibernate.format_sql" value="true" />
 			<property name="hibernate.use_sql_comments" value="true" />
 			<property name="hibernate.dialect" value="org.hibernate.dialect.SQLServerDialect" />
+			<property name="hibernate.id.new_generator_mappings" value="false" />
 		</properties>
 	</persistence-unit>
 </persistence>
