@@ -10,12 +10,12 @@
 <meta name="author" content="">
 <% if (request.getParameter("titre")== null){
 		%>
-<title>Login</title>
+<title>Sortir.com</title>
 <% 
 	}else{
 %>
 
-<title><%= request.getParameter("titre") %></title>
+<title><%= request.getParameter("titre") %> | Sortir.com</title>
 
 <% } %>
 
