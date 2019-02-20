@@ -41,8 +41,8 @@ public class ServletLogin extends HttpServlet {
 		if( (session != null)) 
 		{
 			if((session.getAttribute("participant") != null)) {
-				//response.sendRedirect("/sortir/accueil");
-				//return;
+				response.sendRedirect("/sortir/accueil");
+				return;
 			}
 		}
 
@@ -83,7 +83,6 @@ public class ServletLogin extends HttpServlet {
 					Cookie cookie = new Cookie("mail", "");
 					cookie.setMaxAge(0);
 					response.addCookie(cookie);
-					System.out.println("erased cookie");
 				}
 				// redirect
 				session.setAttribute("participant", participant);
