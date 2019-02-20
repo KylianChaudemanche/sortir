@@ -3,7 +3,7 @@
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!-- ####### NAVBAR ######## -->
-<%@include file="includes/navbar.jsp"%>
+<%@include file="includes/header.jsp"%>
 
 
 <!-- ####### CONTENT ######## -->
