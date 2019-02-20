@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import fr.eni.sortir.dao.DaoFactory;
+import fr.eni.sortir.entities.Participant;
 
 /**
  * Servlet implementation class ServletLogin
@@ -34,6 +35,8 @@ public class ServletLogin extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+		Participant participant = DaoFactory.getParticipantDao().findParticipantByMail("mail@mail.com");
+		
 		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/login.jsp");
 		rd.forward(request, response);
 	}
@@ -46,7 +49,6 @@ public class ServletLogin extends HttpServlet {
 		request.getParameter("password");
 		
 		DaoFactory daoFactory = new DaoFactory();
-		daoFactory.
 	}
 
 }

@@ -13,5 +13,7 @@ public interface ParticipantDao {
 
 	Boolean removeParticipant(Integer noParticipant);
 
-	Collection<Participant> getAllParticipant(); 
+	Collection<Participant> getAllParticipant();
+
+	Participant findParticipantByMail(String mail); 
 }
