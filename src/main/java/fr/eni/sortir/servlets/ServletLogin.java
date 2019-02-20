@@ -41,8 +41,8 @@ public class ServletLogin extends HttpServlet {
 		if( (session != null)) 
 		{
 			if((session.getAttribute("participant") != null)) {
-				response.sendRedirect("/sortir/accueil");
-				return;
+				//response.sendRedirect("/sortir/accueil");
+				//return;
 			}
 		}
 
