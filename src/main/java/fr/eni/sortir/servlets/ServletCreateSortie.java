@@ -7,6 +7,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import fr.eni.sortir.dao.DaoFactory;
+import fr.eni.sortir.entities.Sortie;
+
 /**
  * Servlet implementation class ServletCreateSortie
  */
@@ -27,6 +30,7 @@ public class ServletCreateSortie extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		request.setAttribute("cities", DaoFactory.getVilleDao().getAllVille());
 		request.getRequestDispatcher("createSortie.jsp").forward(request, response);
 	}
 
@@ -36,7 +40,23 @@ public class ServletCreateSortie extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		doGet(request, response);
+		
+		System.out.println(request.getParameter("sortieCity"));
+		
+		switch(request.getParameter("action")) {
+			case "save":
+				saveSortie(request);
+				break;
+			case "publish":
+				break;
+			default:
+				response.sendError(HttpServletResponse.SC_FORBIDDEN);
+		}
 	}
-
+	
+	private boolean saveSortie(HttpServletRequest request) {
+		Sortie sortie = new Sortie();
+		
+		return true;
+	}
 }

@@ -32,7 +32,7 @@ public class Sortie implements Serializable {
 	private Integer noSortie;
 	private String nom;
 	@Column(name = "datedebut")
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date dateDebut;
 	private Integer duree;
 	@Column(name = "datecloture")

@@ -31,6 +31,9 @@
 	rel="stylesheet">
 </head>
 
+<!-- Selectize -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.css" rel="stylesheet">
+
 <body>
 	<div class="wrapper">
 		<!-- allow responsive footer -->
