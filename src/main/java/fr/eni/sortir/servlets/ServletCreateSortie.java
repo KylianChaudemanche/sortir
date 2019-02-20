@@ -8,7 +8,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import fr.eni.sortir.dao.DaoFactory;
+import fr.eni.sortir.entities.Lieu;
 import fr.eni.sortir.entities.Sortie;
+import fr.eni.sortir.entities.Ville;
 
 /**
  * Servlet implementation class ServletCreateSortie
@@ -31,6 +33,7 @@ public class ServletCreateSortie extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		request.setAttribute("cities", DaoFactory.getVilleDao().getAllVille());
+		request.setAttribute("places", DaoFactory.getLieuDao().getAllLieu());
 		request.getRequestDispatcher("createSortie.jsp").forward(request, response);
 	}
 
@@ -40,8 +43,26 @@ public class ServletCreateSortie extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+
+		if (request.getParameter("sortieCity").equals("") || request.getParameter("sortiePlace").equals("")) {
+			response.sendError(HttpServletResponse.SC_FORBIDDEN);
+		}
 		
-		System.out.println(request.getParameter("sortieCity"));
+		Ville ville = DaoFactory.getVilleDao().findVille(Integer.valueOf(request.getParameter("sortieCity")));
+		Lieu lieu = DaoFactory.getLieuDao().findLieu(Integer.valueOf(request.getParameter("sortiePlace")));
+		
+		if (ville == null || lieu == null) {
+			response.sendError(HttpServletResponse.SC_FORBIDDEN);
+		}
+		
+		System.out.println();
+			
+//		request.getParameter("sortieName"),
+//		request.getParameter("sortieBeginDate"),
+//		request.getParameter("sortieCloseInscriptionDate"),
+//		request.getParameter("sortieNbMaxPlace"),
+//		request.getParameter("sortieDuration"),
+//		request.getParameter("sortieDesc"),
 		
 		switch(request.getParameter("action")) {
 			case "save":

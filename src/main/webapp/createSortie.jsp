@@ -17,47 +17,47 @@
 				<div class="form-group row">
 					<label class="col-sm-4 col-form-label">Nom de la sortie</label>
 					<div class="col-sm-8">
-						<input class="form-control" type="text" name="sortieName">
+						<input class="form-control" type="text" name="sortieName" required>
 					</div>
 				</div>
 				<div class="form-group row">
 					<label class="col-sm-4 col-form-label">Date et heure de la sortie</label>
 					<div class="col-sm-8">
-						<input class="form-control" type="datetime" name="sortieBeginDate">
+						<input class="form-control" type="datetime-local" name="sortieBeginDate" required>
 					</div>
 				</div>
 				<div class="form-group row">
 					<label class="col-sm-4 col-form-label">Date limite d'inscription</label>
 					<div class="col-sm-8">
-						<input class="form-control" type="date" name="sortieCloseInscriptionDate">
+						<input class="form-control" type="date" name="sortieCloseInscriptionDate" required>
 					</div>
 				</div>
 				<div class="form-group row">
 					<label class="col-sm-4 col-form-label">Nombre de place</label>
 					<div class="col-sm-8">
-						<input class="form-control" type="number" name="sortieNbMaxPlace">
+						<input class="form-control" type="number" name="sortieNbMaxPlace" required>
 					</div>
 				</div>
 				<div class="form-group row">
 					<label class="col-sm-4 col-form-label">Durée</label>
 					<div class="col-sm-8">
-						<input class="form-control col-sm-2 d-inline" name="sortieDuration" type="number" min="1" max="100" step="1">
+						<input class="form-control col-sm-2 d-inline" name="sortieDuration" type="number" min="1" max="100" step="1" required>
 						<p class="d-inline ml-3">minutes</p>
 					</div>
 				</div>
 				<div class="form-group row">
 					<label class="col-sm-4 col-form-label">Description et infos</label>
 					<div class="col-sm-8">
-						<textarea class="form-control" name="sortieDesc" rows="3"></textarea>
+						<textarea class="form-control" name="sortieDesc" rows="3" required></textarea>
 					</div>
 				</div>
 			</div>
 			
 			<div class="col-sm-6 float-right">
 				<div class="form-group row">
-					<label class="col-sm-4 col-form-label">Ville organisatrice</label>
+					<label class="col-sm-4 col-form-label">Site organisateur</label>
 					<div class="col-sm-8">
-						<input class="form-control" type="text">
+						<input class="form-control" type="text" disabled>
 					</div>
 				</div>
 				<div class="form-group row">
@@ -70,32 +70,32 @@
 				<div class="form-group row">
 					<label class="col-sm-4 col-form-label">Lieu</label>
 					<div class="col-sm-8">
-						<select id="sortiePlace" name="sortiePlace" class="form-control">
+						<select id="sortiePlace" name="sortiePlace" require>
 						</select>
 					</div>
 				</div>
 				<div class="form-group row">
-					<label class="col-sm-4 col-form-label">Rue</label>
+					<label class="col-sm-4 col-form-label">Adresse</label>
 					<div class="col-sm-8">
-						<input class="form-control" type="text">
+						<input id="sortieAddress" class="form-control" type="text" disabled>
 					</div>
 				</div>
 				<div class="form-group row">
 					<label class="col-sm-4 col-form-label">Code postal</label>
 					<div class="col-sm-8">
-						<input class="form-control" type="text">
+						<input id="sortieCodePostal" class="form-control" type="text" disabled>
 					</div>
 				</div>
 				<div class="form-group row">
 					<label class="col-sm-4 col-form-label">Latitude</label>
 					<div class="col-sm-8">
-						<input class="form-control" name="sortieLatitude" type="text">
+						<input id="sortieLatitude" class="form-control"type="text" disabled>
 					</div>
 				</div>
 				<div class="form-group row">
 					<label class="col-sm-4 col-form-label">Longitude</label>
 					<div class="col-sm-8">
-						<input class="form-control" name="sortieLongitude" type="text">
+						<input id="sortieLongitude" class="form-control"type="text" disabled>
 					</div>
 				</div>
 			</div>
@@ -122,16 +122,65 @@
 			<c:forEach items="${cities}" var="city">
 				{
 					name: "${city.nomVille}",
-					id: "${city.noVille}"
+					id: "${city.noVille}",
+					codePostal: "${city.codePostal}"
 				},
 			</c:forEach> 
 		];
 		
-		$( "#sortieCity" ).selectize({
+		var places = [
+			<c:forEach items="${places}" var="place">
+				{
+					name: "${place.nomLieu}",
+					id: "${place.noLieu}",
+					address: "${place.adresse}",
+					latitude: "${place.latitude}",
+					longitude: "${place.longitude}",
+					cityId: "${place.ville.noVille}"
+				},
+			</c:forEach> 
+		];
+		
+		initSelectize(cities);
+		handleOnChangeCity(cities, places);
+	});
+	
+	function initSelectize(cities) {
+		$("#sortieCity").selectize({
 			options: cities,
 			valueField: "id",
 			labelField: "name",
 			searchField: "name"
+		});		
+		
+		$("#sortiePlace").selectize();
+	}
+	
+	function handleOnChangeCity(cities, places) {
+		$("#sortieCity").on("change", function() {
+			var cityId = $("#sortieCity").find(":selected").val();
+			$("#sortieCodePostal").val(cities.filter(city => city.id == cityId)[0].codePostal);
+
+			var placeFiltred = places.filter(place => place.cityId == cityId);
+			handleOnChangePlace(placeFiltred);
 		});
-	});
+	}
+	
+	function handleOnChangePlace(placeFiltred) {
+		$('#sortiePlace').selectize()[0].selectize.destroy();
+		$("#sortiePlace").selectize({
+			options: placeFiltred,
+			valueField: "id",
+			labelField: "name",
+			searchField: "name"
+		});
+		
+		$("#sortiePlace").on("change", function() {
+			var placeId = $("#sortiePlace").find(":selected").val();
+			var place = placeFiltred.filter(place => place.id == placeId)[0];
+			$("#sortieAddress").val(place.address);
+			$("#sortieLongitude").val(place.longitude);
+			$("#sortieLatitude").val(place.latitude);
+		});
+	}
 </script>
