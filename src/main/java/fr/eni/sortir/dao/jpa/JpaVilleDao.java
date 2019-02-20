@@ -14,7 +14,6 @@ public class JpaVilleDao extends JpaDao implements VilleDao {
 
 	public JpaVilleDao(EntityManagerFactory emf) {
 		super(emf);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -100,6 +99,7 @@ public class JpaVilleDao extends JpaDao implements VilleDao {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<Ville> getAllVille() {
 		EntityManager em = getEntityManagerFactory().createEntityManager();

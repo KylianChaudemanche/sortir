@@ -8,14 +8,12 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 
 import fr.eni.sortir.dao.SortieDao;
-import fr.eni.sortir.entities.Etat;
 import fr.eni.sortir.entities.Sortie;;
 
 public class JpaSortieDao extends JpaDao implements SortieDao{
 
 	public JpaSortieDao(EntityManagerFactory emf) {
 		super(emf);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -101,6 +99,7 @@ public class JpaSortieDao extends JpaDao implements SortieDao{
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<Sortie> getAllSortie() {
 		EntityManager em = getEntityManagerFactory().createEntityManager();

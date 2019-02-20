@@ -3,12 +3,14 @@ package fr.eni.sortir.entities;
 import java.io.Serializable;
 import java.util.Objects;
 
-import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.persistence.ManyToOne;
 
 @Embeddable
 public class InscriptionId implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2283392230583010242L;
 	private Integer noParticipant;
 	private Integer noSortie;
 	

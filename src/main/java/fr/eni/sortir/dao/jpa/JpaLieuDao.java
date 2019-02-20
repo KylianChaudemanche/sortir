@@ -14,7 +14,6 @@ public class JpaLieuDao extends JpaDao implements LieuDao{
 	
 	public JpaLieuDao(EntityManagerFactory emf) {
 		super(emf);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -100,6 +99,7 @@ public class JpaLieuDao extends JpaDao implements LieuDao{
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<Lieu> getAllLieu() {
 		EntityManager em = getEntityManagerFactory().createEntityManager();

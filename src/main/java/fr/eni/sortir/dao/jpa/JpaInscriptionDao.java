@@ -99,6 +99,7 @@ public class JpaInscriptionDao extends JpaDao implements InscriptionDao {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<Inscription> getAllInscription() {
 		EntityManager em = getEntityManagerFactory().createEntityManager();

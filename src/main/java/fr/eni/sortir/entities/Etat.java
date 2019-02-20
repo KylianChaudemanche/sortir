@@ -14,6 +14,10 @@ import javax.persistence.Table;
 @Entity
 @Table(name="ETATS")
 public class Etat implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3247440578284786710L;
 	@Id
 	@GeneratedValue
 	@Column(name="no_etat")

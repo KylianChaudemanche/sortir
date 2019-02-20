@@ -9,7 +9,7 @@
 <!-- ####### CONTENT ######## -->
 
 <div class="container">
-	<h1 class="title-create-sortie mb-4 mt-4">Créer une sortie</h1>
+	<h1 class="text-center mb-4 mt-4">Créer une sortie</h1>
 	
 	<form action="createSortie" method="POST">
 		<div class="row">
@@ -41,7 +41,7 @@
 				<div class="form-group row">
 					<label class="col-sm-4 col-form-label">Durée</label>
 					<div class="col-sm-8">
-						<input class="form-control col-sm-2 d-inline" name="sortieDuration" type="number" min="1" max="100" step="1" required>
+						<input class="form-control col-sm-3 d-inline" name="sortieDuration" type="number" min="1" max="999" step="1" required>
 						<p class="d-inline ml-3">minutes</p>
 					</div>
 				</div>
@@ -63,14 +63,14 @@
 				<div class="form-group row">
 					<label class="col-sm-4 col-form-label">Ville</label>
 					<div class="col-sm-8">
-						<select id="sortieCity" name="sortieCity">
+						<select id="sortieCity" name="sortieCity" required>
 						</select>
 					</div>
 				</div>
 				<div class="form-group row">
 					<label class="col-sm-4 col-form-label">Lieu</label>
 					<div class="col-sm-8">
-						<select id="sortiePlace" name="sortiePlace" require>
+						<select id="sortiePlace" name="sortiePlace" required>
 						</select>
 					</div>
 				</div>
@@ -102,7 +102,7 @@
 		</div>
 		
 		<div class="form-group row">
-			<div class="btn-wrapper mt-2">
+			<div class="mx-auto mt-2">
 		      	<button type="submit" name="action" class="btn btn-secondary btn-align" value="save">Enregistrer</button>
 		      	<button type="submit" name="action" class="btn btn-secondary btn-align" value="publish">Publier la sortie</button>
 		      	<a href="#"><button class="btn btn-secondary btn-align">Annuler</button></a>
@@ -153,34 +153,42 @@
 			searchField: "name"
 		});		
 		
-		$("#sortiePlace").selectize();
+		$("#sortiePlace").selectize({
+			valueField: "id",
+			labelField: "name",
+			searchField: "name"
+		});
 	}
 	
 	function handleOnChangeCity(cities, places) {
 		$("#sortieCity").on("change", function() {
 			var cityId = $("#sortieCity").find(":selected").val();
-			$("#sortieCodePostal").val(cities.filter(city => city.id == cityId)[0].codePostal);
+			var city = cities.filter(city => city.id == cityId)[0];
+			if (city) {
+				$("#sortieCodePostal").val(city.codePostal);
 
-			var placeFiltred = places.filter(place => place.cityId == cityId);
-			handleOnChangePlace(placeFiltred);
+				var placeFiltred = places.filter(place => place.cityId == cityId);
+				handleOnChangePlace(placeFiltred);
+			}
 		});
 	}
 	
 	function handleOnChangePlace(placeFiltred) {
-		$('#sortiePlace').selectize()[0].selectize.destroy();
-		$("#sortiePlace").selectize({
-			options: placeFiltred,
-			valueField: "id",
-			labelField: "name",
-			searchField: "name"
-		});
+		var selectize = $('#sortiePlace').selectize()[0].selectize;
+		selectize.clear();
+		selectize.clearOptions();
+		selectize.load(function(callback) {
+			callback(placeFiltred);
+		})
 		
 		$("#sortiePlace").on("change", function() {
 			var placeId = $("#sortiePlace").find(":selected").val();
 			var place = placeFiltred.filter(place => place.id == placeId)[0];
-			$("#sortieAddress").val(place.address);
-			$("#sortieLongitude").val(place.longitude);
-			$("#sortieLatitude").val(place.latitude);
+			if (place) {
+				$("#sortieAddress").val(place.address);
+				$("#sortieLongitude").val(place.longitude);
+				$("#sortieLatitude").val(place.latitude);
+			}
 		});
 	}
 </script>

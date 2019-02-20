@@ -114,4 +114,19 @@ public class JpaEtatDao extends JpaDao implements EtatDao {
 			em.close();
 		}
 	}
+
+	@Override
+	public Etat findEtatByName(String name) {
+		EntityManager em = getEntityManagerFactory().createEntityManager();
+		
+		try {
+			Query query = em.createQuery("SELECT e FROM Etats AS e WHERE libelle = :libelle", Etat.class).setParameter("libelle", name);
+
+			Etat etat = (Etat) query.getSingleResult();
+
+			return etat;
+		} finally {
+			em.close();
+		}
+	}
 }

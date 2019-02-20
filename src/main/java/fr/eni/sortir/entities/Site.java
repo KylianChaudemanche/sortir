@@ -7,7 +7,6 @@ import java.util.Collection;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -15,6 +14,10 @@ import javax.persistence.Table;
 @Entity
 @Table(name="SITES")
 public class Site implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8468692258408794359L;
 	@Id
 	@GeneratedValue
 	@Column(name="no_site")

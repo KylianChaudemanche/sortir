@@ -17,6 +17,10 @@ import javax.persistence.Table;
 @Entity
 @Table(name="LIEUX")
 public class Lieu implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1693505869974830434L;
 	@Id
 	@GeneratedValue
 	@Column(name="no_lieu")

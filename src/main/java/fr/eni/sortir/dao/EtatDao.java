@@ -8,6 +8,8 @@ public interface EtatDao {
 	Etat addEtat(Etat etat);
 
 	Etat findEtat(Integer noEtat);
+	
+	Etat findEtatByName(String name);
 
 	Etat updateEtat(Etat etat);
 
