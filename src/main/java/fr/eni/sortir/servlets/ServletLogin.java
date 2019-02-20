@@ -37,7 +37,7 @@ public class ServletLogin extends HttpServlet {
 
 		Participant participant = DaoFactory.getParticipantDao().findParticipantByMail("mail@mail.com");
 		
-		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/login.jsp");
+		RequestDispatcher rd = request.getRequestDispatcher("/login.jsp");
 		rd.forward(request, response);
 	}
 

@@ -32,7 +32,7 @@ public class Inscription {
     @Column(name = "date_inscription")
     private Date dateInscription = new Date();
     
-    private Inscription() {}
+    public Inscription() {}
     
     public Inscription(Participant participant, Sortie sortie) {
         this.participant = participant;
