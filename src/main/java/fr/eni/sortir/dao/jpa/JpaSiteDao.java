@@ -14,7 +14,7 @@ import fr.eni.sortir.entities.Site;
 
 public class JpaSiteDao extends JpaDao implements SiteDao  {
 
-	protected JpaSiteDao(EntityManagerFactory emf) {
+	public JpaSiteDao(EntityManagerFactory emf) {
 		super(emf);
 		// TODO Auto-generated constructor stub
 	}
@@ -107,7 +107,7 @@ public class JpaSiteDao extends JpaDao implements SiteDao  {
 		EntityManager em = getEntityManagerFactory().createEntityManager();
 
 		try {
-			Query query = em.createQuery("SELECT s FROM Sites AS s", Inscription.class);
+			Query query = em.createQuery("SELECT s FROM Site AS s", Site.class);
 
 			Collection<Site> listSite = query.getResultList();
 
