@@ -8,8 +8,6 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 
 import fr.eni.sortir.dao.SiteDao;
-import fr.eni.sortir.entities.Inscription;
-import fr.eni.sortir.entities.Participant;
 import fr.eni.sortir.entities.Site;
 
 public class JpaSiteDao extends JpaDao implements SiteDao  {
