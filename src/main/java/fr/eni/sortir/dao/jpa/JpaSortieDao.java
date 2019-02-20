@@ -13,7 +13,7 @@ import fr.eni.sortir.entities.Sortie;;
 
 public class JpaSortieDao extends JpaDao implements SortieDao{
 
-	protected JpaSortieDao(EntityManagerFactory emf) {
+	public JpaSortieDao(EntityManagerFactory emf) {
 		super(emf);
 		// TODO Auto-generated constructor stub
 	}

@@ -14,7 +14,7 @@ import fr.eni.sortir.entities.Participant;
 
 public class JpaParticipantDao extends JpaDao implements ParticipantDao {
 
-	protected JpaParticipantDao(EntityManagerFactory emf) {
+	public JpaParticipantDao(EntityManagerFactory emf) {
 		super(emf);
 	}
 
