@@ -82,19 +82,21 @@ public class ServletCreateSortie extends HttpServlet {
 	    }
 	}
 
+	int noCity = -1, noPlace = -1, maxPlace = -1, duration = -1;
+
 	try {
-	    Integer.parseInt(request.getParameter(SORTIE_CITY));
-	    Integer.parseInt(request.getParameter(SORTIE_PLACE));
-	    Integer.parseInt(request.getParameter(SORTIE_MAX_PLACE));
-	    Integer.parseInt(request.getParameter(SORTIE_DURATION));
+	    noCity = Integer.parseInt(request.getParameter(SORTIE_CITY));
+	    noPlace = Integer.parseInt(request.getParameter(SORTIE_PLACE));
+	    maxPlace = Integer.parseInt(request.getParameter(SORTIE_MAX_PLACE));
+	    duration = Integer.parseInt(request.getParameter(SORTIE_DURATION));
 	} catch (NumberFormatException nfe) {
 	    nfe.printStackTrace();
 	    response.sendError(HttpServletResponse.SC_FORBIDDEN);
 	    return;
 	}
 
-	Ville ville = DaoFactory.getVilleDao().findVille(Integer.valueOf(request.getParameter(SORTIE_CITY)));
-	Lieu lieu = DaoFactory.getLieuDao().findLieu(Integer.valueOf(request.getParameter(SORTIE_PLACE)));
+	Ville ville = DaoFactory.getVilleDao().findVille(noCity);
+	Lieu lieu = DaoFactory.getLieuDao().findLieu(noPlace);
 	if (ville == null || lieu == null) {
 	    response.sendError(HttpServletResponse.SC_FORBIDDEN);
 	    return;
@@ -121,10 +123,8 @@ public class ServletCreateSortie extends HttpServlet {
 	// TODO replace with the value of user connected
 	Participant organisateur = DaoFactory.getParticipantDao().findParticipant(2);
 
-	Sortie sortie = new Sortie(request.getParameter(SORTIE_NAME), dateBegin,
-		Integer.valueOf(request.getParameter(SORTIE_DURATION)), dateCloseInscription,
-		Integer.valueOf(request.getParameter(SORTIE_MAX_PLACE)), request.getParameter(SORTIE_DESCRIPTION), null,
-		null, lieu, new ArrayList<>(), organisateur);
+	Sortie sortie = new Sortie(request.getParameter(SORTIE_NAME), dateBegin, duration, dateCloseInscription,
+		maxPlace, request.getParameter(SORTIE_DESCRIPTION), null, null, lieu, new ArrayList<>(), organisateur);
 
 	switch (request.getParameter(ACTION)) {
 	case SAVE:
@@ -134,7 +134,6 @@ public class ServletCreateSortie extends HttpServlet {
 	    sortie = saveSortie(sortie, State.OPENED);
 	    break;
 	default:
-	    System.out.println(6);
 	    response.sendError(HttpServletResponse.SC_FORBIDDEN);
 	    return;
 	}
