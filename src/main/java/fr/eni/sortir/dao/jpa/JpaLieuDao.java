@@ -24,8 +24,8 @@ public class JpaLieuDao extends JpaDao implements LieuDao{
 		try {
 			transaction.begin();
 			em.persist(lieu);
-			transaction.commit();
 			em.flush();
+			transaction.commit();
 
 			if (lieu.getNoLieu() != 0) {
 				return lieu;

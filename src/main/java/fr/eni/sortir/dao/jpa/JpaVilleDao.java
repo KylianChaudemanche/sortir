@@ -24,8 +24,8 @@ public class JpaVilleDao extends JpaDao implements VilleDao {
 		try {
 			transaction.begin();
 			em.persist(ville);
-			transaction.commit();
 			em.flush();
+			transaction.commit();
 
 			if (ville.getNoVille() != 0) {
 				return ville;

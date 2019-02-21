@@ -25,9 +25,9 @@ public class JpaSiteDao extends JpaDao implements SiteDao  {
 		try {
 			transaction.begin();
 			em.persist(site);
-			transaction.commit();
 			em.flush();
-
+			transaction.commit();
+			
 			if (site.getNoSite() != 0) {
 				return site;
 			} else {

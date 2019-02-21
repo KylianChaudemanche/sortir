@@ -25,8 +25,8 @@ public class JpaParticipantDao extends JpaDao implements ParticipantDao {
 		try {
 			transaction.begin();
 			em.persist(participant);
-			transaction.commit();
 			em.flush();
+			transaction.commit();
 
 			if (participant.getNoParticipant() != 0) {
 				return participant;

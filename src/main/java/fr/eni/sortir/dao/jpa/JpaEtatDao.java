@@ -23,8 +23,8 @@ public class JpaEtatDao extends JpaDao implements EtatDao {
 		try {
 			transaction.begin();
 			em.persist(etat);
-			transaction.commit();
 			em.flush();
+			transaction.commit();
 
 			if (etat.getNoEtat() != 0) {
 				return etat;
