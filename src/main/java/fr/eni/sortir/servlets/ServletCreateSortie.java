@@ -76,7 +76,7 @@ public class ServletCreateSortie extends HttpServlet {
 	    throws ServletException, IOException {
 
 	for (String name : request.getParameterMap().keySet()) {
-	    if (request.getParameter(name).equals("")) {
+	    if ("".equals(request.getParameter(name))) {
 		response.sendError(HttpServletResponse.SC_FORBIDDEN);
 		return;
 	    }
