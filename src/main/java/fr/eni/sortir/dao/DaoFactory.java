@@ -1,10 +1,6 @@
 package fr.eni.sortir.dao;
 
 import fr.eni.sortir.dao.jpa.JpaEtatDao;
-<<<<<<< HEAD
-=======
-import fr.eni.sortir.dao.jpa.JpaInscriptionDao;
->>>>>>> origin/1
 import fr.eni.sortir.dao.jpa.JpaLieuDao;
 import fr.eni.sortir.dao.jpa.JpaParticipantDao;
 import fr.eni.sortir.dao.jpa.JpaSiteDao;
