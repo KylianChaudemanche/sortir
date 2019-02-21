@@ -9,6 +9,7 @@ import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -40,7 +41,7 @@ public class Participant implements Serializable {
 	private String motDePasse;
 	private Boolean administrateur;
 	private Boolean actif;
-	@OneToMany(mappedBy = "participant", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "participant", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Collection<Inscription> inscriptions = new ArrayList<>();
 	@ManyToOne
 	@JoinColumn(name = "sites_no_site")
