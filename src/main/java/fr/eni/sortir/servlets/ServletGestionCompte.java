@@ -2,9 +2,6 @@ package fr.eni.sortir.servlets;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -26,6 +23,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import fr.eni.sortir.dao.DaoFactory;
 import fr.eni.sortir.entities.Participant;
 import fr.eni.sortir.entities.Site;
+import fr.eni.sortir.utils.Constantes;
 import fr.eni.sortir.utils.SaltedMD5;
 
 /**
@@ -35,7 +33,7 @@ import fr.eni.sortir.utils.SaltedMD5;
 		* 5, maxRequestSize = 1024 * 1024 * 5 * 5)
 public class ServletGestionCompte extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private static final String IMAGES_PATH = "/sortir/target/m2e-wtp/web-resources/images/";
+
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
@@ -64,8 +62,7 @@ public class ServletGestionCompte extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		Participant participant = (Participant) session.getAttribute("participant");
 		DiskFileItemFactory factory = new DiskFileItemFactory();
@@ -90,19 +87,29 @@ public class ServletGestionCompte extends HttpServlet {
 
 					switch (name) {
 					case "pseudo":
+						if (!value.equals("")) {
 						participant.setPseudo(value);
+						}
 						break;
 					case "prenom":
+						if (!value.equals("")) {
 						participant.setPrenom(value);
+						}
 						break;
 					case "nom":
+						if (!value.equals("")) {
 						participant.setNom(value);
+						}
 						break;
 					case "telephone":
+						if (!value.equals("")) {
 						participant.setTelephone(value);
+						}
 						break;
 					case "mail":
+						if (!value.equals("")) {
 						participant.setMail(value);
+						}
 						break;
 					case "motDePasse":
 						if (!value.equals("")) {
@@ -112,58 +119,41 @@ public class ServletGestionCompte extends HttpServlet {
 					case "confirmationMotDePasse":
 						if (!value.equals("")) {
 							if (value.equals(motDePasse))
-
 							{
-								System.out.println("MotDePasse = " + motDePasse);
-								System.out.println("Confirmation = " + value);
 								String passwordToHash = value;
-								byte[] salt = SaltedMD5.getSalt();
-								String securePassword = SaltedMD5.getSecurePassword(passwordToHash, salt);
+								String securePassword = SaltedMD5.getSecurePassword(passwordToHash);
 								participant.setMotDePasse(securePassword);
 							}
 						}
 						break;
 					case "site":
+						if (!value.equals("")) {
 						participant.setSite(DaoFactory.getSiteDao().findSite(Integer.valueOf(value)));
+						}
 						break;
 					}
-
 				} else {
-					System.out.println(new File(".").getAbsolutePath());
-					String pathUploadedFile = IMAGES_PATH + participant.getNoParticipant() + ".jpg";
-					File uploadedFile = new File(pathUploadedFile);
-					System.out.println(pathUploadedFile);
-					item.write(uploadedFile);
+					if (item.getName() != null && item.getSize() != 0) {
+						try
+						{
+							String uploadName = participant.getNoParticipant().toString() + ".jpg";
+							File writeFile = new File(Constantes.DATA_PATH + uploadName);
+							item.write(writeFile);
+
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+							System.out.println(e.toString());
+						}
+					}
 				}
 			}
 		} catch (FileUploadException e) {
-			System.out.println(e.toString());
-		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
-			System.out.println(e.toString());
-		} catch (NoSuchProviderException e) {
-			// TODO Auto-generated catch block
 			System.out.println(e.toString());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			System.out.println(e.toString());
 		}
-
-		/*
-		 * participant.setPseudo(request.getParameter("pseudo"));
-		 * participant.setNom(request.getParameter("nom"));
-		 * participant.setPrenom(request.getParameter("prenom"));
-		 * participant.setTelephone(request.getParameter("telephone"));
-		 * participant.setMail(request.getParameter("mail"));
-		 * System.out.println(request.getParameter("site"));
-		 * participant.setSite(DaoFactory.getSiteDao().findSite(Integer.valueOf(request.
-		 * getParameter("site"))));
-		 */
-
-		/*
-		 * if(request.getParameter("photo").toString() != "")
-		 * System.out.println(request.getParameter("photo").toString());
-		 */
 		DaoFactory.getParticipantDao().updateParticipant(participant);
 		doGet(request, response);
 	}

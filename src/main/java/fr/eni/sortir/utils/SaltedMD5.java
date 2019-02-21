@@ -8,9 +8,11 @@ import java.security.SecureRandom;
 public class SaltedMD5
 {
 	
-    public static String getSecurePassword(String passwordToHash, byte[] salt)
+    public static String getSecurePassword(String passwordToHash)
     {
         String generatedPassword = null;
+        byte[] salt;
+        salt = getSalt();
         try {
             // Create MessageDigest instance for MD5
             MessageDigest md = MessageDigest.getInstance("MD5");
@@ -35,15 +37,17 @@ public class SaltedMD5
     }
      
     //Add salt
-    public static byte[] getSalt() throws NoSuchAlgorithmException, NoSuchProviderException
+    public static byte[] getSalt()
     {
-        //Always use a SecureRandom generator
-        SecureRandom sr = SecureRandom.getInstance("SHA1PRNG", "SUN");
-        //Create array for salt
-        byte[] salt = new byte[16];
-        //Get a random salt
-        sr.nextBytes(salt);
-        //return salt
+    	String saltString = Constantes.SALT;
+    	int len = saltString.length();
+        byte[] data = new byte[len / 2];
+        for (int i = 0; i < len; i += 2) {
+            data[i / 2] = (byte) ((Character.digit(saltString.charAt(i), 16) << 4)
+                                 + Character.digit(saltString.charAt(i+1), 16));
+        }
+        byte[] salt = data;
+
         return salt;
     }
 }
