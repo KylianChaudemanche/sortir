@@ -32,132 +32,132 @@ import fr.eni.sortir.utils.SaltedMD5;
  */
 @WebServlet(name = "ServletGestionCompte", urlPatterns = { "/gestionCompte" })
 @MultipartConfig(location = "/tmp", fileSizeThreshold = 1024 * 1024, maxFileSize = 1024 * 1024
-		* 5, maxRequestSize = 1024 * 1024 * 5 * 5)
+	* 5, maxRequestSize = 1024 * 1024 * 5 * 5)
 public class ServletGestionCompte extends HttpServlet {
-	private static final long serialVersionUID = 1L;
 
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
-	public ServletGestionCompte() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 2978411438742435566L;
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		HttpSession session = request.getSession();
-		session.setAttribute("participant", DaoFactory.getParticipantDao().findParticipant(7));
-		Participant participant = (Participant) session.getAttribute("participant");
-		request.setAttribute("participant", participant);
-		Collection<Site> listeSite = DaoFactory.getSiteDao().getAllSite();
-		request.setAttribute("listeSite", listeSite);
-		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/gestionCompte.jsp");
-		rd.forward(request, response);
-	}
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public ServletGestionCompte() {
+	super();
+    }
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		HttpSession session = request.getSession();
-		Participant participant = (Participant) session.getAttribute("participant");
-		DiskFileItemFactory factory = new DiskFileItemFactory();
-		// Configure a repository (to ensure a secure temp location is used)
-		ServletContext servletContext = this.getServletConfig().getServletContext();
-		File repository = (File) servletContext.getAttribute("javax.servlet.context.tempdir");
-		factory.setRepository(repository);
+    /**
+     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+     *      response)
+     */
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+	    throws ServletException, IOException {
+	HttpSession session = request.getSession();
+	session.setAttribute("participant", DaoFactory.getParticipantDao().findParticipant(7));
+	Participant participant = (Participant) session.getAttribute("participant");
+	request.setAttribute("participant", participant);
+	Collection<Site> listeSite = DaoFactory.getSiteDao().getAllSite();
+	request.setAttribute("listeSite", listeSite);
+	RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/gestionCompte.jsp");
+	rd.forward(request, response);
+    }
 
-		// Create a new file upload handler
-		ServletFileUpload upload = new ServletFileUpload(factory);
+    /**
+     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+     *      response)
+     */
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+	    throws ServletException, IOException {
+	HttpSession session = request.getSession();
+	Participant participant = (Participant) session.getAttribute("participant");
+	DiskFileItemFactory factory = new DiskFileItemFactory();
+	// Configure a repository (to ensure a secure temp location is used)
+	ServletContext servletContext = this.getServletConfig().getServletContext();
+	File repository = (File) servletContext.getAttribute("javax.servlet.context.tempdir");
+	factory.setRepository(repository);
 
-		// Parse the request
-		try {
-			List<FileItem> items = upload.parseRequest(request);
-			Iterator<FileItem> iter = items.iterator();
-			String motDePasse = null;
-			while (iter.hasNext()) {
-				FileItem item = iter.next();
-				if (item.isFormField()) {
-					String name = item.getFieldName();
-					String value = item.getString();
+	// Create a new file upload handler
+	ServletFileUpload upload = new ServletFileUpload(factory);
 
-					switch (name) {
-					case "pseudo":
-						if (!value.equals("")) {
-						participant.setPseudo(value);
-						}
-						break;
-					case "prenom":
-						if (!value.equals("")) {
-						participant.setPrenom(value);
-						}
-						break;
-					case "nom":
-						if (!value.equals("")) {
-						participant.setNom(value);
-						}
-						break;
-					case "telephone":
-						if (!value.equals("")) {
-						participant.setTelephone(value);
-						}
-						break;
-					case "mail":
-						if (!value.equals("")) {
-						participant.setMail(value);
-						}
-						break;
-					case "motDePasse":
-						if (!value.equals("")) {
-							motDePasse = value;
-						}
-						break;
-					case "confirmationMotDePasse":
-						if (!value.equals("")) {
-							if (value.equals(motDePasse))
-							{
-								String passwordToHash = value;
-								String securePassword = SaltedMD5.getSecurePassword(passwordToHash);
-								participant.setMotDePasse(securePassword);
-							}
-						}
-						break;
-					case "site":
-						if (!value.equals("")) {
-						participant.setSite(DaoFactory.getSiteDao().findSite(Integer.valueOf(value)));
-						}
-						break;
-					}
-				} else {
-					if (item.getName() != null && item.getSize() != 0) {
-						try
-						{
-							String uploadName = participant.getNoParticipant().toString() + ".jpg";
-							File writeFile = new File(Constantes.DATA_PATH + uploadName);
-							item.write(writeFile);
+	// Parse the request
+	try {
+	    List<FileItem> items = upload.parseRequest(request);
+	    Iterator<FileItem> iter = items.iterator();
+	    String motDePasse = null;
+	    while (iter.hasNext()) {
+		FileItem item = iter.next();
+		if (item.isFormField()) {
+		    String name = item.getFieldName();
+		    String value = item.getString();
 
-						} catch (Exception e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-							System.out.println(e.toString());
-						}
-					}
-				}
+		    switch (name) {
+		    case "pseudo":
+			if (!value.equals("")) {
+			    participant.setPseudo(value);
 			}
-		} catch (FileUploadException e) {
-			System.out.println(e.toString());
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			System.out.println(e.toString());
+			break;
+		    case "prenom":
+			if (!value.equals("")) {
+			    participant.setPrenom(value);
+			}
+			break;
+		    case "nom":
+			if (!value.equals("")) {
+			    participant.setNom(value);
+			}
+			break;
+		    case "telephone":
+			if (!value.equals("")) {
+			    participant.setTelephone(value);
+			}
+			break;
+		    case "mail":
+			if (!value.equals("")) {
+			    participant.setMail(value);
+			}
+			break;
+		    case "motDePasse":
+			if (!value.equals("")) {
+			    motDePasse = value;
+			}
+			break;
+		    case "confirmationMotDePasse":
+			if (!value.equals("")) {
+			    if (value.equals(motDePasse)) {
+				String passwordToHash = value;
+				String securePassword = SaltedMD5.getSecurePassword(passwordToHash);
+				participant.setMotDePasse(securePassword);
+			    }
+			}
+			break;
+		    case "site":
+			if (!value.equals("")) {
+			    participant.setSite(DaoFactory.getSiteDao().findSite(Integer.valueOf(value)));
+			}
+			break;
+		    }
+		} else {
+		    if (item.getName() != null && item.getSize() != 0) {
+			try {
+			    String uploadName = participant.getNoParticipant().toString() + ".jpg";
+			    File writeFile = new File(Constantes.DATA_PATH + uploadName);
+			    item.write(writeFile);
+
+			} catch (Exception e) {
+			    e.printStackTrace();
+			    System.out.println(e.toString());
+			}
+		    }
 		}
-		DaoFactory.getParticipantDao().updateParticipant(participant);
-		doGet(request, response);
+	    }
+	} catch (FileUploadException e) {
+	    System.out.println(e.toString());
+	} catch (Exception e) {
+	    System.out.println(e.toString());
 	}
+	DaoFactory.getParticipantDao().updateParticipant(participant);
+	doGet(request, response);
+    }
 
 }

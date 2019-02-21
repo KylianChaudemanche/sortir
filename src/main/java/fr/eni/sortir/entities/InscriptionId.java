@@ -7,51 +7,52 @@ import javax.persistence.Embeddable;
 
 @Embeddable
 public class InscriptionId implements Serializable {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 2283392230583010242L;
-	private Integer noParticipant;
-	private Integer noSortie;
-	
-	public InscriptionId() {
-		super();
-	}
-	
-	public InscriptionId(Integer noParticipant, Integer noSortie) {
-		super();
-		this.noParticipant = noParticipant;
-		this.noSortie = noSortie;
-	}
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 2283392230583010242L;
 
-	public Integer getNoParticipant() {
-		return noParticipant;
-	}
+    private Integer noParticipant;
+    private Integer noSortie;
 
-	public Integer getNoSortie() {
-		return noSortie;
-	}
-	
-	@Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
- 
-        if (o == null || getClass() != o.getClass())
-            return false;
- 
-        InscriptionId that = (InscriptionId) o;
-        return Objects.equals(noParticipant, that.noParticipant) &&
-               Objects.equals(noSortie, that.noSortie);
+    public InscriptionId() {
+	super();
     }
- 
+
+    public InscriptionId(Integer noParticipant, Integer noSortie) {
+	super();
+	this.noParticipant = noParticipant;
+	this.noSortie = noSortie;
+    }
+
+    public Integer getNoParticipant() {
+	return noParticipant;
+    }
+
+    public Integer getNoSortie() {
+	return noSortie;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+	if (this == o)
+	    return true;
+
+	if (o == null || getClass() != o.getClass())
+	    return false;
+
+	InscriptionId that = (InscriptionId) o;
+	return Objects.equals(noParticipant, that.noParticipant) && Objects.equals(noSortie, that.noSortie);
+    }
+
     @Override
     public int hashCode() {
-        return Objects.hash(noParticipant, noSortie);
+	return Objects.hash(noParticipant, noSortie);
     }
 
-	@Override
-	public String toString() {
-		return "InscriptionId [participant=" + noParticipant + ", sortie=" + noSortie + "]";
-	}
-	
+    @Override
+    public String toString() {
+	return "InscriptionId [participant=" + noParticipant + ", sortie=" + noSortie + "]";
+    }
+
 }

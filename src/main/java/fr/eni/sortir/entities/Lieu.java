@@ -15,102 +15,103 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="LIEUX")
+@Table(name = "LIEUX")
 public class Lieu implements Serializable {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1693505869974830434L;
-	@Id
-	@GeneratedValue
-	@Column(name="no_lieu")
-	private Integer noLieu;
-	@Column(name="nom_lieu")
-	private String nomLieu;
-	private String adresse;
-	private Float latitude;
-	private Float longitude;
-	@ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="villes_no_ville")
-	private Ville ville;
-	@OneToMany(mappedBy="lieu")
-	private Collection<Sortie> listSortie = new ArrayList<>();
-	
-	public Lieu() {
-		super();
-	}
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1693505869974830434L;
 
-	public Lieu(String nomLieu, String adresse, Float latitude, Float longitude, Ville ville,
-			Collection<Sortie> listSortie) {
-		super();
-		this.nomLieu = nomLieu;
-		this.adresse = adresse;
-		this.latitude = latitude;
-		this.longitude = longitude;
-		this.ville = ville;
-		this.listSortie = listSortie;
-	}
+    @Id
+    @GeneratedValue
+    @Column(name = "no_lieu")
+    private Integer noLieu;
+    @Column(name = "nom_lieu")
+    private String nomLieu;
+    private String adresse;
+    private Float latitude;
+    private Float longitude;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "villes_no_ville")
+    private Ville ville;
+    @OneToMany(mappedBy = "lieu")
+    private Collection<Sortie> listSortie = new ArrayList<>();
 
-	public Integer getNoLieu() {
-		return noLieu;
-	}
+    public Lieu() {
+	super();
+    }
 
-	public void setNoLieu(Integer noLieu) {
-		this.noLieu = noLieu;
-	}
+    public Lieu(String nomLieu, String adresse, Float latitude, Float longitude, Ville ville,
+	    Collection<Sortie> listSortie) {
+	super();
+	this.nomLieu = nomLieu;
+	this.adresse = adresse;
+	this.latitude = latitude;
+	this.longitude = longitude;
+	this.ville = ville;
+	this.listSortie = listSortie;
+    }
 
-	public String getNomLieu() {
-		return nomLieu;
-	}
+    public Integer getNoLieu() {
+	return noLieu;
+    }
 
-	public void setNomLieu(String nomLieu) {
-		this.nomLieu = nomLieu;
-	}
+    public void setNoLieu(Integer noLieu) {
+	this.noLieu = noLieu;
+    }
 
-	public String getAdresse() {
-		return adresse;
-	}
+    public String getNomLieu() {
+	return nomLieu;
+    }
 
-	public void setAdresse(String adresse) {
-		this.adresse = adresse;
-	}
+    public void setNomLieu(String nomLieu) {
+	this.nomLieu = nomLieu;
+    }
 
-	public Float getLatitude() {
-		return latitude;
-	}
+    public String getAdresse() {
+	return adresse;
+    }
 
-	public void setLatitude(Float latitude) {
-		this.latitude = latitude;
-	}
+    public void setAdresse(String adresse) {
+	this.adresse = adresse;
+    }
 
-	public Float getLongitude() {
-		return longitude;
-	}
+    public Float getLatitude() {
+	return latitude;
+    }
 
-	public void setLongitude(Float longitude) {
-		this.longitude = longitude;
-	}
+    public void setLatitude(Float latitude) {
+	this.latitude = latitude;
+    }
 
-	public Ville getVille() {
-		return ville;
-	}
+    public Float getLongitude() {
+	return longitude;
+    }
 
-	public void setVille(Ville ville) {
-		this.ville = ville;
-	}
+    public void setLongitude(Float longitude) {
+	this.longitude = longitude;
+    }
 
-	public Collection<Sortie> getListSortie() {
-		return listSortie;
-	}
+    public Ville getVille() {
+	return ville;
+    }
 
-	public void setListSortie(Collection<Sortie> listSortie) {
-		this.listSortie = listSortie;
-	}
+    public void setVille(Ville ville) {
+	this.ville = ville;
+    }
 
-	@Override
-	public String toString() {
-		return "Lieu [noLieu=" + noLieu + ", nomLieu=" + nomLieu + ", adresse=" + adresse + ", latitude=" + latitude
-				+ ", longitude=" + longitude + ", ville=" + ville + "]";
-	}
-	
+    public Collection<Sortie> getListSortie() {
+	return listSortie;
+    }
+
+    public void setListSortie(Collection<Sortie> listSortie) {
+	this.listSortie = listSortie;
+    }
+
+    @Override
+    public String toString() {
+	return "Lieu [noLieu=" + noLieu + ", nomLieu=" + nomLieu + ", adresse=" + adresse + ", latitude=" + latitude
+		+ ", longitude=" + longitude + ", ville=" + ville + "]";
+    }
+
 }
