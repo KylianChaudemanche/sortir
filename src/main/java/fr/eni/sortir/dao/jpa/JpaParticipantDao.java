@@ -106,11 +106,27 @@ public class JpaParticipantDao extends JpaDao implements ParticipantDao {
 		EntityManager em = getEntityManagerFactory().createEntityManager();
 
 		try {
-			Query query = em.createQuery("SELECT p FROM Participant AS p", Inscription.class);
+			Query query = em.createQuery("SELECT p FROM Participant AS p", Participant.class);
 
 			Collection<Participant> listParticipant = query.getResultList();
 
 			return listParticipant;
+		} finally {
+			em.close();
+		}
+	}
+	
+	@Override
+	public Participant findParticipantByMail(String mail) {
+		EntityManager em = getEntityManagerFactory().createEntityManager();
+
+		try {
+			Query query = em.createQuery("SELECT p FROM Participant AS p WHERE mail = :mail", Participant.class)
+					.setParameter("mail", mail);
+
+			Participant participant = (Participant) query.getSingleResult();
+
+			return participant;
 		} finally {
 			em.close();
 		}
