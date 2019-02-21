@@ -120,7 +120,7 @@ public class JpaEtatDao extends JpaDao implements EtatDao {
 		EntityManager em = getEntityManagerFactory().createEntityManager();
 		
 		try {
-			Query query = em.createQuery("SELECT e FROM Etats AS e WHERE libelle = :libelle", Etat.class).setParameter("libelle", name);
+			Query query = em.createQuery("SELECT e FROM Etat AS e WHERE libelle = :libelle", Etat.class).setParameter("libelle", name);
 
 			Etat etat = (Etat) query.getSingleResult();
 

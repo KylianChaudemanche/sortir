@@ -10,9 +10,13 @@ import javax.servlet.http.HttpServletResponse;
  * Servlet implementation class ServletAccueil
  */
 public class ServletAccueil extends HttpServlet {
-	private static final long serialVersionUID = 1L;
        
     /**
+	 * 
+	 */
+	private static final long serialVersionUID = 3336521254958339719L;
+
+	/**
      * @see HttpServlet#HttpServlet()
      */
     public ServletAccueil() {

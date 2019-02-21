@@ -24,8 +24,8 @@ public class JpaSortieDao extends JpaDao implements SortieDao{
 		try {
 			transaction.begin();
 			em.persist(sortie);
-			transaction.commit();
 			em.flush();
+			transaction.commit();
 
 			if (sortie.getNoSortie() != 0) {
 				return sortie;

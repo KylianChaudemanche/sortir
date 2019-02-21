@@ -18,9 +18,13 @@ import javax.servlet.http.HttpServletResponse;
 	urlPatterns= {"/login"}
 )
 public class ServletLogin extends HttpServlet {
-	private static final long serialVersionUID = 1L;
 
     /**
+	 * 
+	 */
+	private static final long serialVersionUID = -7926787715554177925L;
+
+	/**
      * Default constructor. 
      */
     public ServletLogin() {
@@ -31,7 +35,7 @@ public class ServletLogin extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		RequestDispatcher rd = request.getRequestDispatcher("login.jsp");
+		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/login.jsp");
 		rd.forward(request, response);
 	}
 
