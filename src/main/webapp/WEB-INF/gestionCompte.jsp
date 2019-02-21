@@ -60,7 +60,7 @@
 			 	</div>
 			 	<div>
 			 		<a href="#" class="btn btn-danger float-left">Annuler</a>
-					<button type="submit" class="btn btn-primary float-right">Enregistrer</button>
+					<button type="submit" class="btn btn-success float-right">Enregistrer</button>
 				</div>
 			</form>
 		</div>
