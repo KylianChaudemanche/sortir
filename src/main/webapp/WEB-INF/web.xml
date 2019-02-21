@@ -39,24 +39,5 @@
     <servlet-name>ServletInscription</servlet-name>
     <url-pattern>/ServletInscription</url-pattern>
   </servlet-mapping>
-  <servlet>
-    <description></description>
-    <display-name>ServletGestionCompte</display-name>
-    <servlet-name>ServletGestionCompte</servlet-name>
-    <servlet-class>fr.eni.sortir.servlets.ServletGestionCompte</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>ServletGestionCompte</servlet-name>
-    <url-pattern>/ServletGestionCompte</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <description></description>
-    <display-name>ServletImage</display-name>
-    <servlet-name>ServletImage</servlet-name>
-    <servlet-class>fr.eni.sortir.servlets.ServletImage</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>ServletImage</servlet-name>
-    <url-pattern>/ServletImage/*</url-pattern>
-  </servlet-mapping>
+
 </web-app>

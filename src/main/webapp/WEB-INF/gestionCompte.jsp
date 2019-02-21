@@ -1,5 +1,7 @@
 <!-- ####### HEADER ######## -->
-<%@include file="includes/header.jsp"%>
+<jsp:include page="includes/header.jsp">
+	<jsp:param value="Gestion de compte" name="titre"/>
+</jsp:include>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!-- ####### NAVBAR ######## -->
@@ -11,30 +13,30 @@
 <div class="container">
 	<div class="row">
 	<div class="col-md-3 py-5">
-		<img src="ServletImage/${participant.noParticipant}" alt="${participant.nom}" class="img-thumbnail">
+		<img src="images/${participant.noParticipant}" alt="${participant.nom}" class="img-thumbnail w-100">
 	</div>
 		<div class="col-md-6">
 			<h1 class="text-center">Mon Profil</h1>
-			<form action="ServletGestionCompte" method="post" enctype="multipart/form-data">
+			<form action="gestionCompte" method="post" enctype="multipart/form-data">
 				<div class="form-group">
 					<label for="pseudo">Pseudo :</label> 
-					<input type="text" class="form-control" id="pseudo" name="pseudo" placeholder="Ex : XxDaRkSaSuKeDu72xX" value="${participant.pseudo}"> 
+					<input type="text" class="form-control" id="pseudo" name="pseudo" required placeholder="Ex : XxDaRkSaSuKeDu72xX" value="${participant.pseudo}"> 
 				</div>
 				<div class="form-group">
 					<label for="prenom">Prénom :</label> 
-					<input type="text" class="form-control" id="prenom" name="prenom" placeholder="Prénom" value="${participant.prenom}"> 
+					<input type="text" class="form-control" id="prenom" name="prenom" required placeholder="Prénom" value="${participant.prenom}"> 
 				</div>
 				<div class="form-group">
 					<label for="nom">Nom :</label> 
-					<input type="text" class="form-control" id="nom" name="nom" placeholder="Nom" value="${participant.nom}"> 
+					<input type="text" class="form-control" id="nom" name="nom" required placeholder="Nom" value="${participant.nom}"> 
 				</div>
 				<div class="form-group">
 					<label for="telephone">Téléphone :</label> 
-					<input type="text" class="form-control" id="telephone" name="telephone" placeholder="Numéro de téléphone" maxlength="10" value="${participant.telephone}"> 
+					<input type="text" class="form-control" id="telephone" name="telephone" required placeholder="Numéro de téléphone" maxlength="10" value="${participant.telephone}"> 
 				</div>
 				<div class="form-group">
 					<label for="mail">Mail :</label> 
-					<input type="text" class="form-control" id="mail" name="mail" placeholder="Mail" value="${participant.mail}"> 
+					<input type="text" class="form-control" id="mail" name="mail" required placeholder="Mail" value="${participant.mail}"> 
 				</div>
 				<div class="form-group">
 					<label for="motDePasse">Mot de passe :</label> 
