@@ -23,8 +23,8 @@ public class JpaEtatDao extends JpaDao implements EtatDao {
 		try {
 			transaction.begin();
 			em.persist(etat);
-			transaction.commit();
 			em.flush();
+			transaction.commit();
 
 			if (etat.getNoEtat() != 0) {
 				return etat;
@@ -110,6 +110,21 @@ public class JpaEtatDao extends JpaDao implements EtatDao {
 			Collection<Etat> listEtat = query.getResultList();
 
 			return listEtat;
+		} finally {
+			em.close();
+		}
+	}
+
+	@Override
+	public Etat findEtatByName(String name) {
+		EntityManager em = getEntityManagerFactory().createEntityManager();
+		
+		try {
+			Query query = em.createQuery("SELECT e FROM Etat AS e WHERE libelle = :libelle", Etat.class).setParameter("libelle", name);
+
+			Etat etat = (Etat) query.getSingleResult();
+
+			return etat;
 		} finally {
 			em.close();
 		}

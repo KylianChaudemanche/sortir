@@ -11,7 +11,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.Table;
-import javax.swing.text.html.HTML.Tag;
 
 @Entity
 @Table(name = "INSCRIPTIONS")
@@ -32,7 +31,7 @@ public class Inscription {
     @Column(name = "date_inscription")
     private Date dateInscription = new Date();
     
-    private Inscription() {}
+    public Inscription() {}
     
     public Inscription(Participant participant, Sortie sortie) {
         this.participant = participant;

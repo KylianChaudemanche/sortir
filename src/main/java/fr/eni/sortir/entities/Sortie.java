@@ -26,13 +26,17 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Table(name = "SORTIES")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Sortie implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7666699193456697025L;
 	@Id
 	@GeneratedValue
 	@Column(name = "no_sortie")
 	private Integer noSortie;
 	private String nom;
 	@Column(name = "datedebut")
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date dateDebut;
 	private Integer duree;
 	@Column(name = "datecloture")

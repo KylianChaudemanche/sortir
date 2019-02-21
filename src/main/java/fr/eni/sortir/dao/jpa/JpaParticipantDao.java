@@ -8,7 +8,6 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 
 import fr.eni.sortir.dao.ParticipantDao;
-import fr.eni.sortir.entities.Etat;
 import fr.eni.sortir.entities.Inscription;
 import fr.eni.sortir.entities.Participant;
 
@@ -26,8 +25,8 @@ public class JpaParticipantDao extends JpaDao implements ParticipantDao {
 		try {
 			transaction.begin();
 			em.persist(participant);
-			transaction.commit();
 			em.flush();
+			transaction.commit();
 
 			if (participant.getNoParticipant() != 0) {
 				return participant;
@@ -101,6 +100,7 @@ public class JpaParticipantDao extends JpaDao implements ParticipantDao {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<Participant> getAllParticipant() {
 		EntityManager em = getEntityManagerFactory().createEntityManager();

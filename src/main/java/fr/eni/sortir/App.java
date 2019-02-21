@@ -4,7 +4,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
-import fr.eni.sortir.entities.Inscription;
 import fr.eni.sortir.entities.Lieu;
 import fr.eni.sortir.entities.Participant;
 import fr.eni.sortir.entities.Sortie;
