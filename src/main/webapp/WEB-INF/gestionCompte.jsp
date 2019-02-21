@@ -11,11 +11,11 @@
 <div class="container">
 	<div class="row">
 	<div class="col-md-3 py-5">
-		<img src="ServletImage/${participant.noParticipant}" alt="${participant.nom}" class="img-thumbnail">
+		<img src="image/${participant.noParticipant}" alt="${participant.nom}" class="img-thumbnail">
 	</div>
 		<div class="col-md-6">
 			<h1 class="text-center">Mon Profil</h1>
-			<form action="ServletGestionCompte" method="post" enctype="multipart/form-data">
+			<form action="gestionCompte" method="post" enctype="multipart/form-data">
 				<div class="form-group">
 					<label for="pseudo">Pseudo :</label> 
 					<input type="text" class="form-control" id="pseudo" name="pseudo" placeholder="Ex : XxDaRkSaSuKeDu72xX" value="${participant.pseudo}"> 
