@@ -8,137 +8,131 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.PersistenceException;
 import javax.persistence.TransactionRequiredException;
 
+import org.apache.log4j.Logger;
+
 import fr.eni.sortir.dao.ParticipantDao;
 import fr.eni.sortir.entities.Participant;
 
 public class JpaParticipantDao extends JpaDao implements ParticipantDao {
-    private final String QUERY_PARTICIPANT_ALL = "SELECT p FROM Participant AS p";
-    private final String QUERY_PARTICIPANT_BY_MAIL = "SELECT p FROM Participant AS p WHERE mail = :mail";
-    private final String MAIL = "mail";
+	private static final Logger LOGGER = Logger.getLogger(JpaParticipantDao.class);
+	private final String QUERY_PARTICIPANT_ALL = "SELECT p FROM Participant AS p";
+	private final String QUERY_PARTICIPANT_BY_MAIL = "SELECT p FROM Participant AS p WHERE mail = :mail";
+	private final String MAIL = "mail";
 
-    public JpaParticipantDao(EntityManagerFactory emf) {
-	super(emf);
-    }
+	public JpaParticipantDao(EntityManagerFactory emf) {
+		super(emf);
+	}
 
-    @Override
-    public Participant addParticipant(Participant participant) {
-	EntityManager em = null;
-	EntityTransaction transaction = null;
-	try {
-	    em = getEntityManagerFactory().createEntityManager();
-	    transaction = em.getTransaction();
-	    transaction.begin();
-	    em.persist(participant);
-	    em.flush();
-	    transaction.commit();
-	} catch (IllegalStateException | PersistenceException | IllegalArgumentException e) {
-	    e.printStackTrace();
-	    participant = null;
-	} finally {
-	    if (transaction.isActive()) {
-		transaction.rollback();
-	    }
-	    em.close();
+	@Override
+	public Participant addParticipant(Participant participant) {
+		EntityManager em = getEntityManagerFactory().createEntityManager();
+		EntityTransaction transaction = em.getTransaction();
+		try {
+			transaction.begin();
+			em.persist(participant);
+			em.flush();
+			transaction.commit();
+		} catch (IllegalStateException | PersistenceException | IllegalArgumentException e) {
+			LOGGER.error(e.getMessage(), e);
+			participant = null;
+		} finally {
+			if (transaction.isActive()) {
+				transaction.rollback();
+			}
+			em.close();
+		}
+		return participant;
 	}
-	return participant;
-    }
 
-    @Override
-    public Participant findParticipant(final Integer noParticipant) {
-	EntityManager em = null;
-	Participant participant = null;
-	try {
-	    em = getEntityManagerFactory().createEntityManager();
-	    participant = em.find(Participant.class, noParticipant);
-	} catch (IllegalStateException | IllegalArgumentException e) {
-	    e.printStackTrace();
-	} finally {
-	    em.close();
+	@Override
+	public Participant findParticipant(final Integer noParticipant) {
+		EntityManager em = getEntityManagerFactory().createEntityManager();
+		Participant participant = null;
+		try {
+			participant = em.find(Participant.class, noParticipant);
+		} catch (IllegalStateException | IllegalArgumentException e) {
+			LOGGER.error(e.getMessage(), e);
+		} finally {
+			em.close();
+		}
+		return participant;
 	}
-	return participant;
-    }
 
-    @Override
-    public Participant updateParticipant(Participant participant) {
-	EntityManager em = null;
-	EntityTransaction transaction = null;
-	try {
-	    em = getEntityManagerFactory().createEntityManager();
-	    transaction = em.getTransaction();
-	    transaction.begin();
-	    em.merge(participant);
-	    transaction.commit();
-	} catch (IllegalStateException | IllegalArgumentException | TransactionRequiredException e) {
-	    e.printStackTrace();
-	    participant = null;
-	} finally {
-	    if (transaction.isActive()) {
-		transaction.rollback();
-	    }
-	    em.close();
+	@Override
+	public Participant updateParticipant(Participant participant) {
+		EntityManager em = getEntityManagerFactory().createEntityManager();
+		EntityTransaction transaction = em.getTransaction();
+		try {
+			transaction.begin();
+			em.merge(participant);
+			transaction.commit();
+		} catch (IllegalStateException | IllegalArgumentException | TransactionRequiredException e) {
+			LOGGER.error(e.getMessage(), e);
+			participant = null;
+		} finally {
+			if (transaction.isActive()) {
+				transaction.rollback();
+			}
+			em.close();
+		}
+		return participant;
 	}
-	return participant;
-    }
 
-    @Override
-    public Boolean removeParticipant(final Integer noParticipant) {
-	EntityManager em = null;
-	EntityTransaction transaction = null;
-	Participant participant = null;
-	try {
-	    em = getEntityManagerFactory().createEntityManager();
-	    participant = em.find(Participant.class, noParticipant);
-	    transaction = em.getTransaction();
-	    if (participant != null) {
-		transaction.begin();
-		em.remove(participant);
-		transaction.commit();
-	    }
-	} catch (IllegalStateException | IllegalArgumentException | TransactionRequiredException e) {
-	    e.printStackTrace();
-	    participant = null;
-	} finally {
-	    if (transaction.isActive()) {
-		transaction.rollback();
-	    }
-	    em.close();
+	@Override
+	public Boolean removeParticipant(final Integer noParticipant) {
+		EntityManager em = getEntityManagerFactory().createEntityManager();
+		EntityTransaction transaction = em.getTransaction();
+		Participant participant = null;
+		try {
+			participant = em.find(Participant.class, noParticipant);
+			if (participant != null) {
+				transaction.begin();
+				em.remove(participant);
+				transaction.commit();
+			}
+		} catch (IllegalStateException | IllegalArgumentException | TransactionRequiredException e) {
+			LOGGER.error(e.getMessage(), e);
+			participant = null;
+		} finally {
+			if (transaction.isActive()) {
+				transaction.rollback();
+			}
+			em.close();
+		}
+		if (participant != null) {
+			return true;
+		} else {
+			return false;
+		}
 	}
-	if (participant != null) {
-	    return true;
-	} else {
-	    return false;
-	}
-    }
 
-    @Override
-    public Collection<Participant> getAllParticipant() {
-	EntityManager em = null;
-	Collection<Participant> listParticipant = null;
-	try {
-	    em = getEntityManagerFactory().createEntityManager();
-	    listParticipant = em.createQuery(QUERY_PARTICIPANT_ALL, Participant.class).getResultList();
-	} catch (IllegalStateException | PersistenceException | IllegalArgumentException e) {
-	    e.printStackTrace();
-	} finally {
-	    em.close();
+	@Override
+	public Collection<Participant> getAllParticipant() {
+		EntityManager em = getEntityManagerFactory().createEntityManager();
+		Collection<Participant> listParticipant = null;
+		try {
+			listParticipant = em.createQuery(QUERY_PARTICIPANT_ALL, Participant.class).getResultList();
+		} catch (IllegalStateException | PersistenceException | IllegalArgumentException e) {
+			LOGGER.error(e.getMessage(), e);
+		} finally {
+			em.close();
+		}
+		return listParticipant;
 	}
-	return listParticipant;
-    }
 
-    @Override
-    public Participant findParticipantByMail(String mail) {
-	EntityManager em = null;
-	Participant participant = null;
-	try {
-	    em = getEntityManagerFactory().createEntityManager();
-	    participant = em.createQuery(QUERY_PARTICIPANT_BY_MAIL, Participant.class).setParameter(MAIL, mail)
-		    .getSingleResult();
-	} catch (IllegalStateException | PersistenceException | IllegalArgumentException e) {
-	    e.printStackTrace();
-	} finally {
-	    em.close();
+	@Override
+	public Participant findParticipantByMail(String mail) {
+		EntityManager em = getEntityManagerFactory().createEntityManager();
+		Participant participant = null;
+		try {
+			participant = em.createQuery(QUERY_PARTICIPANT_BY_MAIL, Participant.class).setParameter(MAIL, mail)
+					.getSingleResult();
+		} catch (IllegalStateException | PersistenceException | IllegalArgumentException e) {
+			LOGGER.error(e.getMessage(), e);
+		} finally {
+			em.close();
+		}
+		return participant;
 	}
-	return participant;
-    }
 
 }

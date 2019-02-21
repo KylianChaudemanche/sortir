@@ -30,23 +30,23 @@ public class ServletCreateSortie extends HttpServlet {
      */
     private static final long serialVersionUID = -6076039526658978701L;
 
-    private final String CITIES = "cities";
-    private final String PLACES = "places";
-    private final String ACTION = "action";
-    private final String SAVE = "save";
-    private final String PUBLISH = "publish";
-    private final String JSP_CREATE_SORTIE = "/WEB-INF/createSortie.jsp";
-    private final String JSP_LOGIN = "/WEB-INF/login.jsp";
-    private final String SORTIE_CITY = "sortieCity";
-    private final String SORTIE_PLACE = "sortiePlace";
-    private final String SORTIE_NAME = "sortieName";
-    private final String SORTIE_BEGIN_DATE = "sortieBeginDate";
-    private final String SORTIE_CLOSE_INSCRIPTION_DATE = "sortieCloseInscriptionDate";
-    private final String SORTIE_MAX_PLACE = "sortieNbMaxPlace";
-    private final String SORTIE_DURATION = "sortieDuration";
-    private final String SORTIE_DESCRIPTION = "sortieDesc";
-    private final String FORMAT_DATE = "yyyy-MM-dd";
-    private final String FORMAT_DATETIME = "yyyy-MM-dd'T'hh:mm";
+    private static final String CITIES = "cities";
+    private static final String PLACES = "places";
+    private static final String ACTION = "action";
+    private static final String SAVE = "save";
+    private static final String PUBLISH = "publish";
+    private static final String JSP_CREATE_SORTIE = "/WEB-INF/createSortie.jsp";
+    private static final String JSP_LOGIN = "/WEB-INF/login.jsp";
+    private static final String SORTIE_CITY = "sortieCity";
+    private static final String SORTIE_PLACE = "sortiePlace";
+    private static final String SORTIE_NAME = "sortieName";
+    private static final String SORTIE_BEGIN_DATE = "sortieBeginDate";
+    private static final String SORTIE_CLOSE_INSCRIPTION_DATE = "sortieCloseInscriptionDate";
+    private static final String SORTIE_MAX_PLACE = "sortieNbMaxPlace";
+    private static final String SORTIE_DURATION = "sortieDuration";
+    private static final String SORTIE_DESCRIPTION = "sortieDesc";
+    private static final String FORMAT_DATE = "yyyy-MM-dd";
+    private static final String FORMAT_DATETIME = "yyyy-MM-dd'T'hh:mm";
 
     /**
      * @see HttpServlet#HttpServlet()

@@ -8,118 +8,113 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.PersistenceException;
 import javax.persistence.TransactionRequiredException;
 
+import org.apache.log4j.Logger;
+
 import fr.eni.sortir.dao.LieuDao;
 import fr.eni.sortir.entities.Lieu;
 
 public class JpaLieuDao extends JpaDao implements LieuDao {
-    private final String QUERY_LIEU_ALL = "SELECT l FROM Lieu AS l";
+	private static final Logger LOGGER = Logger.getLogger(JpaLieuDao.class);
+	private final String QUERY_LIEU_ALL = "SELECT l FROM Lieu AS l";
 
-    public JpaLieuDao(EntityManagerFactory emf) {
-	super(emf);
-    }
+	public JpaLieuDao(EntityManagerFactory emf) {
+		super(emf);
+	}
 
-    @Override
-    public Lieu addLieu(Lieu lieu) {
-	EntityManager em = null;
-	EntityTransaction transaction = null;
-	try {
-	    em = getEntityManagerFactory().createEntityManager();
-	    transaction = em.getTransaction();
-	    transaction.begin();
-	    em.persist(lieu);
-	    em.flush();
-	    transaction.commit();
-	} catch (IllegalStateException | PersistenceException | IllegalArgumentException e) {
-	    e.printStackTrace();
-	    lieu = null;
-	} finally {
-	    if (transaction.isActive()) {
-		transaction.rollback();
-	    }
-	    em.close();
+	@Override
+	public Lieu addLieu(Lieu lieu) {
+		EntityManager em = getEntityManagerFactory().createEntityManager();
+		EntityTransaction transaction = em.getTransaction();
+		try {
+			transaction.begin();
+			em.persist(lieu);
+			em.flush();
+			transaction.commit();
+		} catch (IllegalStateException | PersistenceException | IllegalArgumentException e) {
+			LOGGER.error(e.getMessage(), e);
+			lieu = null;
+		} finally {
+			if (transaction.isActive()) {
+				transaction.rollback();
+			}
+			em.close();
+		}
+		return lieu;
 	}
-	return lieu;
-    }
 
-    @Override
-    public Lieu findLieu(final Integer noLieu) {
-	EntityManager em = null;
-	Lieu lieu = null;
-	try {
-	    em = getEntityManagerFactory().createEntityManager();
-	    lieu = em.find(Lieu.class, noLieu);
-	} catch (IllegalStateException | IllegalArgumentException e) {
-	    e.printStackTrace();
-	} finally {
-	    em.close();
+	@Override
+	public Lieu findLieu(final Integer noLieu) {
+		EntityManager em = getEntityManagerFactory().createEntityManager();
+		Lieu lieu = null;
+		try {
+			lieu = em.find(Lieu.class, noLieu);
+		} catch (IllegalStateException | IllegalArgumentException e) {
+			LOGGER.error(e.getMessage(), e);
+		} finally {
+			em.close();
+		}
+		return lieu;
 	}
-	return lieu;
-    }
 
-    @Override
-    public Lieu updateLieu(Lieu lieu) {
-	EntityManager em = null;
-	EntityTransaction transaction = null;
-	try {
-	    em = getEntityManagerFactory().createEntityManager();
-	    transaction = em.getTransaction();
-	    transaction.begin();
-	    em.merge(lieu);
-	    transaction.commit();
-	} catch (IllegalStateException | IllegalArgumentException | TransactionRequiredException e) {
-	    e.printStackTrace();
-	    lieu = null;
-	} finally {
-	    if (transaction.isActive()) {
-		transaction.rollback();
-	    }
-	    em.close();
+	@Override
+	public Lieu updateLieu(Lieu lieu) {
+		EntityManager em = getEntityManagerFactory().createEntityManager();
+		EntityTransaction transaction = em.getTransaction();
+		try {
+			transaction.begin();
+			em.merge(lieu);
+			transaction.commit();
+		} catch (IllegalStateException | IllegalArgumentException | TransactionRequiredException e) {
+			LOGGER.error(e.getMessage(), e);
+			lieu = null;
+		} finally {
+			if (transaction.isActive()) {
+				transaction.rollback();
+			}
+			em.close();
+		}
+		return lieu;
 	}
-	return lieu;
-    }
 
-    @Override
-    public Boolean removeLieu(final Integer noLieu) {
-	EntityManager em = null;
-	EntityTransaction transaction = null;
-	Lieu lieu = null;
-	try {
-	    em = getEntityManagerFactory().createEntityManager();
-	    lieu = em.find(Lieu.class, noLieu);
-	    transaction = em.getTransaction();
-	    if (lieu != null) {
-		transaction.begin();
-		em.remove(lieu);
-		transaction.commit();
-	    }
-	} catch (IllegalStateException | IllegalArgumentException | TransactionRequiredException e) {
-	    e.printStackTrace();
-	    lieu = null;
-	} finally {
-	    if (transaction.isActive()) {
-		transaction.rollback();
-	    }
-	    em.close();
+	@Override
+	public Boolean removeLieu(final Integer noLieu) {
+		EntityManager em = getEntityManagerFactory().createEntityManager();
+		EntityTransaction transaction = em.getTransaction();
+		Lieu lieu = null;
+		try {
+			lieu = em.find(Lieu.class, noLieu);
+			if (lieu != null) {
+				transaction.begin();
+				em.remove(lieu);
+				transaction.commit();
+			}
+		} catch (IllegalStateException | IllegalArgumentException | TransactionRequiredException e) {
+			LOGGER.error(e.getMessage(), e);
+			lieu = null;
+		} finally {
+			if (transaction.isActive()) {
+				transaction.rollback();
+			}
+			em.close();
+		}
+		if (lieu != null) {
+			return true;
+		} else {
+			return false;
+		}
 	}
-	if (lieu != null) {
-	    return true;
-	} else {
-	    return false;
-	}
-    }
 
-    @Override
-    public Collection<Lieu> getAllLieu() {
-	EntityManager em = null;
-	Collection<Lieu> listLieu = null;
-	try {
-	    em = getEntityManagerFactory().createEntityManager();
-	    listLieu = em.createQuery(QUERY_LIEU_ALL, Lieu.class).getResultList();
-	} catch (IllegalStateException | PersistenceException | IllegalArgumentException e) {
-	    e.printStackTrace();
-	} finally {
-	    em.close();
+	@Override
+	public Collection<Lieu> getAllLieu() {
+		EntityManager em = getEntityManagerFactory().createEntityManager();
+		Collection<Lieu> listLieu = null;
+		try {
+			listLieu = em.createQuery(QUERY_LIEU_ALL, Lieu.class).getResultList();
+		} catch (IllegalStateException | PersistenceException | IllegalArgumentException e) {
+			LOGGER.error(e.getMessage(), e);
+		} finally {
+			em.close();
+		}
+		return listLieu;
 	}
-	return listLieu;
-    }
 }

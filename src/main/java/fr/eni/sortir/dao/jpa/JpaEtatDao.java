@@ -8,138 +8,129 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.PersistenceException;
 import javax.persistence.TransactionRequiredException;
 
+import org.apache.log4j.Logger;
+
 import fr.eni.sortir.dao.EtatDao;
 import fr.eni.sortir.entities.Etat;
 
 public class JpaEtatDao extends JpaDao implements EtatDao {
-    private final String QUERY_ETAT_ALL = "SELECT e FROM Etats AS e"; 
-    private final String QUERY_ETAT_BY_NAME = "SELECT e FROM Etat AS e WHERE libelle = :libelle";
-    private final String LIBELLE = "libelle";
-    
-    public JpaEtatDao(EntityManagerFactory emf) {
-	super(emf);
-    }
+	private static final Logger LOGGER = Logger.getLogger(JpaEtatDao.class);
+	private static final String QUERY_ETAT_ALL = "SELECT e FROM Etats AS e";
+	private static final String QUERY_ETAT_BY_NAME = "SELECT e FROM Etat AS e WHERE libelle = :libelle";
+	private static final String LIBELLE = "libelle";
 
-    @Override
-    public Etat addEtat(Etat etat) {
-	EntityManager em = null;
-	EntityTransaction transaction = null;
-	try {
-	    em = getEntityManagerFactory().createEntityManager();
-	    transaction = em.getTransaction();
-	    transaction.begin();
-	    em.persist(etat);
-	    em.flush();
-	    transaction.commit();
-	} catch (IllegalStateException | PersistenceException | IllegalArgumentException e) {
-	    e.printStackTrace();
-	    etat = null;
-	} finally {
-	    if (transaction.isActive()) {
-		transaction.rollback();
-	    }
-	    em.close();
+	public JpaEtatDao(EntityManagerFactory emf) {
+		super(emf);
 	}
-	return etat;
-    }
 
-    @Override
-    public Etat findEtat(final Integer noEtat) {
-	EntityManager em = null;
-	Etat etat = null;
-	try {
-	    em = getEntityManagerFactory().createEntityManager();
-	    etat = em.find(Etat.class, noEtat);
-	} catch (IllegalStateException | IllegalArgumentException e) {
-	    e.printStackTrace();
-	} finally {
-	    em.close();
+	@Override
+	public Etat addEtat(Etat etat) {
+		EntityManager em = getEntityManagerFactory().createEntityManager();
+		EntityTransaction transaction = em.getTransaction();
+		try {
+			transaction.begin();
+			em.persist(etat);
+			em.flush();
+			transaction.commit();
+		} catch (IllegalStateException | PersistenceException | IllegalArgumentException e) {
+			LOGGER.error(e.getMessage(), e);
+			etat = null;
+		} finally {
+			if (transaction.isActive()) {
+				transaction.rollback();
+			}
+			em.close();
+		}
+		return etat;
 	}
-	return etat;
-    }
 
-    @Override
-    public Etat updateEtat(Etat etat) {
-	EntityManager em = null;
-	EntityTransaction transaction = null;
-	try {
-	    em = getEntityManagerFactory().createEntityManager();
-	    transaction = em.getTransaction();
-	    transaction.begin();
-	    em.merge(etat);
-	    transaction.commit();
-	} catch (IllegalStateException | IllegalArgumentException | TransactionRequiredException e) {
-	    e.printStackTrace();
-	    etat = null;
-	} finally {
-	    if (transaction.isActive()) {
-		transaction.rollback();
-	    }
-	    em.close();
+	@Override
+	public Etat findEtat(final Integer noEtat) {
+		EntityManager em = getEntityManagerFactory().createEntityManager();
+		Etat etat = null;
+		try {
+			etat = em.find(Etat.class, noEtat);
+		} catch (IllegalStateException | IllegalArgumentException e) {
+			LOGGER.error(e.getMessage(), e);
+		} finally {
+			em.close();
+		}
+		return etat;
 	}
-	return etat;
-    }
 
-    @Override
-    public Boolean removeEtat(final Integer noEtat) {
-	EntityManager em = null;
-	EntityTransaction transaction = null;
-	Etat etat = null;
-	try {
-	    em = getEntityManagerFactory().createEntityManager();
-	    etat = em.find(Etat.class, noEtat);
-	    transaction = em.getTransaction();
-	    if (etat != null) {
-		transaction.begin();
-		em.remove(etat);
-		transaction.commit();
-	    }
-	} catch (IllegalStateException | IllegalArgumentException | TransactionRequiredException e) {
-	    e.printStackTrace();
-	    etat = null;
-	} finally {
-	    if (transaction.isActive()) {
-		transaction.rollback();
-	    }
-	    em.close();
+	@Override
+	public Etat updateEtat(Etat etat) {
+		EntityManager em = getEntityManagerFactory().createEntityManager();
+		EntityTransaction transaction = em.getTransaction();
+		try {
+			transaction.begin();
+			em.merge(etat);
+			transaction.commit();
+		} catch (IllegalStateException | IllegalArgumentException | TransactionRequiredException e) {
+			LOGGER.error(e.getMessage(), e);
+			etat = null;
+		} finally {
+			if (transaction.isActive()) {
+				transaction.rollback();
+			}
+			em.close();
+		}
+		return etat;
 	}
-	if (etat != null) {
-	    return true;
-	} else {
-	    return false;
-	}
-    }
 
-    @Override
-    public Collection<Etat> getAllEtat() {
-	EntityManager em = null;
-	Collection<Etat> listEtat = null;
-	try {
-	    em = getEntityManagerFactory().createEntityManager();
-	    listEtat = em.createQuery(QUERY_ETAT_ALL, Etat.class)
-		    .getResultList();
-	} catch (IllegalStateException | PersistenceException | IllegalArgumentException e) {
-	    e.printStackTrace();
-	} finally {
-	    em.close();
+	@Override
+	public Boolean removeEtat(final Integer noEtat) {
+		EntityManager em = getEntityManagerFactory().createEntityManager();
+		EntityTransaction transaction = em.getTransaction();
+		Etat etat = null;
+		try {
+			etat = em.find(Etat.class, noEtat);
+			if (etat != null) {
+				transaction.begin();
+				em.remove(etat);
+				transaction.commit();
+			}
+		} catch (IllegalStateException | IllegalArgumentException | TransactionRequiredException e) {
+			LOGGER.error(e.getMessage(), e);
+			etat = null;
+		} finally {
+			if (transaction.isActive()) {
+				transaction.rollback();
+			}
+			em.close();
+		}
+		if (etat != null) {
+			return true;
+		} else {
+			return false;
+		}
 	}
-	return listEtat;
-    }
 
-    @Override
-    public Etat findEtatByName(final String name) {
-	EntityManager em = null;
-	Etat etat = null;
-	try {
-	    em = getEntityManagerFactory().createEntityManager();
-	    etat = em.createQuery(QUERY_ETAT_BY_NAME, Etat.class)
-		    .setParameter(LIBELLE, name)
-		    .getSingleResult();
-	} catch(IllegalStateException | PersistenceException | IllegalArgumentException e) {
-	   e.printStackTrace(); 
-	} finally {
-	    em.close();
+	@Override
+	public Collection<Etat> getAllEtat() {
+		EntityManager em = getEntityManagerFactory().createEntityManager();;
+		Collection<Etat> listEtat = null;
+		try {
+			listEtat = em.createQuery(QUERY_ETAT_ALL, Etat.class).getResultList();
+		} catch (IllegalStateException | PersistenceException | IllegalArgumentException e) {
+			LOGGER.error(e.getMessage(), e);
+		} finally {
+			em.close();
+		}
+		return listEtat;
 	}
-	return etat;
-    }
+
+	@Override
+	public Etat findEtatByName(final String name) {
+		EntityManager em = getEntityManagerFactory().createEntityManager();
+		Etat etat = null;
+		try {
+			etat = em.createQuery(QUERY_ETAT_BY_NAME, Etat.class).setParameter(LIBELLE, name).getSingleResult();
+		} catch (IllegalStateException | PersistenceException | IllegalArgumentException e) {
+			LOGGER.error(e.getMessage(), e);
+		} finally {
+			em.close();
+		}
+		return etat;
+	}
 }
