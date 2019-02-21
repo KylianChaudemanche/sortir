@@ -9,24 +9,4 @@
     <welcome-file>default.htm</welcome-file>
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
-  <servlet>
-    <description></description>
-    <display-name>ServletLogin</display-name>
-    <servlet-name>ServletLogin</servlet-name>
-    <servlet-class>fr.eni.sortir.servlets.ServletLogin</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>ServletLogin</servlet-name>
-    <url-pattern>/login</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <description></description>
-    <display-name>ServletAccueil</display-name>
-    <servlet-name>ServletAccueil</servlet-name>
-    <servlet-class>fr.eni.sortir.servlets.ServletAccueil</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>ServletAccueil</servlet-name>
-    <url-pattern>/ServletAccueil</url-pattern>
-  </servlet-mapping>
 </web-app>

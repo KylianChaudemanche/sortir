@@ -26,7 +26,7 @@
 	crossorigin="anonymous">
 
 <!-- Custom styles for this template -->
-<link href="<%=request.getContextPath()%>/assets/css/style.css"
+<link href="<%=request.getContextPath()%>/WEB-INF/assets/css/style.css"
 	rel="stylesheet">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
 	rel="stylesheet">
