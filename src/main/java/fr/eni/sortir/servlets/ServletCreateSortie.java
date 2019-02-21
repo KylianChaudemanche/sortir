@@ -5,8 +5,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Enumeration;
-import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -32,23 +30,23 @@ public class ServletCreateSortie extends HttpServlet {
      */
     private static final long serialVersionUID = -6076039526658978701L;
 
-    final private String CITIES = "cities";
-    final private String PLACES = "places";
-    final private String ACTION = "action";
-    final private String SAVE = "save";
-    final private String PUBLISH = "publish";
-    final private String JSP_CREATE_SORTIE = "/WEB-INF/createSortie.jsp";
-    final private String JSP_LOGIN = "/WEB-INF/login.jsp";
-    final private String SORTIE_CITY = "sortieCity";
-    final private String SORTIE_PLACE = "sortiePlace";
-    final private String SORTIE_NAME = "sortieName";
-    final private String SORTIE_BEGIN_DATE = "sortieBeginDate";
-    final private String SORTIE_CLOSE_INSCRIPTION_DATE = "sortieCloseInscriptionDate";
-    final private String SORTIE_MAX_PLACE = "sortieNbMaxPlace";
-    final private String SORTIE_DURATION = "sortieDuration";
-    final private String SORTIE_DESCRIPTION = "sortieDesc";
-    final private String FORMAT_DATE = "yyyy-MM-dd";
-    final private String FORMAT_DATETIME = "yyyy-MM-dd'T'hh:mm";
+    private final String CITIES = "cities";
+    private final String PLACES = "places";
+    private final String ACTION = "action";
+    private final String SAVE = "save";
+    private final String PUBLISH = "publish";
+    private final String JSP_CREATE_SORTIE = "/WEB-INF/createSortie.jsp";
+    private final String JSP_LOGIN = "/WEB-INF/login.jsp";
+    private final String SORTIE_CITY = "sortieCity";
+    private final String SORTIE_PLACE = "sortiePlace";
+    private final String SORTIE_NAME = "sortieName";
+    private final String SORTIE_BEGIN_DATE = "sortieBeginDate";
+    private final String SORTIE_CLOSE_INSCRIPTION_DATE = "sortieCloseInscriptionDate";
+    private final String SORTIE_MAX_PLACE = "sortieNbMaxPlace";
+    private final String SORTIE_DURATION = "sortieDuration";
+    private final String SORTIE_DESCRIPTION = "sortieDesc";
+    private final String FORMAT_DATE = "yyyy-MM-dd";
+    private final String FORMAT_DATETIME = "yyyy-MM-dd'T'hh:mm";
 
     /**
      * @see HttpServlet#HttpServlet()

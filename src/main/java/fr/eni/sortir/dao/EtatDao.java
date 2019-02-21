@@ -5,15 +5,15 @@ import java.util.Collection;
 import fr.eni.sortir.entities.Etat;
 
 public interface EtatDao {
-	Etat addEtat(Etat etat);
+    Etat addEtat(Etat etat);
 
-	Etat findEtat(Integer noEtat);
-	
-	Etat findEtatByName(String name);
+    Etat findEtat(Integer noEtat);
 
-	Etat updateEtat(Etat etat);
+    Etat findEtatByName(String name);
 
-	Boolean removeEtat(Integer noEtat);
+    Etat updateEtat(Etat etat);
 
-	Collection<Etat> getAllEtat();
+    Boolean removeEtat(Integer noEtat);
+
+    Collection<Etat> getAllEtat();
 }

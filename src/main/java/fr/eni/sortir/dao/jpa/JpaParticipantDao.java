@@ -5,13 +5,16 @@ import java.util.Collection;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
-import javax.persistence.Query;
+import javax.persistence.PersistenceException;
+import javax.persistence.TransactionRequiredException;
 
 import fr.eni.sortir.dao.ParticipantDao;
-import fr.eni.sortir.entities.Inscription;
 import fr.eni.sortir.entities.Participant;
 
 public class JpaParticipantDao extends JpaDao implements ParticipantDao {
+    private final String QUERY_PARTICIPANT_ALL = "SELECT p FROM Participant AS p";
+    private final String QUERY_PARTICIPANT_BY_MAIL = "SELECT p FROM Participant AS p WHERE mail = :mail";
+    private final String MAIL = "mail";
 
     public JpaParticipantDao(EntityManagerFactory emf) {
 	super(emf);
@@ -19,110 +22,123 @@ public class JpaParticipantDao extends JpaDao implements ParticipantDao {
 
     @Override
     public Participant addParticipant(Participant participant) {
-	EntityManager em = getEntityManagerFactory().createEntityManager();
-	EntityTransaction transaction = em.getTransaction();
-
+	EntityManager em = null;
+	EntityTransaction transaction = null;
 	try {
+	    em = getEntityManagerFactory().createEntityManager();
+	    transaction = em.getTransaction();
 	    transaction.begin();
 	    em.persist(participant);
 	    em.flush();
 	    transaction.commit();
-
-	    if (participant.getNoParticipant() != 0) {
-		return participant;
-	    } else {
-		return null;
-	    }
+	} catch (IllegalStateException | PersistenceException | IllegalArgumentException e) {
+	    e.printStackTrace();
+	    participant = null;
 	} finally {
 	    if (transaction.isActive()) {
 		transaction.rollback();
 	    }
 	    em.close();
 	}
+	return participant;
     }
 
     @Override
-    public Participant findParticipant(Integer noParticipant) {
-	EntityManager em = getEntityManagerFactory().createEntityManager();
-	Participant participant = em.find(Participant.class, noParticipant);
+    public Participant findParticipant(final Integer noParticipant) {
+	EntityManager em = null;
+	Participant participant = null;
 	try {
-	    if (participant != null) {
-		return participant;
-	    } else {
-		return null;
-	    }
+	    em = getEntityManagerFactory().createEntityManager();
+	    participant = em.find(Participant.class, noParticipant);
+	} catch (IllegalStateException | IllegalArgumentException e) {
+	    e.printStackTrace();
 	} finally {
 	    em.close();
 	}
+	return participant;
     }
 
     @Override
     public Participant updateParticipant(Participant participant) {
-	EntityManager em = getEntityManagerFactory().createEntityManager();
-	EntityTransaction transaction = em.getTransaction();
-
+	EntityManager em = null;
+	EntityTransaction transaction = null;
 	try {
+	    em = getEntityManagerFactory().createEntityManager();
+	    transaction = em.getTransaction();
 	    transaction.begin();
 	    em.merge(participant);
 	    transaction.commit();
-
-	    return participant;
+	} catch (IllegalStateException | IllegalArgumentException | TransactionRequiredException e) {
+	    e.printStackTrace();
+	    participant = null;
 	} finally {
-	    if (transaction.isActive())
+	    if (transaction.isActive()) {
 		transaction.rollback();
+	    }
 	    em.close();
 	}
+	return participant;
     }
 
     @Override
-    public Boolean removeParticipant(Integer noParticipant) {
-	EntityManager em = getEntityManagerFactory().createEntityManager();
-	EntityTransaction transaction = em.getTransaction();
+    public Boolean removeParticipant(final Integer noParticipant) {
+	EntityManager em = null;
+	EntityTransaction transaction = null;
+	Participant participant = null;
 	try {
-	    Participant participant = em.find(Participant.class, noParticipant);
+	    em = getEntityManagerFactory().createEntityManager();
+	    participant = em.find(Participant.class, noParticipant);
+	    transaction = em.getTransaction();
 	    if (participant != null) {
 		transaction.begin();
 		em.remove(participant);
 		transaction.commit();
-		return true;
-	    } else {
-		return false;
 	    }
+	} catch (IllegalStateException | IllegalArgumentException | TransactionRequiredException e) {
+	    e.printStackTrace();
+	    participant = null;
 	} finally {
-	    if (transaction.isActive())
+	    if (transaction.isActive()) {
 		transaction.rollback();
+	    }
 	    em.close();
+	}
+	if (participant != null) {
+	    return true;
+	} else {
+	    return false;
 	}
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public Collection<Participant> getAllParticipant() {
-	EntityManager em = getEntityManagerFactory().createEntityManager();
-
+	EntityManager em = null;
+	Collection<Participant> listParticipant = null;
 	try {
-	    Query query = em.createQuery("SELECT p FROM Participant AS p", Participant.class);
-	    Collection<Participant> listParticipant = query.getResultList();
-	    return listParticipant;
+	    em = getEntityManagerFactory().createEntityManager();
+	    listParticipant = em.createQuery(QUERY_PARTICIPANT_ALL, Participant.class).getResultList();
+	} catch (IllegalStateException | PersistenceException | IllegalArgumentException e) {
+	    e.printStackTrace();
 	} finally {
 	    em.close();
 	}
+	return listParticipant;
     }
 
     @Override
     public Participant findParticipantByMail(String mail) {
-	EntityManager em = getEntityManagerFactory().createEntityManager();
-
+	EntityManager em = null;
+	Participant participant = null;
 	try {
-	    Query query = em.createQuery("SELECT p FROM Participant AS p WHERE mail = :mail", Participant.class)
-		    .setParameter("mail", mail);
-
-	    Participant participant = (Participant) query.getSingleResult();
-
-	    return participant;
+	    em = getEntityManagerFactory().createEntityManager();
+	    participant = em.createQuery(QUERY_PARTICIPANT_BY_MAIL, Participant.class).setParameter(MAIL, mail)
+		    .getSingleResult();
+	} catch (IllegalStateException | PersistenceException | IllegalArgumentException e) {
+	    e.printStackTrace();
 	} finally {
 	    em.close();
 	}
+	return participant;
     }
 
 }

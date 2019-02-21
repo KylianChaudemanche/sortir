@@ -12,7 +12,9 @@ import fr.eni.sortir.dao.EtatDao;
 import fr.eni.sortir.entities.Etat;
 
 public class JpaEtatDao extends JpaDao implements EtatDao {
-    
+    private final String QUERY_ETAT_ALL = "SELECT e FROM Etats AS e"; 
+    private final String QUERY_ETAT_BY_NAME = "SELECT e FROM Etat AS e WHERE libelle = :libelle";
+    private final String LIBELLE = "libelle";
     
     public JpaEtatDao(EntityManagerFactory emf) {
 	super(emf);
@@ -33,8 +35,9 @@ public class JpaEtatDao extends JpaDao implements EtatDao {
 	    e.printStackTrace();
 	    etat = null;
 	} finally {
-	    if (transaction.isActive())
+	    if (transaction.isActive()) {
 		transaction.rollback();
+	    }
 	    em.close();
 	}
 	return etat;
@@ -69,8 +72,9 @@ public class JpaEtatDao extends JpaDao implements EtatDao {
 	    e.printStackTrace();
 	    etat = null;
 	} finally {
-	    if (transaction.isActive())
+	    if (transaction.isActive()) {
 		transaction.rollback();
+	    }
 	    em.close();
 	}
 	return etat;
@@ -92,9 +96,11 @@ public class JpaEtatDao extends JpaDao implements EtatDao {
 	    }
 	} catch (IllegalStateException | IllegalArgumentException | TransactionRequiredException e) {
 	    e.printStackTrace();
+	    etat = null;
 	} finally {
-	    if (transaction.isActive())
+	    if (transaction.isActive()) {
 		transaction.rollback();
+	    }
 	    em.close();
 	}
 	if (etat != null) {
@@ -110,7 +116,7 @@ public class JpaEtatDao extends JpaDao implements EtatDao {
 	Collection<Etat> listEtat = null;
 	try {
 	    em = getEntityManagerFactory().createEntityManager();
-	    listEtat = em.createQuery("SELECT e FROM Etats AS e", Etat.class)
+	    listEtat = em.createQuery(QUERY_ETAT_ALL, Etat.class)
 		    .getResultList();
 	} catch (IllegalStateException | PersistenceException | IllegalArgumentException e) {
 	    e.printStackTrace();
@@ -126,8 +132,8 @@ public class JpaEtatDao extends JpaDao implements EtatDao {
 	Etat etat = null;
 	try {
 	    em = getEntityManagerFactory().createEntityManager();
-	    etat = em.createQuery("SELECT e FROM Etat AS e WHERE libelle = :libelle", Etat.class)
-		    .setParameter("libelle", name)
+	    etat = em.createQuery(QUERY_ETAT_BY_NAME, Etat.class)
+		    .setParameter(LIBELLE, name)
 		    .getSingleResult();
 	} catch(IllegalStateException | PersistenceException | IllegalArgumentException e) {
 	   e.printStackTrace(); 

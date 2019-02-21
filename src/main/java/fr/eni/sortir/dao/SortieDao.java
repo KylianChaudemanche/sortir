@@ -5,13 +5,13 @@ import java.util.Collection;
 import fr.eni.sortir.entities.Sortie;
 
 public interface SortieDao {
-	Sortie addSortie(Sortie sorties);
+    Sortie addSortie(Sortie sorties);
 
-	Sortie findSortie(Integer noSortie);
+    Sortie findSortie(Integer noSortie);
 
-	Sortie updateSortie(Sortie sorties);
+    Sortie updateSortie(Sortie sorties);
 
-	Boolean removeSortie(Integer noSortie);
+    Boolean removeSortie(Integer noSortie);
 
-	Collection<Sortie> getAllSortie();
+    Collection<Sortie> getAllSortie();
 }
