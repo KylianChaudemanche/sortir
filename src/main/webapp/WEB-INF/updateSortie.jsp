@@ -9,7 +9,7 @@
 <!-- ####### CONTENT ######## -->
 
 <div class="container">
-	<h1 class="text-center mb-4 mt-4">Créer une sortie</h1>
+	<h1 class="text-center mb-4 mt-4">Modifier une sortie</h1>
 	
 	<form action="createSortie" method="POST">
 		<div class="row">
@@ -55,9 +55,9 @@
 			
 			<div class="col-sm-6 float-right">
 				<div class="form-group row">
-					<label class="col-sm-4 col-form-label">Ville organisatrice</label>
+					<label class="col-sm-4 col-form-label">Site organisateur</label>
 					<div class="col-sm-8">
-						<input id="sortieCityOrganizing" class="form-control" type="text" disabled>
+						<input class="form-control" type="text" disabled>
 					</div>
 				</div>
 				<div class="form-group row">
@@ -144,4 +144,19 @@
 		initSelectize(cities);
 		handleOnChangeCity(cities, places);
 	});
+	
+	function initSelectize(cities) {
+		$("#sortieCity").selectize({
+			options: cities,
+			valueField: "id",
+			labelField: "name",
+			searchField: "name"
+		});		
+		
+		$("#sortiePlace").selectize({
+			valueField: "id",
+			labelField: "name",
+			searchField: "name"
+		});
+	}
 </script>

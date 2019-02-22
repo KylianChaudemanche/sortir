@@ -10,6 +10,7 @@ import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -19,8 +20,12 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.codehaus.jackson.annotate.JsonBackReference;
+import org.codehaus.jackson.annotate.JsonManagedReference;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 @Entity
 @Table(name = "SORTIES")
@@ -49,15 +54,20 @@ public class Sortie implements Serializable {
     private String descriptionInfos;
     @Column(name = "urlPhoto")
     private String urlPhoto;
-    @ManyToOne
+    @JsonBackReference
+    @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "etats_no_etat")
     private Etat etat;
-    @ManyToOne
+    @JsonBackReference
+    @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "lieux_no_lieu")
     private Lieu lieu;
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @JsonManagedReference
     @OneToMany(mappedBy = "sortie", cascade = CascadeType.ALL, orphanRemoval = true)
     private Collection<Inscription> inscriptions = new ArrayList<>();
-    @ManyToOne
+    @JsonBackReference
+    @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "organisateur")
     private Participant organisateur;
 

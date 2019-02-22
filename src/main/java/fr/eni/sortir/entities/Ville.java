@@ -6,10 +6,13 @@ import java.util.Collection;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.codehaus.jackson.annotate.JsonManagedReference;
 
 @Entity
 @Table(name = "VILLES")
@@ -27,7 +30,8 @@ public class Ville implements Serializable {
     private String nomVille;
     @Column(name = "code_postal")
     private String codePostal;
-    @OneToMany(mappedBy = "ville")
+    @JsonManagedReference
+    @OneToMany(mappedBy = "ville", fetch=FetchType.EAGER)
     private Collection<Lieu> listLieu = new ArrayList<>();
 
     public Ville() {
