@@ -10,7 +10,7 @@
 <meta name="author" content="">
 <% if (request.getParameter("titre")== null){
 		%>
-<title>Login</title>
+<title>Sortir.com</title>
 <% 
 	}else{
 %>

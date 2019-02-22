@@ -10,6 +10,7 @@ import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -50,7 +51,7 @@ public class Sortie implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "lieux_no_lieu")
 	private Lieu lieu;
-	@OneToMany(mappedBy = "sortie", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(fetch= FetchType.EAGER, mappedBy = "sortie", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Collection<Inscription> inscriptions = new ArrayList<>();
 	@ManyToOne
 	@JoinColumn(name = "organisateur")

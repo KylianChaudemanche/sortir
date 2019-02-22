@@ -6,6 +6,7 @@ import java.util.Collection;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
@@ -19,7 +20,7 @@ public class Etat implements Serializable {
 	@Column(name="no_etat")
 	private Integer noEtat;
 	private String libelle;
-	@OneToMany(mappedBy="etat")
+	@OneToMany(fetch= FetchType.EAGER, mappedBy="etat")
 	private Collection<Sortie> listSortie = new ArrayList<>();
 	
 	public Etat() {

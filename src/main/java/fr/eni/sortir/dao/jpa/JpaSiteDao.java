@@ -6,11 +6,13 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 import fr.eni.sortir.dao.SiteDao;
 import fr.eni.sortir.entities.Inscription;
 import fr.eni.sortir.entities.Participant;
 import fr.eni.sortir.entities.Site;
+import fr.eni.sortir.entities.Sortie;
 
 public class JpaSiteDao extends JpaDao implements SiteDao  {
 
@@ -107,7 +109,7 @@ public class JpaSiteDao extends JpaDao implements SiteDao  {
 		EntityManager em = getEntityManagerFactory().createEntityManager();
 
 		try {
-			Query query = em.createQuery("SELECT s FROM Sites AS s", Inscription.class);
+			TypedQuery<Site> query = em.createQuery("SELECT s FROM Site AS s", Site.class);
 
 			Collection<Site> listSite = query.getResultList();
 

@@ -1,14 +1,24 @@
 package fr.eni.sortir.dao.jpa;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Date;
+import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 import fr.eni.sortir.dao.SortieDao;
 import fr.eni.sortir.entities.Etat;
+import fr.eni.sortir.entities.Participant;
+import fr.eni.sortir.entities.Site;
 import fr.eni.sortir.entities.Sortie;;
 
 public class JpaSortieDao extends JpaDao implements SortieDao{
@@ -80,16 +90,16 @@ public class JpaSortieDao extends JpaDao implements SortieDao{
 		EntityTransaction transaction = em.getTransaction();
 
 		try {
-			
+
 			Sortie sortie = em.find(Sortie.class, noSortie);
-			
+
 			if (sortie != null) {
 				transaction.begin();
-				
+
 				em.remove(sortie);
 
 				transaction.commit();
-				
+
 				return true;
 			} else {
 				return false;
@@ -104,16 +114,65 @@ public class JpaSortieDao extends JpaDao implements SortieDao{
 	@Override
 	public Collection<Sortie> getAllSortie() {
 		EntityManager em = getEntityManagerFactory().createEntityManager();
-
+		Collection<Sortie> listeSortie = null;
 		try {
-			Query query = em.createQuery("SELECT s FROM Sortie AS s", Sortie.class);
+			TypedQuery<Sortie> query = em.createQuery("SELECT s FROM Sortie AS s", Sortie.class);
 
-			Collection<Sortie> listSortie = query.getResultList();
+			listeSortie = query.getResultList();
 
-			return listSortie;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			em.close();
+		}
+		return listeSortie;
+	}
+	
+	@Override
+	public Collection<Sortie> getAllSortieFiltre(Site site, Boolean organisateur, Boolean inscrit, 
+			Boolean pasInscrit, Boolean passee, Date dateDebut, Date dateFin, Participant participant) {
+		Collection<Sortie> listeSortie = null;
+		Date today = new Date();
+
+		/* Construction de la requête dynamique */
+		String queryOrganisateur = (organisateur) ? " AND s.organisateur.noParticipant = :no_participant" : "";
+		String queryInscrit = (inscrit) ? " AND i.participant.noParticipant = :no_participant" : "";
+		String queryPasInscrit= (pasInscrit) ? " AND i.participant.noParticipant != :no_participant" : "";
+		String queryPassee = (passee) ? " AND s.dateDebut < :today" : "";
+		String queryDateDebut = (dateDebut != null) ? " AND s.dateDebut > :dateDebut" : "";
+		String queryDateFin = (dateFin != null) ? " AND s.dateDebut < :dateFin" : "";
+
+		EntityManager em = getEntityManagerFactory().createEntityManager();
+		try {
+			TypedQuery<Sortie> query = em.createQuery("SELECT s FROM Sortie AS s"
+					//+ " INNER JOIN fetch s.inscriptions AS i"
+					+ " WHERE s.organisateur.site.noSite = :noSite"
+					+queryOrganisateur+queryInscrit+queryPasInscrit
+					+queryPassee+queryDateDebut+queryDateFin
+					,Sortie.class)
+					.setParameter("noSite", site.getNoSite());
+
+			if(organisateur || inscrit || pasInscrit) {
+				query.setParameter("no_participant", participant.getNoParticipant());
+			}
+			if(passee) {
+				query.setParameter("today", today);
+			}
+			if(dateDebut != null) {
+				query.setParameter("dateDebut", dateDebut);
+			}
+			if(dateFin != null) {
+				query.setParameter("dateFin", dateFin);
+			}
+
+			listeSortie = query.getResultList();
+
+		} catch (Exception e) {
+			e.printStackTrace();
 		} finally {
 			em.close();
 		}
+		return listeSortie;
 	}
 
 }
