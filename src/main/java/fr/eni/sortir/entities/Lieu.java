@@ -35,11 +35,11 @@ public class Lieu implements Serializable {
     private Float latitude;
     private Float longitude;
     @JsonBackReference
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "villes_no_ville")
     private Ville ville;
     @JsonManagedReference
-    @OneToMany(mappedBy = "lieu", fetch=FetchType.EAGER)
+    @OneToMany(mappedBy = "lieu", fetch=FetchType.LAZY)
     private Collection<Sortie> listSortie = new ArrayList<>();
 
     public Lieu() {

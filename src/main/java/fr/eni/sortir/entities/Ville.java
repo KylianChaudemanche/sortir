@@ -31,7 +31,7 @@ public class Ville implements Serializable {
     @Column(name = "code_postal")
     private String codePostal;
     @JsonManagedReference
-    @OneToMany(mappedBy = "ville", fetch=FetchType.EAGER)
+    @OneToMany(mappedBy = "ville", fetch=FetchType.LAZY)
     private Collection<Lieu> listLieu = new ArrayList<>();
 
     public Ville() {

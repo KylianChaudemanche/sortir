@@ -17,13 +17,15 @@ function initSelectize(cities) {
 	});
 }
 
-function handleOnChangeCity(cities, places) {
+function handleOnChangeCity(cities, places, isCreatedPage) {
 	$("#sortieCity").on("change", function() {
 		var cityId = $("#sortieCity").find(":selected").val();
 		var city = cities.filter(city => city.id == cityId)[0];
 		if (city) {
 			$("#sortieCodePostal").val(city.codePostal);
-			$("#sortieCityOrganizing").val(city.name)
+			if (isCreatedPage) {
+				$("#sortieCityOrganizing").val(city.name)
+			}
 			var placeFiltred = places.filter(place => place.cityId == cityId);
 			handleOnChangePlace(placeFiltred);
 		}

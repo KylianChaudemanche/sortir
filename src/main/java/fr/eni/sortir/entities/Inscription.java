@@ -25,12 +25,12 @@ public class Inscription implements Serializable {
 
     @EmbeddedId
     private InscriptionId id;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @MapsId("noParticipant")
     @JoinColumn(name = "participants_no_participant")
     private Participant participant;
     @JsonBackReference
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @MapsId("noSortie")
     @JoinColumn(name = "sorties_no_sortie")
     private Sortie sortie;

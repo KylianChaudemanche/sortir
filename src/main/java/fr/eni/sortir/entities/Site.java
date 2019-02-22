@@ -29,7 +29,7 @@ public class Site implements Serializable {
     @Column(name = "nom_site")
     private String nomSite;
     @JsonManagedReference
-    @OneToMany(mappedBy = "site", fetch=FetchType.EAGER)
+    @OneToMany(mappedBy = "site", fetch=FetchType.LAZY)
     private Collection<Participant> listInscrit = new ArrayList<>();
 
     public Site() {

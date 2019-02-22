@@ -46,15 +46,14 @@ public class Participant implements Serializable {
     private String motDePasse;
     private Boolean administrateur;
     private Boolean actif;
-    @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(mappedBy = "participant", cascade = CascadeType.ALL, orphanRemoval = true)
     private Collection<Inscription> inscriptions = new ArrayList<>();
     @JsonBackReference
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name = "sites_no_site")
     private Site site;
     @JsonManagedReference
-    @OneToMany(mappedBy = "organisateur", fetch=FetchType.EAGER)
+    @OneToMany(mappedBy = "organisateur", fetch=FetchType.LAZY)
     private Collection<Sortie> listSortie = new ArrayList<>();
 
     public Participant() {

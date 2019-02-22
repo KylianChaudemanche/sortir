@@ -27,7 +27,7 @@ public class Etat implements Serializable {
     private Integer noEtat;
     private String libelle;
     @JsonManagedReference
-    @OneToMany(mappedBy = "etat", fetch=FetchType.EAGER)
+    @OneToMany(mappedBy = "etat", fetch=FetchType.LAZY)
     private Collection<Sortie> listSortie = new ArrayList<>();
 
     public Etat() {

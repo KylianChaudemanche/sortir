@@ -55,19 +55,18 @@ public class Sortie implements Serializable {
     @Column(name = "urlPhoto")
     private String urlPhoto;
     @JsonBackReference
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name = "etats_no_etat")
     private Etat etat;
     @JsonBackReference
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name = "lieux_no_lieu")
     private Lieu lieu;
-    @LazyCollection(LazyCollectionOption.FALSE)
     @JsonManagedReference
     @OneToMany(mappedBy = "sortie", cascade = CascadeType.ALL, orphanRemoval = true)
     private Collection<Inscription> inscriptions = new ArrayList<>();
     @JsonBackReference
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name = "organisateur")
     private Participant organisateur;
 

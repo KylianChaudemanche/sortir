@@ -142,6 +142,6 @@
 		];
 		
 		initSelectize(cities);
-		handleOnChangeCity(cities, places);
+		handleOnChangeCity(cities, places, true);
 	});
 </script>
