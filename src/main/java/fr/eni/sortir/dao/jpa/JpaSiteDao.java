@@ -1,6 +1,8 @@
 package fr.eni.sortir.dao.jpa;
 
 import java.util.Collection;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -8,13 +10,11 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.PersistenceException;
 import javax.persistence.TransactionRequiredException;
 
-import org.apache.log4j.Logger;
-
 import fr.eni.sortir.dao.SiteDao;
 import fr.eni.sortir.entities.Site;
 
 public class JpaSiteDao extends JpaDao implements SiteDao {
-	private static final Logger LOGGER = Logger.getLogger(JpaSiteDao.class);
+    private static final Logger LOGGER = Logger.getLogger(JpaSiteDao.class.getName());
     private final String QUERY_SITE_ALL = "SELECT s FROM Site AS s";
 
     public JpaSiteDao(EntityManagerFactory emf) {
@@ -31,7 +31,7 @@ public class JpaSiteDao extends JpaDao implements SiteDao {
 	    em.flush();
 	    transaction.commit();
 	} catch (IllegalStateException | PersistenceException | IllegalArgumentException e) {
-		LOGGER.error(e.getMessage(), e);
+	    LOGGER.log(Level.SEVERE, e.getMessage(), e);
 	    site = null;
 	} finally {
 	    if (transaction.isActive()) {
@@ -49,7 +49,7 @@ public class JpaSiteDao extends JpaDao implements SiteDao {
 	try {
 	    site = em.find(Site.class, noSite);
 	} catch (IllegalStateException | IllegalArgumentException e) {
-		LOGGER.error(e.getMessage(), e);
+	    LOGGER.log(Level.SEVERE, e.getMessage(), e);
 	} finally {
 	    em.close();
 	}
@@ -65,7 +65,7 @@ public class JpaSiteDao extends JpaDao implements SiteDao {
 	    em.merge(site);
 	    transaction.commit();
 	} catch (IllegalStateException | IllegalArgumentException | TransactionRequiredException e) {
-		LOGGER.error(e.getMessage(), e);
+	    LOGGER.log(Level.SEVERE, e.getMessage(), e);
 	    site = null;
 	} finally {
 	    if (transaction.isActive()) {
@@ -89,7 +89,7 @@ public class JpaSiteDao extends JpaDao implements SiteDao {
 		transaction.commit();
 	    }
 	} catch (IllegalStateException | IllegalArgumentException | TransactionRequiredException e) {
-		LOGGER.error(e.getMessage(), e);
+	    LOGGER.log(Level.SEVERE, e.getMessage(), e);
 	    site = null;
 	} finally {
 	    if (transaction.isActive()) {
@@ -111,7 +111,7 @@ public class JpaSiteDao extends JpaDao implements SiteDao {
 	try {
 	    listSite = em.createQuery(QUERY_SITE_ALL, Site.class).getResultList();
 	} catch (IllegalStateException | PersistenceException | IllegalArgumentException e) {
-		LOGGER.error(e.getMessage(), e);
+	    LOGGER.log(Level.SEVERE, e.getMessage(), e);
 	} finally {
 	    em.close();
 	}

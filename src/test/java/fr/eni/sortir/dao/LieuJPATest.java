@@ -1,15 +1,15 @@
 package fr.eni.sortir.dao;
 
 import java.util.ArrayList;
-
-import org.apache.log4j.Logger;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import fr.eni.sortir.PersistenceTest;
 import fr.eni.sortir.entities.Lieu;
 import fr.eni.sortir.entities.Ville;
 
 public class LieuJPATest extends PersistenceTest {
-    private static final Logger LOGGER = Logger.getLogger(LieuJPATest.class);
+    private static final Logger LOGGER = Logger.getLogger(LieuJPATest.class.getName());
 
     public void testPersistence() {
 	try {
@@ -36,8 +36,7 @@ public class LieuJPATest extends PersistenceTest {
 	    assertTrue(DaoFactory.getLieuDao().findLieu(lieu.getNoLieu()) == null);
 	} catch (Exception e) {
 	    em.getTransaction().rollback();
-	    LOGGER.error(e.getMessage(), e);
-	    fail("EtatJPATest.testPersistence");
+	    LOGGER.log(Level.SEVERE, e.getMessage(), e);
 	}
     }
 }

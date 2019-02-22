@@ -2,8 +2,8 @@ package fr.eni.sortir.dao;
 
 import java.util.ArrayList;
 import java.util.Date;
-
-import org.apache.log4j.Logger;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import fr.eni.sortir.PersistenceTest;
 import fr.eni.sortir.entities.Etat;
@@ -14,7 +14,7 @@ import fr.eni.sortir.entities.Sortie;
 import fr.eni.sortir.entities.Ville;
 
 public class SortieJPATest extends PersistenceTest {
-    private static final Logger LOGGER = Logger.getLogger(SortieJPATest.class);
+    private static final Logger LOGGER = Logger.getLogger(SortieJPATest.class.getName());
 
     public void testPersistence() {
 	try {
@@ -51,8 +51,7 @@ public class SortieJPATest extends PersistenceTest {
 	    assertTrue(DaoFactory.getSortieDao().findSortie(sortie.getNoSortie()) == null);
 	} catch (Exception e) {
 	    em.getTransaction().rollback();
-	    LOGGER.error(e.getMessage(), e);
-	    fail("EtatJPATest.testPersistence");
+	    LOGGER.log(Level.SEVERE, e.getMessage(), e);
 	}
     }
 }

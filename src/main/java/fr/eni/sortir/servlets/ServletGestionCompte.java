@@ -34,6 +34,8 @@ import fr.eni.sortir.utils.SaltedMD5;
 @MultipartConfig(location = "/tmp", fileSizeThreshold = 1024 * 1024, maxFileSize = 1024 * 1024
 	* 5, maxRequestSize = 1024 * 1024 * 5 * 5)
 public class ServletGestionCompte extends HttpServlet {
+    private static final String ATTR_PARTICIPANT = "participant";
+    private static final String ATTR_LIST_SITE = "listeSite";
 
     /**
      * 
@@ -54,11 +56,11 @@ public class ServletGestionCompte extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
 	    throws ServletException, IOException {
 	HttpSession session = request.getSession();
-	session.setAttribute("participant", DaoFactory.getParticipantDao().findParticipant(7));
-	Participant participant = (Participant) session.getAttribute("participant");
-	request.setAttribute("participant", participant);
+	session.setAttribute(ATTR_PARTICIPANT, DaoFactory.getParticipantDao().findParticipant(7));
+	Participant participant = (Participant) session.getAttribute(ATTR_PARTICIPANT);
+	request.setAttribute(ATTR_PARTICIPANT, participant);
 	Collection<Site> listeSite = DaoFactory.getSiteDao().getAllSite();
-	request.setAttribute("listeSite", listeSite);
+	request.setAttribute(ATTR_LIST_SITE, listeSite);
 	RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/gestionCompte.jsp");
 	rd.forward(request, response);
     }

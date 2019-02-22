@@ -1,17 +1,16 @@
 package fr.eni.sortir;
 
 import java.sql.DriverManager;
+import java.util.logging.Logger;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
-import org.apache.log4j.Logger;
-
 import junit.framework.TestCase;
 
 public abstract class PersistenceTest extends TestCase {
-    private static final Logger LOGGER = Logger.getLogger(PersistenceTest.class);
+    private static final Logger LOGGER = Logger.getLogger(PersistenceTest.class.getName());
     private EntityManagerFactory emFactory;
     protected EntityManager em;
     

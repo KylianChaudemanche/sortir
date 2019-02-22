@@ -1,14 +1,14 @@
 package fr.eni.sortir.dao;
 
 import java.util.ArrayList;
-
-import org.apache.log4j.Logger;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import fr.eni.sortir.PersistenceTest;
 import fr.eni.sortir.entities.Ville;
 
 public class VilleJPATest extends PersistenceTest {
-    private static final Logger LOGGER = Logger.getLogger(VilleJPATest.class);
+    private static final Logger LOGGER = Logger.getLogger(VilleJPATest.class.getName());
 
     public void testPersistence() {
 	try {
@@ -33,8 +33,7 @@ public class VilleJPATest extends PersistenceTest {
 	    assertTrue(DaoFactory.getVilleDao().findVille(ville.getNoVille()) == null);
 	} catch (Exception e) {
 	    em.getTransaction().rollback();
-	    LOGGER.error(e.getMessage(), e);
-	    fail("EtatJPATest.testPersistence");
+	    LOGGER.log(Level.SEVERE, e.getMessage(), e);
 	}
     }
 }
