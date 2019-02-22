@@ -126,7 +126,7 @@ public class Participant implements Serializable {
     public void setMotDePasse(String motDePasse) {
 	this.motDePasse = motDePasse;
     }
-
+    //TODO modifier getAdministrateur en isAdministrateur
     public Boolean getAdministrateur() {
 	return administrateur;
     }
@@ -134,7 +134,7 @@ public class Participant implements Serializable {
     public void setAdministrateur(Boolean administrateur) {
 	this.administrateur = administrateur;
     }
-
+    //TODO modifier getActif en isActif
     public Boolean getActif() {
 	return actif;
     }

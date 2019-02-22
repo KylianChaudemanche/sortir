@@ -9,12 +9,10 @@ import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
@@ -28,42 +26,48 @@ import fr.eni.sortir.utils.Constantes;
 import fr.eni.sortir.utils.SaltedMD5;
 
 /**
- * Servlet implementation class ServletGestionCompte
+ * Servlet implementation class ServletCreationCompte
  */
-@WebServlet(name = "ServletGestionCompte", urlPatterns = { "/gestionCompte" })
-public class ServletGestionCompte extends HttpServlet {
+@WebServlet(name = "ServletGestionCompteAdmin", urlPatterns = { "/gestionCompteAdmin/*" })
+public class ServletGestionCompteAdmin extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+       
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public ServletGestionCompteAdmin() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
 
 	/**
-	 * @see HttpServlet#HttpServlet()
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-	public ServletGestionCompte() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
-		HttpSession session = request.getSession();
-		session.setAttribute("participant", DaoFactory.getParticipantDao().findParticipant(7));
-		Participant participant = (Participant) session.getAttribute("participant");
-		request.setAttribute("participant", participant);
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
 		Collection<Site> listeSite = DaoFactory.getSiteDao().getAllSite();
 		request.setAttribute("listeSite", listeSite);
-		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/gestionCompte.jsp");
-		rd.forward(request, response);
+		if("/nouveau".equals(request.getPathInfo())){
+			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/gestionCompteAdmin.jsp");
+			rd.forward(request, response);
+		}else {
+			try {
+			Participant participant = DaoFactory.getParticipantDao().findParticipant(Integer.valueOf(request.getPathInfo().replace("/","")));
+			request.setAttribute("participant", participant);
+			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/gestionCompteAdmin.jsp");
+			rd.forward(request, response);
+			}catch(NumberFormatException e) {
+			}
+		}
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		HttpSession session = request.getSession();
-		Participant participant = (Participant) session.getAttribute("participant");
+		
+		Participant participant = null;
+		Boolean nouveau = false;
 		DiskFileItemFactory factory = new DiskFileItemFactory();
 		// Configure a repository (to ensure a secure temp location is used)
 		ServletContext servletContext = this.getServletConfig().getServletContext();
@@ -78,13 +82,24 @@ public class ServletGestionCompte extends HttpServlet {
 			List<FileItem> items = upload.parseRequest(request);
 			Iterator<FileItem> iter = items.iterator();
 			String motDePasse = null;
+			boolean isAdmin = false;
+			boolean isActif = false;
 			while (iter.hasNext()) {
 				FileItem item = iter.next();
 				if (item.isFormField()) {
 					String name = item.getFieldName();
 					String value = item.getString();
-
 					switch (name) {
+					case "action":
+						if("nouveau".equals(value))
+						{
+							participant = new Participant();
+							nouveau = true;
+						}else {
+							participant = DaoFactory.getParticipantDao().findParticipant(Integer.valueOf(value));
+							nouveau = false;
+						}
+						break;
 					case "pseudo":
 						if (!value.equals("")) {
 						participant.setPseudo(value);
@@ -125,6 +140,16 @@ public class ServletGestionCompte extends HttpServlet {
 							}
 						}
 						break;
+					case "isAdmin":
+						if (value.equals("isAdmin")) {
+							isAdmin = true;
+							}
+						break;
+					case "isActif":
+						if (value.equals("isActif")) {
+							isActif = true;
+							}
+						break;
 					case "site":
 						if (!value.equals("")) {
 						participant.setSite(DaoFactory.getSiteDao().findSite(Integer.valueOf(value)));
@@ -142,19 +167,25 @@ public class ServletGestionCompte extends HttpServlet {
 						} catch (Exception e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
-							System.out.println(e.toString());
 						}
 					}
 				}
 			}
+			participant.setAdministrateur(isAdmin);
+			participant.setActif(isActif);
 		} catch (FileUploadException e) {
-			System.out.println(e.toString());
+			e.printStackTrace();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			System.out.println(e.toString());
+			e.printStackTrace();
 		}
-		DaoFactory.getParticipantDao().updateParticipant(participant);
-		doGet(request, response);
+		if(nouveau) {
+			DaoFactory.getParticipantDao().addParticipant(participant);
+		}else {
+			DaoFactory.getParticipantDao().updateParticipant(participant);
+		}
+		
+		response.sendRedirect("../gestionCompteAdmin/"+participant.getNoParticipant());
 	}
 
 }
