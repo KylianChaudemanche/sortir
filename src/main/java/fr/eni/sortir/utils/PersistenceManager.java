@@ -8,7 +8,7 @@ public class PersistenceManager {
 
     public static EntityManagerFactory getEntityManagerFactory() {
 	if (emf == null) {
-	    emf = Persistence.createEntityManagerFactory("pu");
+	    emf = Persistence.createEntityManagerFactory(Constantes.PU);
 	}
 	return emf;
     }
