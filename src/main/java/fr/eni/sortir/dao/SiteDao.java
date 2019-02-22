@@ -5,11 +5,11 @@ import java.util.Collection;
 import fr.eni.sortir.entities.Site;
 
 public interface SiteDao {
-    Site addSite(Site sites);
+    Site addSite(Site site);
 
     Site findSite(Integer noSite);
 
-    Site updateSite(Site sites);
+    Site updateSite(Site site);
 
     Boolean removeSite(Integer noSite);
 

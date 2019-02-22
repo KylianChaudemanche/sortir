@@ -9,11 +9,11 @@ public interface EtatDao {
 
     Etat findEtat(Integer noEtat);
 
-    Etat findEtatByName(String name);
-
     Etat updateEtat(Etat etat);
 
     Boolean removeEtat(Integer noEtat);
 
     Collection<Etat> getAllEtat();
+    
+    Etat findEtatByName(String name);
 }
