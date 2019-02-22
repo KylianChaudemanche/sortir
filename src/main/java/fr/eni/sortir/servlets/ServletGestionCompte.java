@@ -31,8 +31,6 @@ import fr.eni.sortir.utils.SaltedMD5;
  * Servlet implementation class ServletGestionCompte
  */
 @WebServlet(name = "ServletGestionCompte", urlPatterns = { "/gestionCompte" })
-@MultipartConfig(location = "/tmp", fileSizeThreshold = 1024 * 1024, maxFileSize = 1024 * 1024
-	* 5, maxRequestSize = 1024 * 1024 * 5 * 5)
 public class ServletGestionCompte extends HttpServlet {
     private static final String ATTR_PARTICIPANT = "participant";
     private static final String ATTR_LIST_SITE = "listeSite";
