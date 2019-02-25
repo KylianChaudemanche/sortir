@@ -12,63 +12,63 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="ETATS")
+@Table(name = "ETATS")
 public class Etat implements Serializable {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 3247440578284786710L;
-	@Id
-	@GeneratedValue
-	@Column(name="no_etat")
-	private Integer noEtat;
-	private String libelle;
-	@OneToMany(mappedBy="etat")
-	private Collection<Sortie> listSortie = new ArrayList<>();
-	
-	public Etat() {
-		super();
-	}
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 3247440578284786710L;
+    @Id
+    @GeneratedValue
+    @Column(name = "no_etat")
+    private Integer noEtat;
+    private String libelle;
+    @OneToMany(mappedBy = "etat")
+    private Collection<Sortie> listSortie = new ArrayList<>();
 
-	public Etat(Integer noEtat, String libelle, Collection<Sortie> listSortie) {
-		super();
-		this.noEtat = noEtat;
-		this.libelle = libelle;
-		this.listSortie = listSortie;
-	}
-	
-	public Etat(String libelle, Collection<Sortie> listSortie) {
-		super();
-		this.libelle = libelle;
-		this.listSortie = listSortie;
-	}
+    public Etat() {
+	super();
+    }
 
-	public Integer getNoEtat() {
-		return noEtat;
-	}
+    public Etat(Integer noEtat, String libelle, Collection<Sortie> listSortie) {
+	super();
+	this.noEtat = noEtat;
+	this.libelle = libelle;
+	this.listSortie = listSortie;
+    }
 
-	public void setNoEtat(Integer noEtat) {
-		this.noEtat = noEtat;
-	}
+    public Etat(String libelle, Collection<Sortie> listSortie) {
+	super();
+	this.libelle = libelle;
+	this.listSortie = listSortie;
+    }
 
-	public String getLibelle() {
-		return libelle;
-	}
+    public Integer getNoEtat() {
+	return noEtat;
+    }
 
-	public void setLibelle(String libelle) {
-		this.libelle = libelle;
-	}
+    public void setNoEtat(Integer noEtat) {
+	this.noEtat = noEtat;
+    }
 
-	public Collection<Sortie> getListSortie() {
-		return listSortie;
-	}
+    public String getLibelle() {
+	return libelle;
+    }
 
-	public void setListSortie(Collection<Sortie> listSortie) {
-		this.listSortie = listSortie;
-	}
+    public void setLibelle(String libelle) {
+	this.libelle = libelle;
+    }
 
-	@Override
-	public String toString() {
-		return "Etat [noEtat=" + noEtat + ", libelle=" + libelle + ", listSortie=" + listSortie + "]";
-	}
+    public Collection<Sortie> getListSortie() {
+	return listSortie;
+    }
+
+    public void setListSortie(Collection<Sortie> listSortie) {
+	this.listSortie = listSortie;
+    }
+
+    @Override
+    public String toString() {
+	return "Etat [noEtat=" + noEtat + ", libelle=" + libelle + ", listSortie=" + listSortie + "]";
+    }
 }

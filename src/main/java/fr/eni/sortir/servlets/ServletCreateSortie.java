@@ -5,8 +5,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Enumeration;
-import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -32,23 +30,27 @@ public class ServletCreateSortie extends HttpServlet {
      */
     private static final long serialVersionUID = -6076039526658978701L;
 
-    final private String CITIES = "cities";
-    final private String PLACES = "places";
-    final private String ACTION = "action";
-    final private String SAVE = "save";
-    final private String PUBLISH = "publish";
-    final private String JSP_CREATE_SORTIE = "/WEB-INF/createSortie.jsp";
-    final private String JSP_LOGIN = "/WEB-INF/login.jsp";
-    final private String SORTIE_CITY = "sortieCity";
-    final private String SORTIE_PLACE = "sortiePlace";
-    final private String SORTIE_NAME = "sortieName";
-    final private String SORTIE_BEGIN_DATE = "sortieBeginDate";
-    final private String SORTIE_CLOSE_INSCRIPTION_DATE = "sortieCloseInscriptionDate";
-    final private String SORTIE_MAX_PLACE = "sortieNbMaxPlace";
-    final private String SORTIE_DURATION = "sortieDuration";
-    final private String SORTIE_DESCRIPTION = "sortieDesc";
-    final private String FORMAT_DATE = "yyyy-MM-dd";
-    final private String FORMAT_DATETIME = "yyyy-MM-dd'T'hh:mm";
+    private static final String CITIES = "cities";
+    private static final String PLACES = "places";
+    private static final String ACTION = "action";
+    private static final String SAVE = "save";
+    private static final String PUBLISH = "publish";
+    private static final int CITY = 0;
+    private static final int PLACE = 1;
+    private static final int MAX_SUBSCRIPTION = 2;
+    private static final int DURATION = 3;
+    private static final String JSP_CREATE_SORTIE = "/WEB-INF/createSortie.jsp";
+    private static final String JSP_LOGIN = "/WEB-INF/login.jsp";
+    private static final String SORTIE_CITY = "sortieCity";
+    private static final String SORTIE_PLACE = "sortiePlace";
+    private static final String SORTIE_NAME = "sortieName";
+    private static final String SORTIE_BEGIN_DATE = "sortieBeginDate";
+    private static final String SORTIE_CLOSE_INSCRIPTION_DATE = "sortieCloseInscriptionDate";
+    private static final String SORTIE_MAX_SUBSCRIPTION = "sortieNbMaxPlace";
+    private static final String SORTIE_DURATION = "sortieDuration";
+    private static final String SORTIE_DESCRIPTION = "sortieDesc";
+    private static final String FORMAT_DATE = "yyyy-MM-dd";
+    private static final String FORMAT_DATETIME = "yyyy-MM-dd'T'hh:mm";
 
     /**
      * @see HttpServlet#HttpServlet()
@@ -74,29 +76,13 @@ public class ServletCreateSortie extends HttpServlet {
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
 	    throws ServletException, IOException {
-
-	for (String name : request.getParameterMap().keySet()) {
-	    if ("".equals(request.getParameter(name))) {
-		response.sendError(HttpServletResponse.SC_FORBIDDEN);
-		return;
-	    }
-	}
-
-	int noCity = -1, noPlace = -1, maxPlace = -1, duration = -1;
-
-	try {
-	    noCity = Integer.parseInt(request.getParameter(SORTIE_CITY));
-	    noPlace = Integer.parseInt(request.getParameter(SORTIE_PLACE));
-	    maxPlace = Integer.parseInt(request.getParameter(SORTIE_MAX_PLACE));
-	    duration = Integer.parseInt(request.getParameter(SORTIE_DURATION));
-	} catch (NumberFormatException nfe) {
-	    nfe.printStackTrace();
+	int[] parameters = checkParameter(request);
+	if (parameters == null) {
 	    response.sendError(HttpServletResponse.SC_FORBIDDEN);
-	    return;
 	}
 
-	Ville ville = DaoFactory.getVilleDao().findVille(noCity);
-	Lieu lieu = DaoFactory.getLieuDao().findLieu(noPlace);
+	Ville ville = DaoFactory.getVilleDao().findVille(parameters[CITY]);
+	Lieu lieu = DaoFactory.getLieuDao().findLieu(parameters[PLACE]);
 	if (ville == null || lieu == null) {
 	    response.sendError(HttpServletResponse.SC_FORBIDDEN);
 	    return;
@@ -114,7 +100,6 @@ public class ServletCreateSortie extends HttpServlet {
 	    response.sendError(HttpServletResponse.SC_FORBIDDEN);
 	    return;
 	}
-
 	if (dateBegin.compareTo(dateCloseInscription) < 0) {
 	    response.sendError(HttpServletResponse.SC_FORBIDDEN);
 	    return;
@@ -122,10 +107,9 @@ public class ServletCreateSortie extends HttpServlet {
 
 	// TODO replace with the value of user connected
 	Participant organisateur = DaoFactory.getParticipantDao().findParticipant(2);
-
-	Sortie sortie = new Sortie(request.getParameter(SORTIE_NAME), dateBegin, duration, dateCloseInscription,
-		maxPlace, request.getParameter(SORTIE_DESCRIPTION), null, null, lieu, new ArrayList<>(), organisateur);
-
+	Sortie sortie = new Sortie(request.getParameter(SORTIE_NAME), dateBegin, parameters[DURATION],
+		dateCloseInscription, parameters[MAX_SUBSCRIPTION], request.getParameter(SORTIE_DESCRIPTION), null,
+		null, lieu, new ArrayList<>(), organisateur);
 	switch (request.getParameter(ACTION)) {
 	case SAVE:
 	    sortie = saveSortie(sortie, State.CREATED);
@@ -137,13 +121,31 @@ public class ServletCreateSortie extends HttpServlet {
 	    response.sendError(HttpServletResponse.SC_FORBIDDEN);
 	    return;
 	}
-
 	// TODO replace with correct page redirection
 	if (sortie != null) {
 	    request.getRequestDispatcher(JSP_LOGIN).forward(request, response);
 	} else {
 	    response.sendError(HttpServletResponse.SC_FORBIDDEN);
 	}
+    }
+
+    private int[] checkParameter(HttpServletRequest request) {
+	for (String name : request.getParameterMap().keySet()) {
+	    if ("".equals(request.getParameter(name))) {
+		return null;
+	    }
+	}
+	int[] parameters = new int[4];
+	try {
+	    parameters[CITY] = Integer.parseInt(request.getParameter(SORTIE_CITY));
+	    parameters[PLACE] = Integer.parseInt(request.getParameter(SORTIE_PLACE));
+	    parameters[MAX_SUBSCRIPTION] = Integer.parseInt(request.getParameter(SORTIE_MAX_SUBSCRIPTION));
+	    parameters[DURATION] = Integer.parseInt(request.getParameter(SORTIE_DURATION));
+	} catch (NumberFormatException nfe) {
+	    nfe.printStackTrace();
+	    return null;
+	}
+	return parameters;
     }
 
     private Sortie saveSortie(Sortie sortie, State state) {

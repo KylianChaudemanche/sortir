@@ -1,6 +1,8 @@
 package fr.eni.sortir.dao.jpa;
 
 import java.util.Collection;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -12,29 +14,31 @@ import fr.eni.sortir.dao.EtatDao;
 import fr.eni.sortir.entities.Etat;
 
 public class JpaEtatDao extends JpaDao implements EtatDao {
-    
-    
+    private static final Logger LOGGER = Logger.getLogger(JpaEtatDao.class.getName());
+    private static final String QUERY_ETAT_ALL = "SELECT e FROM Etat AS e";
+    private static final String QUERY_ETAT_BY_NAME = "SELECT e FROM Etat AS e WHERE libelle = :libelle";
+    private static final String LIBELLE = "libelle";
+
     public JpaEtatDao(EntityManagerFactory emf) {
 	super(emf);
     }
 
     @Override
     public Etat addEtat(Etat etat) {
-	EntityManager em = null;
-	EntityTransaction transaction = null;
+	EntityManager em = getEntityManagerFactory().createEntityManager();
+	EntityTransaction transaction = em.getTransaction();
 	try {
-	    em = getEntityManagerFactory().createEntityManager();
-	    transaction = em.getTransaction();
 	    transaction.begin();
 	    em.persist(etat);
 	    em.flush();
 	    transaction.commit();
 	} catch (IllegalStateException | PersistenceException | IllegalArgumentException e) {
-	    e.printStackTrace();
+	    LOGGER.log(Level.SEVERE, e.getMessage(), e);
 	    etat = null;
 	} finally {
-	    if (transaction.isActive())
+	    if (transaction.isActive()) {
 		transaction.rollback();
+	    }
 	    em.close();
 	}
 	return etat;
@@ -42,13 +46,12 @@ public class JpaEtatDao extends JpaDao implements EtatDao {
 
     @Override
     public Etat findEtat(final Integer noEtat) {
-	EntityManager em = null;
+	EntityManager em = getEntityManagerFactory().createEntityManager();
 	Etat etat = null;
 	try {
-	    em = getEntityManagerFactory().createEntityManager();
 	    etat = em.find(Etat.class, noEtat);
 	} catch (IllegalStateException | IllegalArgumentException e) {
-	    e.printStackTrace();
+	    LOGGER.log(Level.SEVERE, e.getMessage(), e);
 	} finally {
 	    em.close();
 	}
@@ -57,20 +60,19 @@ public class JpaEtatDao extends JpaDao implements EtatDao {
 
     @Override
     public Etat updateEtat(Etat etat) {
-	EntityManager em = null;
-	EntityTransaction transaction = null;
+	EntityManager em = getEntityManagerFactory().createEntityManager();
+	EntityTransaction transaction = em.getTransaction();
 	try {
-	    em = getEntityManagerFactory().createEntityManager();
-	    transaction = em.getTransaction();
 	    transaction.begin();
 	    em.merge(etat);
 	    transaction.commit();
 	} catch (IllegalStateException | IllegalArgumentException | TransactionRequiredException e) {
-	    e.printStackTrace();
+	    LOGGER.log(Level.SEVERE, e.getMessage(), e);
 	    etat = null;
 	} finally {
-	    if (transaction.isActive())
+	    if (transaction.isActive()) {
 		transaction.rollback();
+	    }
 	    em.close();
 	}
 	return etat;
@@ -78,23 +80,23 @@ public class JpaEtatDao extends JpaDao implements EtatDao {
 
     @Override
     public Boolean removeEtat(final Integer noEtat) {
-	EntityManager em = null;
-	EntityTransaction transaction = null;
+	EntityManager em = getEntityManagerFactory().createEntityManager();
+	EntityTransaction transaction = em.getTransaction();
 	Etat etat = null;
 	try {
-	    em = getEntityManagerFactory().createEntityManager();
 	    etat = em.find(Etat.class, noEtat);
-	    transaction = em.getTransaction();
 	    if (etat != null) {
 		transaction.begin();
 		em.remove(etat);
 		transaction.commit();
 	    }
 	} catch (IllegalStateException | IllegalArgumentException | TransactionRequiredException e) {
-	    e.printStackTrace();
+	    LOGGER.log(Level.SEVERE, e.getMessage(), e);
+	    etat = null;
 	} finally {
-	    if (transaction.isActive())
+	    if (transaction.isActive()) {
 		transaction.rollback();
+	    }
 	    em.close();
 	}
 	if (etat != null) {
@@ -106,14 +108,13 @@ public class JpaEtatDao extends JpaDao implements EtatDao {
 
     @Override
     public Collection<Etat> getAllEtat() {
-	EntityManager em = null;
+	EntityManager em = getEntityManagerFactory().createEntityManager();
+	;
 	Collection<Etat> listEtat = null;
 	try {
-	    em = getEntityManagerFactory().createEntityManager();
-	    listEtat = em.createQuery("SELECT e FROM Etats AS e", Etat.class)
-		    .getResultList();
+	    listEtat = em.createQuery(QUERY_ETAT_ALL, Etat.class).getResultList();
 	} catch (IllegalStateException | PersistenceException | IllegalArgumentException e) {
-	    e.printStackTrace();
+	    LOGGER.log(Level.SEVERE, e.getMessage(), e);
 	} finally {
 	    em.close();
 	}
@@ -122,15 +123,13 @@ public class JpaEtatDao extends JpaDao implements EtatDao {
 
     @Override
     public Etat findEtatByName(final String name) {
-	EntityManager em = null;
+	EntityManager em = getEntityManagerFactory().createEntityManager();
 	Etat etat = null;
 	try {
-	    em = getEntityManagerFactory().createEntityManager();
-	    etat = em.createQuery("SELECT e FROM Etat AS e WHERE libelle = :libelle", Etat.class)
-		    .setParameter("libelle", name)
-		    .getSingleResult();
-	} catch(IllegalStateException | PersistenceException | IllegalArgumentException e) {
-	   e.printStackTrace(); 
+	    etat = em.createQuery(QUERY_ETAT_BY_NAME, Etat.class).setParameter(LIBELLE, name).getSingleResult();
+	} catch (IllegalStateException | PersistenceException | IllegalArgumentException e) {
+	    e.printStackTrace();
+	    LOGGER.log(Level.SEVERE, e.getMessage(), e);
 	} finally {
 	    em.close();
 	}

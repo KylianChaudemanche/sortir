@@ -78,10 +78,14 @@ public class ServletLogin extends HttpServlet {
 	    if (participant.getMotDePasse().equals(motDePasse)) {
 		if (request.getParameter("seSouvenir") != null) {
 		    Cookie cookie = new Cookie("mail", mail);
+		    cookie.setSecure(true);
+		    cookie.setHttpOnly(true);
 		    cookie.setMaxAge(99999);
 		    response.addCookie(cookie);
 		} else {
 		    Cookie cookie = new Cookie("mail", "");
+		    cookie.setSecure(true);
+		    cookie.setHttpOnly(true);
 		    cookie.setMaxAge(0);
 		    response.addCookie(cookie);
 		}

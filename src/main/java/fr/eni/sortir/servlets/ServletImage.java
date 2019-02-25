@@ -18,32 +18,38 @@ import fr.eni.sortir.utils.Constantes;
  */
 @WebServlet(name = "ServletImage", urlPatterns = { "/image/*" })
 public class ServletImage extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-       
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 8464668936127232776L;
+
     /**
      * @see HttpServlet#HttpServlet()
      */
     public ServletImage() {
-        super();
-        // TODO Auto-generated constructor stub
+	super();
     }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		File file = new File(Constantes.DATA_PATH+request.getPathInfo()+".jpg");
-		BufferedImage image = ImageIO.read(file);
-		ImageIO.write(image, "JPG", response.getOutputStream());
-	}
+    /**
+     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+     *      response)
+     */
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+	    throws ServletException, IOException {
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
-	}
+	File file = new File(Constantes.DATA_PATH + request.getPathInfo() + ".jpg");
+	BufferedImage image = ImageIO.read(file);
+	ImageIO.write(image, "JPG", response.getOutputStream());
+    }
+
+    /**
+     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+     *      response)
+     */
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+	    throws ServletException, IOException {
+	doGet(request, response);
+    }
 
 }

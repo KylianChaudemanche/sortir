@@ -1,17 +1,22 @@
 package fr.eni.sortir.servlets;
 
 import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import fr.eni.sortir.dao.DaoFactory;
+import fr.eni.sortir.entities.Sortie;
+
 /**
  * Servlet implementation class ServletAccueil
  */
-@WebServlet(name = "ServletAccueil", urlPatterns = { "/accueil" })
-public class ServletAccueil extends HttpServlet {
+@WebServlet(name = "ServletAffichageSortie", urlPatterns = { "/sortie/*" })
+public class ServletAffichageSortie extends HttpServlet {
 
     /**
      * 
@@ -21,7 +26,7 @@ public class ServletAccueil extends HttpServlet {
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public ServletAccueil() {
+    public ServletAffichageSortie() {
 	super();
     }
 
@@ -29,9 +34,11 @@ public class ServletAccueil extends HttpServlet {
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
      *      response)
      */
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-	    throws ServletException, IOException {
-	response.getWriter().append("Served at: ").append(request.getContextPath());
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    	Sortie sortie = DaoFactory.getSortieDao().findSortie(Integer.valueOf(request.getPathInfo().replace("/", "")));
+    	request.setAttribute("sortie", sortie);
+    	RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/afficherSortie.jsp");
+    	rd.forward(request, response);
     }
 
     /**

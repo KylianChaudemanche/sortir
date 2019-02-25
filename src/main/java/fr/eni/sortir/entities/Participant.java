@@ -28,7 +28,7 @@ public class Participant implements Serializable {
      * 
      */
     private static final long serialVersionUID = -1017103974819937156L;
-    
+
     @Id
     @GeneratedValue
     @Column(name = "no_participant")

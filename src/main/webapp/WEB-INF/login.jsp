@@ -18,7 +18,7 @@
 		
 			<form method="POST" action="">
 			  <div class="form-group">
-			    <label for="mail"><b>Mail / Pseudo</b></label>
+			    <label for="mail"><strong>Mail / Pseudo</strong></label>
 			    <c:choose>
 					<c:when test="${ empty mail }">  
 						<input type="email" class="form-control" id="mail" name="mail" aria-describedby="emailHelp" placeholder="ex : nom.prenom2020@campus-eni.fr" required>
@@ -29,7 +29,7 @@
 				</c:choose>
 			   </div>
 			  <div class="form-group">
-			    <label for="motDePasse"><b>Mot de Passe</b></label>
+			    <label for="motDePasse"><strong>Mot de Passe</strong></label>
 			    <input type="password" class="form-control" id="motDePasse" name="motDePasse" required>
 			  </div>
 			  <div class="form-check">
