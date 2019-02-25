@@ -131,10 +131,12 @@ public class JpaSortieDao extends JpaDao implements SortieDao {
 	EntityManager em = getEntityManagerFactory().createEntityManager();
 	Collection<Sortie> listeSortie = null;
 	try {
-	    Etat etat = DaoFactory.getEtatDao().findEtatByName(State.PASSED.toString());
+	    Etat etatPassed = DaoFactory.getEtatDao().findEtatByName(State.PASSED.toString());
+	    Etat etatOpened = DaoFactory.getEtatDao().findEtatByName(State.CREATED.toString());
 	    TypedQuery<Sortie> query = em
-		    .createQuery("SELECT s FROM Sortie AS s WHERE etat != :etat", Sortie.class)
-		    .setParameter("etat", etat);
+		    .createQuery("SELECT s FROM Sortie AS s WHERE etat != :etatPassed AND etat != :etatOpened", Sortie.class)
+		    .setParameter("etatPassed", etatPassed)
+		    .setParameter("etatOpened", etatOpened);
 
 	    listeSortie = query.getResultList();
 
@@ -159,11 +161,12 @@ public class JpaSortieDao extends JpaDao implements SortieDao {
 	String queryPassee = (passee) ? " AND s.dateDebut < :today" : "";
 	String queryDateDebut = (dateDebut != null) ? " AND s.dateDebut > :dateDebut" : "";
 	String queryDateFin = (dateFin != null) ? " AND s.dateDebut < :dateFin" : "";
-	String queryEtat = " AND s.etat != :etat";
+	String queryEtat = " AND s.etat != :etatPassed AND s.etat != :etatOpened";
 
 	EntityManager em = getEntityManagerFactory().createEntityManager();
 	try {
-	    Etat etat = DaoFactory.getEtatDao().findEtatByName(State.PASSED.toString());
+	    Etat etatPassed = DaoFactory.getEtatDao().findEtatByName(State.PASSED.toString());
+	    Etat etatOpened = DaoFactory.getEtatDao().findEtatByName(State.CREATED.toString());
 	    TypedQuery<Sortie> query = em.createQuery("SELECT s FROM Sortie AS s"
 		    // + " INNER JOIN fetch s.inscriptions AS i"
 		    + " WHERE s.organisateur.site.noSite = :noSite" + queryOrganisateur + queryInscrit + queryPasInscrit
@@ -183,7 +186,8 @@ public class JpaSortieDao extends JpaDao implements SortieDao {
 		query.setParameter("dateFin", dateFin);
 	    }
 
-	    query.setParameter("etat",etat);
+	    query.setParameter("etatPassed",etatPassed);
+	    query.setParameter("etatOpened",etatOpened);
 	    
 	    listeSortie = query.getResultList();
 
