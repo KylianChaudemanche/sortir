@@ -6,18 +6,17 @@ import java.util.concurrent.TimeUnit;
 
 import fr.eni.sortir.dao.DaoFactory;
 
-public class ArchiveSortieJob implements Runnable {
-    
+public class CloseInscriptionSortieJob implements Runnable {
+
     private final ScheduledExecutorService service;
 
-    public ArchiveSortieJob(ScheduledExecutorService service) {
+    public CloseInscriptionSortieJob(ScheduledExecutorService service) {
 	this.service = service;
     }
-    
-    @Override
+
     public void run() {
 	try {
-	    DaoFactory.getSortieDao().archiveAllSortie();
+	    DaoFactory.getSortieDao().closeInscription();
 	    try {
 		Thread.sleep(1000);
 	    } catch (InterruptedException e) {

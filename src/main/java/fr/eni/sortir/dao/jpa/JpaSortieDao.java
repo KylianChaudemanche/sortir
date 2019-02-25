@@ -1,6 +1,7 @@
 package fr.eni.sortir.dao.jpa;
 
 import java.time.ZonedDateTime;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.logging.Level;
@@ -206,11 +207,46 @@ public class JpaSortieDao extends JpaDao implements SortieDao {
 	int result = 0;
 	try {
 	    transaction.begin();
-	    Etat etat = DaoFactory.getEtatDao().findEtatByName(State.PASSED.toString());
+	    Etat etatPassed = DaoFactory.getEtatDao().findEtatByName(State.PASSED.toString());
+	    Etat etatOpened = DaoFactory.getEtatDao().findEtatByName(State.OPENED.toString());
 	    Query query = em
-		    .createQuery("UPDATE Sortie SET etat = :etat WHERE dateDebut <= :date")
-		    .setParameter("etat", etat)
-		    .setParameter("date", date);
+		    .createQuery("UPDATE Sortie SET etat = :etatPassed WHERE dateDebut <= :date AND etat != :etatOpened")
+		    .setParameter("etatPassed", etatPassed)
+		    .setParameter("date", date)
+	    	    .setParameter("etatOpened", etatOpened);
+	    
+	    result = query.executeUpdate();
+	    transaction.commit();
+	} catch (IllegalStateException | IllegalArgumentException | TransactionRequiredException e) {
+	    LOGGER.log(Level.SEVERE, e.getMessage(), e);
+	    result = 0;
+	} finally {
+	    if (transaction.isActive()) {
+		transaction.rollback();
+	    }
+	    em.close();
+	}
+	return result;
+    }
+    
+    public int closeInscription() {
+	EntityManager em = getEntityManagerFactory().createEntityManager();
+	EntityTransaction transaction = em.getTransaction();
+	Calendar cal = Calendar.getInstance();
+	cal.set(Calendar.HOUR_OF_DAY, 0);
+	cal.set(Calendar.MINUTE, 0);
+	cal.set(Calendar.SECOND, 0);
+	cal.set(Calendar.MILLISECOND, 0);
+	int result = 0;
+	try {
+	    transaction.begin();
+	    Etat etatOpened = DaoFactory.getEtatDao().findEtatByName(State.OPENED.toString());
+	    Etat etatClosed = DaoFactory.getEtatDao().findEtatByName(State.CLOSED.toString());
+	    Query query = em
+		    .createQuery("UPDATE Sortie SET etat = :etatClosed WHERE dateCloture < :date AND etat = :etatOpened")
+		    .setParameter("etatClosed", etatClosed)
+		    .setParameter("date", cal.getTime())
+	    	    .setParameter("etatOpened", etatOpened);
 	    
 	    result = query.executeUpdate();
 	    transaction.commit();

@@ -24,4 +24,6 @@ public interface SortieDao {
     int archiveAllSortie();
     
     Collection<Sortie> getAllSortieNotPassed();
+    
+    int closeInscription();
 }
