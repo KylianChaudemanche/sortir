@@ -1,6 +1,5 @@
 package fr.eni.sortir.dao.jpa;
 
-import java.time.ZonedDateTime;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -126,28 +125,6 @@ public class JpaSortieDao extends JpaDao implements SortieDao {
 	}
 	return listeSortie;
     }
-    
-    @Override
-    public Collection<Sortie> getAllSortieNotPassed() {
-	EntityManager em = getEntityManagerFactory().createEntityManager();
-	Collection<Sortie> listeSortie = null;
-	try {
-	    Etat etatPassed = DaoFactory.getEtatDao().findEtatByName(State.PASSED.toString());
-	    Etat etatOpened = DaoFactory.getEtatDao().findEtatByName(State.CREATED.toString());
-	    TypedQuery<Sortie> query = em
-		    .createQuery("SELECT s FROM Sortie AS s WHERE etat != :etatPassed AND etat != :etatOpened", Sortie.class)
-		    .setParameter("etatPassed", etatPassed)
-		    .setParameter("etatOpened", etatOpened);
-
-	    listeSortie = query.getResultList();
-
-	} catch (Exception e) {
-	    e.printStackTrace();
-	} finally {
-	    em.close();
-	}
-	return listeSortie;
-    }
 
     @Override
     public Collection<Sortie> getAllSortieFiltre(Site site, Boolean organisateur, Boolean inscrit, Boolean pasInscrit,
@@ -162,16 +139,13 @@ public class JpaSortieDao extends JpaDao implements SortieDao {
 	String queryPassee = (passee) ? " AND s.dateDebut < :today" : "";
 	String queryDateDebut = (dateDebut != null) ? " AND s.dateDebut > :dateDebut" : "";
 	String queryDateFin = (dateFin != null) ? " AND s.dateDebut < :dateFin" : "";
-	String queryEtat = " AND s.etat != :etatPassed AND s.etat != :etatOpened";
 
 	EntityManager em = getEntityManagerFactory().createEntityManager();
 	try {
-	    Etat etatPassed = DaoFactory.getEtatDao().findEtatByName(State.PASSED.toString());
-	    Etat etatOpened = DaoFactory.getEtatDao().findEtatByName(State.CREATED.toString());
 	    TypedQuery<Sortie> query = em.createQuery("SELECT s FROM Sortie AS s"
 		    // + " INNER JOIN fetch s.inscriptions AS i"
 		    + " WHERE s.organisateur.site.noSite = :noSite" + queryOrganisateur + queryInscrit + queryPasInscrit
-		    + queryPassee + queryDateDebut + queryDateFin + queryEtat, Sortie.class)
+		    + queryPassee + queryDateDebut + queryDateFin, Sortie.class)
 		    .setParameter("noSite", site.getNoSite());
 
 	    if (organisateur || inscrit || pasInscrit) {
@@ -187,9 +161,6 @@ public class JpaSortieDao extends JpaDao implements SortieDao {
 		query.setParameter("dateFin", dateFin);
 	    }
 
-	    query.setParameter("etatPassed",etatPassed);
-	    query.setParameter("etatOpened",etatOpened);
-	    
 	    listeSortie = query.getResultList();
 
 	} catch (Exception e) {
@@ -199,36 +170,7 @@ public class JpaSortieDao extends JpaDao implements SortieDao {
 	}
 	return listeSortie;
     }
-    
-    public int archiveAllSortie() {
-	EntityManager em = getEntityManagerFactory().createEntityManager();
-	EntityTransaction transaction = em.getTransaction();
-	Date date = Date.from(ZonedDateTime.now().minusMonths(1).toInstant());
-	int result = 0;
-	try {
-	    transaction.begin();
-	    Etat etatPassed = DaoFactory.getEtatDao().findEtatByName(State.PASSED.toString());
-	    Etat etatOpened = DaoFactory.getEtatDao().findEtatByName(State.OPENED.toString());
-	    Query query = em
-		    .createQuery("UPDATE Sortie SET etat = :etatPassed WHERE dateDebut <= :date AND etat != :etatOpened")
-		    .setParameter("etatPassed", etatPassed)
-		    .setParameter("date", date)
-	    	    .setParameter("etatOpened", etatOpened);
-	    
-	    result = query.executeUpdate();
-	    transaction.commit();
-	} catch (IllegalStateException | IllegalArgumentException | TransactionRequiredException e) {
-	    LOGGER.log(Level.SEVERE, e.getMessage(), e);
-	    result = 0;
-	} finally {
-	    if (transaction.isActive()) {
-		transaction.rollback();
-	    }
-	    em.close();
-	}
-	return result;
-    }
-    
+
     public int closeInscription() {
 	EntityManager em = getEntityManagerFactory().createEntityManager();
 	EntityTransaction transaction = em.getTransaction();
@@ -243,11 +185,11 @@ public class JpaSortieDao extends JpaDao implements SortieDao {
 	    Etat etatOpened = DaoFactory.getEtatDao().findEtatByName(State.OPENED.toString());
 	    Etat etatClosed = DaoFactory.getEtatDao().findEtatByName(State.CLOSED.toString());
 	    Query query = em
-		    .createQuery("UPDATE Sortie SET etat = :etatClosed WHERE dateCloture < :date AND etat = :etatOpened")
-		    .setParameter("etatClosed", etatClosed)
-		    .setParameter("date", cal.getTime())
-	    	    .setParameter("etatOpened", etatOpened);
-	    
+		    .createQuery(
+			    "UPDATE Sortie SET etat = :etatClosed WHERE dateCloture < :date AND etat = :etatOpened")
+		    .setParameter("etatClosed", etatClosed).setParameter("date", cal.getTime())
+		    .setParameter("etatOpened", etatOpened);
+
 	    result = query.executeUpdate();
 	    transaction.commit();
 	} catch (IllegalStateException | IllegalArgumentException | TransactionRequiredException e) {

@@ -7,7 +7,6 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
-import fr.eni.sortir.job.ArchiveSortieJob;
 import fr.eni.sortir.job.CloseInscriptionSortieJob;
 
 /**
@@ -24,7 +23,6 @@ public class TaskSchedulerListener implements ServletContextListener {
 
     public void contextInitialized(ServletContextEvent sce) {
 	scheduler = Executors.newSingleThreadScheduledExecutor();
-	new ArchiveSortieJob(scheduler).run();
 	new CloseInscriptionSortieJob(scheduler).run();
     }
 

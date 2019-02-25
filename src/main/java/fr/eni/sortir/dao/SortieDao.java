@@ -20,10 +20,6 @@ public interface SortieDao {
 
     Collection<Sortie> getAllSortieFiltre(Site site, Boolean organisateur, Boolean inscrit, Boolean pasInscrit,
 	    Boolean passee, Date dateDebut, Date dateFin, Participant participant);
-
-    int archiveAllSortie();
-    
-    Collection<Sortie> getAllSortieNotPassed();
     
     int closeInscription();
 }
