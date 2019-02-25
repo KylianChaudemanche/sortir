@@ -5,13 +5,15 @@ import java.util.Collection;
 import fr.eni.sortir.entities.Participant;
 
 public interface ParticipantDao {
-	Participant addParticipant(Participant inscriptions);
+    Participant addParticipant(Participant participant);
 
-	Participant findParticipant(Integer noParticipant);
+    Participant findParticipant(Integer noParticipant);
 
-	Participant updateParticipant(Participant participants);
+    Participant updateParticipant(Participant participant);
 
-	Boolean removeParticipant(Integer noParticipant);
+    Boolean removeParticipant(Integer noParticipant);
 
-	Collection<Participant> getAllParticipant(); 
+    Collection<Participant> getAllParticipant();
+
+    Participant findParticipantByMail(String mail);
 }

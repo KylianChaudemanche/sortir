@@ -6,71 +6,80 @@ import java.util.Collection;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.codehaus.jackson.annotate.JsonManagedReference;
+
 @Entity
-@Table(name="VILLES")
+@Table(name = "VILLES")
 public class Ville implements Serializable {
-	@Id
-	@GeneratedValue
-	@Column(name="no_ville")
-	private Integer noVille;
-	@Column(name="nom_ville")
-	private String nomVille;
-	@Column(name="code_postal")
-	private String codePostal;
-	@OneToMany(mappedBy="ville")
-	private Collection<Lieu> listLieu = new ArrayList<>();
-	
-	public Ville() {
-		super();
-	}
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 7331803782871467078L;
 
-	public Ville(String nomVille, String codePostal, Collection<Lieu> listLieu) {
-		super();
-		this.nomVille = nomVille;
-		this.codePostal = codePostal;
-		this.listLieu = listLieu;
-	}
+    @Id
+    @GeneratedValue
+    @Column(name = "no_ville")
+    private Integer noVille;
+    @Column(name = "nom_ville")
+    private String nomVille;
+    @Column(name = "code_postal")
+    private String codePostal;
+    @JsonManagedReference
+    @OneToMany(mappedBy = "ville", fetch=FetchType.LAZY)
+    private Collection<Lieu> listLieu = new ArrayList<>();
 
-	public Integer getNoVille() {
-		return noVille;
-	}
+    public Ville() {
+	super();
+    }
 
-	public void setNoVille(Integer noVille) {
-		this.noVille = noVille;
-	}
+    public Ville(String nomVille, String codePostal, Collection<Lieu> listLieu) {
+	super();
+	this.nomVille = nomVille;
+	this.codePostal = codePostal;
+	this.listLieu = listLieu;
+    }
 
-	public String getNomVille() {
-		return nomVille;
-	}
+    public Integer getNoVille() {
+	return noVille;
+    }
 
-	public void setNomVille(String nomVille) {
-		this.nomVille = nomVille;
-	}
+    public void setNoVille(Integer noVille) {
+	this.noVille = noVille;
+    }
 
-	public String getCodePostal() {
-		return codePostal;
-	}
+    public String getNomVille() {
+	return nomVille;
+    }
 
-	public void setCodePostal(String codePostal) {
-		this.codePostal = codePostal;
-	}
+    public void setNomVille(String nomVille) {
+	this.nomVille = nomVille;
+    }
 
-	public Collection<Lieu> getListLieu() {
-		return listLieu;
-	}
+    public String getCodePostal() {
+	return codePostal;
+    }
 
-	public void setListLieu(Collection<Lieu> listLieu) {
-		this.listLieu = listLieu;
-	}
+    public void setCodePostal(String codePostal) {
+	this.codePostal = codePostal;
+    }
 
-	@Override
-	public String toString() {
-		return "Ville [noVille=" + noVille + ", nomVille=" + nomVille + ", codePostal=" + codePostal + "]";
-	}
-	
+    public Collection<Lieu> getListLieu() {
+	return listLieu;
+    }
+
+    public void setListLieu(Collection<Lieu> listLieu) {
+	this.listLieu = listLieu;
+    }
+
+    @Override
+    public String toString() {
+	return "Ville [noVille=" + noVille + ", nomVille=" + nomVille + ", codePostal=" + codePostal + "]";
+    }
+
 }

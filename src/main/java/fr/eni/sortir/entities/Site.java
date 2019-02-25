@@ -6,61 +6,69 @@ import java.util.Collection;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.codehaus.jackson.annotate.JsonManagedReference;
+
 @Entity
-@Table(name="SITES")
+@Table(name = "SITES")
 public class Site implements Serializable {
-	@Id
-	@GeneratedValue
-	@Column(name="no_site")
-	private Integer noSite;
-	@Column(name="nom_site")
-	private String nomSite;
-	@OneToMany(mappedBy = "site")
-	private Collection<Participant> listInscrit = new ArrayList<>();
-	
-	public Site() {
-		super();
-	}
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 8468692258408794359L;
 
-	public Site(String nomSite, Collection<Participant> listInscrit) {
-		super();
-		this.nomSite = nomSite;
-		this.listInscrit = listInscrit;
-	}
+    @Id
+    @GeneratedValue
+    @Column(name = "no_site")
+    private Integer noSite;
+    @Column(name = "nom_site")
+    private String nomSite;
+    @JsonManagedReference
+    @OneToMany(mappedBy = "site", fetch=FetchType.LAZY)
+    private Collection<Participant> listInscrit = new ArrayList<>();
 
-	public Integer getNoSite() {
-		return noSite;
-	}
+    public Site() {
+	super();
+    }
 
-	public void setNoSite(Integer noSite) {
-		this.noSite = noSite;
-	}
+    public Site(String nomSite, Collection<Participant> listInscrit) {
+	super();
+	this.nomSite = nomSite;
+	this.listInscrit = listInscrit;
+    }
 
-	public String getNomSite() {
-		return nomSite;
-	}
+    public Integer getNoSite() {
+	return noSite;
+    }
 
-	public void setNomSite(String nomSite) {
-		this.nomSite = nomSite;
-	}
+    public void setNoSite(Integer noSite) {
+	this.noSite = noSite;
+    }
 
-	public Collection<Participant> getListInscrit() {
-		return listInscrit;
-	}
+    public String getNomSite() {
+	return nomSite;
+    }
 
-	public void setListInscrit(Collection<Participant> listInscrit) {
-		this.listInscrit = listInscrit;
-	}
+    public void setNomSite(String nomSite) {
+	this.nomSite = nomSite;
+    }
 
-	@Override
-	public String toString() {
-		return "Site [noSite=" + noSite + ", nomSite=" + nomSite + "]";
-	}
-	
+    public Collection<Participant> getListInscrit() {
+	return listInscrit;
+    }
+
+    public void setListInscrit(Collection<Participant> listInscrit) {
+	this.listInscrit = listInscrit;
+    }
+
+    @Override
+    public String toString() {
+	return "Site [noSite=" + noSite + ", nomSite=" + nomSite + "]";
+    }
+
 }

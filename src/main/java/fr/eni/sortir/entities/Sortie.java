@@ -20,211 +20,224 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.codehaus.jackson.annotate.JsonBackReference;
+import org.codehaus.jackson.annotate.JsonManagedReference;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 @Entity
 @Table(name = "SORTIES")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Sortie implements Serializable {
-	@Id
-	@GeneratedValue
-	@Column(name = "no_sortie")
-	private Integer noSortie;
-	private String nom;
-	@Column(name = "datedebut")
-	@Temporal(TemporalType.DATE)
-	private Date dateDebut;
-	private Integer duree;
-	@Column(name = "datecloture")
-	@Temporal(TemporalType.DATE)
-	private Date dateCloture;
-	@Column(name = "nbinscriptionsmax")
-	private Integer nbInscriptionsMax;
-	@Column(name = "descriptioninfos")
-	private String descriptionInfos;
-	@Column(name = "urlPhoto")
-	private String urlPhoto;
-	@ManyToOne
-	@JoinColumn(name = "etats_no_etat")
-	private Etat etat;
-	@ManyToOne
-	@JoinColumn(name = "lieux_no_lieu")
-	private Lieu lieu;
-	@OneToMany(fetch= FetchType.EAGER, mappedBy = "sortie", cascade = CascadeType.ALL, orphanRemoval = true)
-	private Collection<Inscription> inscriptions = new ArrayList<>();
-	@ManyToOne
-	@JoinColumn(name = "organisateur")
-	private Participant organisateur;
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 7666699193456697025L;
 
-	public Sortie() {
-		super();
-	}
+    @Id
+    @GeneratedValue
+    @Column(name = "no_sortie")
+    private Integer noSortie;
+    private String nom;
+    @Column(name = "datedebut")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dateDebut;
+    private Integer duree;
+    @Column(name = "datecloture")
+    @Temporal(TemporalType.DATE)
+    private Date dateCloture;
+    @Column(name = "nbinscriptionsmax")
+    private Integer nbInscriptionsMax;
+    @Column(name = "descriptioninfos")
+    private String descriptionInfos;
+    @Column(name = "urlPhoto")
+    private String urlPhoto;
+    @JsonBackReference
+    @ManyToOne(fetch=FetchType.EAGER)
+    @JoinColumn(name = "etats_no_etat")
+    private Etat etat;
+    @JsonBackReference
+    @ManyToOne(fetch=FetchType.EAGER)
+    @JoinColumn(name = "lieux_no_lieu")
+    private Lieu lieu;
+    @JsonManagedReference
+    @OneToMany(mappedBy = "sortie", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Collection<Inscription> inscriptions = new ArrayList<>();
+    @JsonBackReference
+    @ManyToOne(fetch=FetchType.EAGER)
+    @JoinColumn(name = "organisateur")
+    private Participant organisateur;
 
-	public Sortie(String nom, Date dateDebut, Integer duree, Date dateCloture, Integer nbInscriptionsMax,
-			String descriptionInfos, String urlPhoto, Etat etat, Lieu lieu, Collection<Inscription> inscriptions,
-			Participant organisateur) {
-		super();
-		this.nom = nom;
-		this.dateDebut = dateDebut;
-		this.duree = duree;
-		this.dateCloture = dateCloture;
-		this.nbInscriptionsMax = nbInscriptionsMax;
-		this.descriptionInfos = descriptionInfos;
-		this.urlPhoto = urlPhoto;
-		this.etat = etat;
-		this.lieu = lieu;
-		this.inscriptions = inscriptions;
-		this.organisateur = organisateur;
-	}
+    public Sortie() {
+	super();
+    }
 
-	public Integer getNoSortie() {
-		return noSortie;
-	}
+    public Sortie(String nom, Date dateDebut, Integer duree, Date dateCloture, Integer nbInscriptionsMax,
+	    String descriptionInfos, String urlPhoto, Etat etat, Lieu lieu, Collection<Inscription> inscriptions,
+	    Participant organisateur) {
+	super();
+	this.nom = nom;
+	this.dateDebut = dateDebut;
+	this.duree = duree;
+	this.dateCloture = dateCloture;
+	this.nbInscriptionsMax = nbInscriptionsMax;
+	this.descriptionInfos = descriptionInfos;
+	this.urlPhoto = urlPhoto;
+	this.etat = etat;
+	this.lieu = lieu;
+	this.inscriptions = inscriptions;
+	this.organisateur = organisateur;
+    }
 
-	public void setNoSortie(Integer noSortie) {
-		this.noSortie = noSortie;
-	}
+    public Integer getNoSortie() {
+	return noSortie;
+    }
 
-	public String getNom() {
-		return nom;
-	}
+    public void setNoSortie(Integer noSortie) {
+	this.noSortie = noSortie;
+    }
 
-	public void setNom(String nom) {
-		this.nom = nom;
-	}
+    public String getNom() {
+	return nom;
+    }
 
-	public Date getDateDebut() {
-		return dateDebut;
-	}
+    public void setNom(String nom) {
+	this.nom = nom;
+    }
 
-	public void setDateDebut(Date dateDebut) {
-		this.dateDebut = dateDebut;
-	}
+    public Date getDateDebut() {
+	return dateDebut;
+    }
 
-	public Integer getDuree() {
-		return duree;
-	}
+    public void setDateDebut(Date dateDebut) {
+	this.dateDebut = dateDebut;
+    }
 
-	public void setDuree(Integer duree) {
-		this.duree = duree;
-	}
+    public Integer getDuree() {
+	return duree;
+    }
 
-	public Date getDateCloture() {
-		return dateCloture;
-	}
+    public void setDuree(Integer duree) {
+	this.duree = duree;
+    }
 
-	public void setDateCloture(Date dateCloture) {
-		this.dateCloture = dateCloture;
-	}
+    public Date getDateCloture() {
+	return dateCloture;
+    }
 
-	public Integer getNbInscriptionsMax() {
-		return nbInscriptionsMax;
-	}
+    public void setDateCloture(Date dateCloture) {
+	this.dateCloture = dateCloture;
+    }
 
-	public void setNbInscriptionsMax(Integer nbInscriptionsMax) {
-		this.nbInscriptionsMax = nbInscriptionsMax;
-	}
+    public Integer getNbInscriptionsMax() {
+	return nbInscriptionsMax;
+    }
 
-	public String getDescriptionInfos() {
-		return descriptionInfos;
-	}
+    public void setNbInscriptionsMax(Integer nbInscriptionsMax) {
+	this.nbInscriptionsMax = nbInscriptionsMax;
+    }
 
-	public void setDescriptionInfos(String descriptionInfos) {
-		this.descriptionInfos = descriptionInfos;
-	}
+    public String getDescriptionInfos() {
+	return descriptionInfos;
+    }
 
-	public String getUrlPhoto() {
-		return urlPhoto;
-	}
+    public void setDescriptionInfos(String descriptionInfos) {
+	this.descriptionInfos = descriptionInfos;
+    }
 
-	public void setUrlPhoto(String urlPhoto) {
-		this.urlPhoto = urlPhoto;
-	}
+    public String getUrlPhoto() {
+	return urlPhoto;
+    }
 
-	public Etat getEtat() {
-		return etat;
-	}
+    public void setUrlPhoto(String urlPhoto) {
+	this.urlPhoto = urlPhoto;
+    }
 
-	public void setEtat(Etat etat) {
-		this.etat = etat;
-	}
+    public Etat getEtat() {
+	return etat;
+    }
 
-	public Lieu getLieu() {
-		return lieu;
-	}
+    public void setEtat(Etat etat) {
+	this.etat = etat;
+    }
 
-	public void setLieu(Lieu lieu) {
-		this.lieu = lieu;
-	}
-	
-	public Participant getOrganisateur() {
-		return organisateur;
-	}
+    public Lieu getLieu() {
+	return lieu;
+    }
 
-	public void setOrganisateur(Participant organisateur) {
-		this.organisateur = organisateur;
-	}
+    public void setLieu(Lieu lieu) {
+	this.lieu = lieu;
+    }
 
-	public Collection<Inscription> getInscriptions() {
-		return inscriptions;
-	}
+    public Participant getOrganisateur() {
+	return organisateur;
+    }
 
-	public void setInscriptions(Collection<Inscription> inscriptions) {
-		this.inscriptions = inscriptions;
-	}
+    public void setOrganisateur(Participant organisateur) {
+	this.organisateur = organisateur;
+    }
 
-	public void addInscription(Inscription inscription) {
-		this.inscriptions.add(inscription);
-	}
+    public Collection<Inscription> getInscriptions() {
+	return inscriptions;
+    }
 
-	public void removeInscription(Inscription inscription) {
-		this.inscriptions.remove(inscription);
-	}
-	
-	public void addPartcipant(Participant participant) {
-		Inscription inscription = new Inscription(participant, this);
-		inscriptions.add(inscription);
-		participant.getInscriptions().add(inscription);
-	}
-	
-	public void removeParticipant(Participant participant) {
-		for (Iterator<Inscription> iterator = inscriptions.iterator(); iterator.hasNext();) {
-			Inscription inscription = iterator.next();
+    public void setInscriptions(Collection<Inscription> inscriptions) {
+	this.inscriptions = inscriptions;
+    }
 
-			if (inscription.getParticipant().equals(participant) && inscription.getSortie().equals(this)) {
-				iterator.remove();
-				inscription.getSortie().getInscriptions().remove(inscription);
-				inscription.setParticipant(null);
-				inscription.setSortie(null);
-			}
-		}
-	}
+    public void addInscription(Inscription inscription) {
+	this.inscriptions.add(inscription);
+    }
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o)
-			return true;
-		if (o == null || getClass() != o.getClass())
-			return false;
-		Sortie that = (Sortie) o;
-		return Objects.equals(nom, that.nom) && Objects.equals(dateDebut, that.dateDebut)
-				&& Objects.equals(duree, that.duree) && Objects.equals(dateCloture, that.dateCloture)
-				&& Objects.equals(nbInscriptionsMax, that.nbInscriptionsMax)
-				&& Objects.equals(descriptionInfos, that.descriptionInfos)
-				&& Objects.equals(urlPhoto, that.urlPhoto);
-	}
+    public void removeInscription(Inscription inscription) {
+	this.inscriptions.remove(inscription);
+    }
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(nom, dateDebut, duree, dateCloture, nbInscriptionsMax, descriptionInfos, urlPhoto);
+    public void addPartcipant(Participant participant) {
+	Inscription inscription = new Inscription(participant, this);
+	inscriptions.add(inscription);
+	participant.getInscriptions().add(inscription);
+    }
+
+    public void removeParticipant(Participant participant) {
+	for (Iterator<Inscription> iterator = inscriptions.iterator(); iterator.hasNext();) {
+	    Inscription inscription = iterator.next();
+
+	    if (inscription.getParticipant().equals(participant) && inscription.getSortie().equals(this)) {
+		iterator.remove();
+		inscription.getSortie().getInscriptions().remove(inscription);
+		inscription.setParticipant(null);
+		inscription.setSortie(null);
+	    }
 	}
-	
-	@Override
-	public String toString() {
-		return "Sortie [noSortie=" + noSortie + ", nom=" + nom + ", dateDebut=" + dateDebut + ", duree=" + duree
-				+ ", dateCloture=" + dateCloture + ", nbInscriptionsMax=" + nbInscriptionsMax + ", descriptionInfos="
-				+ descriptionInfos + ", urlPhoto=" + urlPhoto + ", etat=" + etat + ", lieu=" + lieu + ", inscriptions="
-				+ inscriptions + ", organisateur=" + organisateur + "]";
-	}
+    }
+
+    @Override
+    public boolean equals(Object o) {
+	if (this == o)
+	    return true;
+	if (o == null || getClass() != o.getClass())
+	    return false;
+	Sortie that = (Sortie) o;
+	return Objects.equals(nom, that.nom) && Objects.equals(dateDebut, that.dateDebut)
+		&& Objects.equals(duree, that.duree) && Objects.equals(dateCloture, that.dateCloture)
+		&& Objects.equals(nbInscriptionsMax, that.nbInscriptionsMax)
+		&& Objects.equals(descriptionInfos, that.descriptionInfos) && Objects.equals(urlPhoto, that.urlPhoto);
+    }
+
+    @Override
+    public int hashCode() {
+	return Objects.hash(nom, dateDebut, duree, dateCloture, nbInscriptionsMax, descriptionInfos, urlPhoto);
+    }
+
+    @Override
+    public String toString() {
+	return "Sortie [noSortie=" + noSortie + ", nom=" + nom + ", dateDebut=" + dateDebut + ", duree=" + duree
+		+ ", dateCloture=" + dateCloture + ", nbInscriptionsMax=" + nbInscriptionsMax + ", descriptionInfos="
+		+ descriptionInfos + ", urlPhoto=" + urlPhoto + ", etat=" + etat + ", lieu=" + lieu + ", inscriptions="
+		+ inscriptions + ", organisateur=" + organisateur + "]";
+    }
+
 }
