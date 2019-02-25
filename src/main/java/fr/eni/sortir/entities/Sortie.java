@@ -24,8 +24,6 @@ import org.codehaus.jackson.annotate.JsonBackReference;
 import org.codehaus.jackson.annotate.JsonManagedReference;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
 
 @Entity
 @Table(name = "SORTIES")
@@ -63,7 +61,7 @@ public class Sortie implements Serializable {
     @JoinColumn(name = "lieux_no_lieu")
     private Lieu lieu;
     @JsonManagedReference
-    @OneToMany(mappedBy = "sortie", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch=FetchType.EAGER, mappedBy = "sortie", cascade = CascadeType.ALL, orphanRemoval = true)
     private Collection<Inscription> inscriptions = new ArrayList<>();
     @JsonBackReference
     @ManyToOne(fetch=FetchType.EAGER)
