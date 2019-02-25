@@ -10,6 +10,7 @@ import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -19,6 +20,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.codehaus.jackson.annotate.JsonBackReference;
+import org.codehaus.jackson.annotate.JsonManagedReference;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -49,15 +52,19 @@ public class Sortie implements Serializable {
     private String descriptionInfos;
     @Column(name = "urlPhoto")
     private String urlPhoto;
-    @ManyToOne
+    @JsonBackReference
+    @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name = "etats_no_etat")
     private Etat etat;
-    @ManyToOne
+    @JsonBackReference
+    @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name = "lieux_no_lieu")
     private Lieu lieu;
-    @OneToMany(mappedBy = "sortie", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    @OneToMany(fetch=FetchType.EAGER, mappedBy = "sortie", cascade = CascadeType.ALL, orphanRemoval = true)
     private Collection<Inscription> inscriptions = new ArrayList<>();
-    @ManyToOne
+    @JsonBackReference
+    @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name = "organisateur")
     private Participant organisateur;
 
@@ -230,4 +237,5 @@ public class Sortie implements Serializable {
 		+ descriptionInfos + ", urlPhoto=" + urlPhoto + ", etat=" + etat + ", lieu=" + lieu + ", inscriptions="
 		+ inscriptions + ", organisateur=" + organisateur + "]";
     }
+
 }
