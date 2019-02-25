@@ -90,19 +90,19 @@ public class ServletAccueil extends HttpServlet {
 		Boolean sortieInscritBool = ( (request.getParameter("sortieInscrit")!=null)? true : false);
 		Boolean sortiePasInscritBool = ( (request.getParameter("sortiePasInscrit")!=null)? true : false);
 		Boolean sortiePasseeBool = ( (request.getParameter("sortiePassee")!=null)? true : false);
-		Boolean sortieDebutBool = ( (request.getParameter("dateDebut")!="")? true : false);
-		Boolean sortieFinBool = ( (request.getParameter("dateFin")!="")? true : false);
+		Boolean sortieDebutBool = ( (!"".equals(request.getParameter("dateDebut")))? true : false);
+		Boolean sortieFinBool = ( (!"".equals(request.getParameter("dateFin")))? true : false);
 
 		Date dateDebut = null;
 		try {
-			dateDebut = request.getParameter("dateDebut") != "" ? new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("dateDebut")) : null;
+			dateDebut = sortieDebutBool ? new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("dateDebut")) : null;
 		} catch (ParseException e) {
 			System.out.println("failed to parse dateDebut");
 			e.printStackTrace();
 		}
 		Date dateFin = null;
 		try {
-			dateFin = request.getParameter("dateFin") != "" ? new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("dateFin")) : null;
+			dateFin = sortieFinBool ? new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("dateFin")) : null;
 		} catch (ParseException e) {
 			System.out.println("failed to parse dateFin");
 			e.printStackTrace();
@@ -126,8 +126,12 @@ public class ServletAccueil extends HttpServlet {
 		request.setAttribute("listeSorties", listeSorties);
 		request.setAttribute("siteSelected", site.getNoSite());
 		request.setAttribute("listeCheckbox", listeCheckbox);
-		request.setAttribute("dateDebut", dateFormat.format(dateDebut));
-		request.setAttribute("dateFin", dateFormat.format(dateFin));
+		if(sortieDebutBool) {
+			request.setAttribute("dateDebut", dateFormat.format(dateDebut));
+		}
+		if(sortieFinBool) {
+			request.setAttribute("dateFin", dateFormat.format(dateFin));
+		}
 
 		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/accueil.jsp");
 		rd.forward(request, response);
