@@ -56,7 +56,7 @@ public class ServletAccueil extends HttpServlet {
 		//TODO : remove test below
 		Participant participant = DaoFactory.getParticipantDao().findParticipant(7);
 
-		Collection<Sortie> listeSorties = (Collection<Sortie>) DaoFactory.getSortieDao().getAllSortie();
+		Collection<Sortie> listeSorties = (Collection<Sortie>) DaoFactory.getSortieDao().getAllSortieNotPassed();
 		request.setAttribute("listeSorties", listeSorties);
 
 		Collection<Site> listeSites = (Collection<Site>) DaoFactory.getSiteDao().getAllSite();
