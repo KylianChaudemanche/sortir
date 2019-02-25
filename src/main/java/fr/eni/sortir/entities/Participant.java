@@ -46,7 +46,7 @@ public class Participant implements Serializable {
     private String motDePasse;
     private Boolean administrateur;
     private Boolean actif;
-    @OneToMany(mappedBy = "participant", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch=FetchType.EAGER,mappedBy = "participant", cascade = CascadeType.ALL, orphanRemoval = true)
     private Collection<Inscription> inscriptions = new ArrayList<>();
     @JsonBackReference
     @ManyToOne(fetch=FetchType.EAGER)
