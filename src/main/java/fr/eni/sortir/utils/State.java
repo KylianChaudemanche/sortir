@@ -1,7 +1,7 @@
 package fr.eni.sortir.utils;
 
 public enum State {
-    CREATED("Créée"), OPENED("Ouverte"), FENCED("Clôturée"), ACTIVITY_IN_PROGRESS("Activité en cours"),
+    CREATED("Créée"), OPENED("Ouverte"), CLOSED("Clôturée"), ACTIVITY_IN_PROGRESS("Activité en cours"),
     PASSED("Passée"), CANCELED("Annulée");
 
     private final String text;
