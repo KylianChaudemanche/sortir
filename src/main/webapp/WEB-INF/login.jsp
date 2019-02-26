@@ -5,8 +5,6 @@
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-
-
 <!-- ####### NAVBAR ######## -->
 <%@include file="includes/navbar.jsp"%>
 
@@ -45,7 +43,7 @@
 			  </div>
 			  <button type="submit" class="btn btn-success mt-3">Connexion</button>
 			</form>
-
+			
 		</div>
 	</div>
 </div>
