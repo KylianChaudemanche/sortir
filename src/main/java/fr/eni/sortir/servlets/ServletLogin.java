@@ -91,7 +91,7 @@ public class ServletLogin extends HttpServlet {
 				}
 				// redirect
 				session.setAttribute("participant", participant);
-				response.sendRedirect("/sortir/login");
+				response.sendRedirect("/sortir/accueil");
 			} else {
 				// login failed
 				response.sendRedirect("/sortir/login");

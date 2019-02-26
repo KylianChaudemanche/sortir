@@ -24,7 +24,7 @@ import fr.eni.sortir.utils.State;
 /**
  * Servlet implementation class ServletCreateSortie
  */
-@WebServlet(name = "ServletUpdateSortie", urlPatterns = { "/updateSortie", "/updateSortie/*" })
+@WebServlet(name = "ServletUpdateSortie", urlPatterns = { "/updateSortie/*" })
 public class ServletUpdateSortie extends HttpServlet {
     private static final Logger LOGGER = Logger.getLogger(ServletUpdateSortie.class.getName());
 
@@ -46,7 +46,6 @@ public class ServletUpdateSortie extends HttpServlet {
     private static final int DURATION = 3;
     private static final int NO_SORTIE = 4;
     private static final String JSP_UPDATE_SORTIE = "/WEB-INF/updateSortie.jsp";
-    private static final String PARAM_NO_SORTIE = "noSortie";
     private static final String SORTIE_NO_SORTIE = "sortieNoSortie";
     private static final String SORTIE_CITY = "sortieCity";
     private static final String SORTIE_PLACE = "sortiePlace";
@@ -74,7 +73,7 @@ public class ServletUpdateSortie extends HttpServlet {
 	    throws ServletException, IOException {
 	Integer noSortie = null;
 	try {
-	    noSortie = Integer.parseInt(request.getParameter(PARAM_NO_SORTIE));
+	    noSortie = Integer.valueOf(request.getPathInfo().replace("/", ""));
 	} catch(NumberFormatException nfe) {
 	    LOGGER.log(Level.SEVERE, nfe.getMessage(), nfe);
 	}
