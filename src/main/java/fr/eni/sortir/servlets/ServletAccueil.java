@@ -52,7 +52,6 @@ public class ServletAccueil extends HttpServlet {
 			System.out.println("not logged in");
 		}
 
-
 		//TODO : remove test below
 		Participant participant = DaoFactory.getParticipantDao().findParticipant(7);
 
@@ -63,6 +62,7 @@ public class ServletAccueil extends HttpServlet {
 		request.setAttribute("listeSites", listeSites);
 
 		request.setAttribute("siteSelected", participant.getSite().getNoSite());
+		request.setAttribute("participant", participant);
 
 		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/accueil.jsp");
 		rd.forward(request, response);
@@ -108,6 +108,7 @@ public class ServletAccueil extends HttpServlet {
 			e.printStackTrace();
 		}
 		
+		// Récupération de la liste des sorties triés
 		listeSorties = (Collection<Sortie>) DaoFactory.getSortieDao().getAllSortieFiltre(site, sortieOrganisateurBool, 
 				sortieInscritBool, sortiePasInscritBool, 
 				sortiePasseeBool, dateDebut, dateFin, 
@@ -126,12 +127,15 @@ public class ServletAccueil extends HttpServlet {
 		request.setAttribute("listeSorties", listeSorties);
 		request.setAttribute("siteSelected", site.getNoSite());
 		request.setAttribute("listeCheckbox", listeCheckbox);
+		
 		if(sortieDebutBool) {
 			request.setAttribute("dateDebut", dateFormat.format(dateDebut));
 		}
 		if(sortieFinBool) {
 			request.setAttribute("dateFin", dateFormat.format(dateFin));
 		}
+		
+		request.setAttribute("participant", participant);
 
 		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/accueil.jsp");
 		rd.forward(request, response);

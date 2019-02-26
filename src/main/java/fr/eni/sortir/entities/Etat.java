@@ -70,6 +70,6 @@ public class Etat implements Serializable {
 
     @Override
     public String toString() {
-	return "Etat [noEtat=" + noEtat + ", libelle=" + libelle + ", listSortie=" + listSortie + "]";
+	return "Etat [noEtat=" + noEtat + ", libelle=" + libelle +"]";
     }
 }

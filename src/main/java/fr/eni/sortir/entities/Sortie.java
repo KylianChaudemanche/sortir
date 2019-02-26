@@ -235,7 +235,7 @@ public class Sortie implements Serializable {
 	return "Sortie [noSortie=" + noSortie + ", nom=" + nom + ", dateDebut=" + dateDebut + ", duree=" + duree
 		+ ", dateCloture=" + dateCloture + ", nbInscriptionsMax=" + nbInscriptionsMax + ", descriptionInfos="
 		+ descriptionInfos + ", urlPhoto=" + urlPhoto + ", etat=" + etat + ", lieu=" + lieu + ", inscriptions="
-		+ inscriptions + ", organisateur=" + organisateur + "]";
+		+ inscriptions + ", organisateur=" + organisateur + "]\r";
     }
 
 }

@@ -10,10 +10,9 @@
 <!-- ####### NAVBAR ######## -->
 <%@include file="includes/navbar.jsp"%>
 
-
 <!-- ####### CONTENT ######## -->
 <div class="container card mt-4 p-3">
-	<form method="POST">
+	<form id="form" method="POST">
 		<div class="row">
 			
 			<div class="col-md-6">
@@ -158,10 +157,17 @@
 			      <th scope="col">Détail</th>
 			    </tr>
 			  </thead>
-			  <tbody>
+			  <tbody id="table-sorties">
+				<c:if test="${fn:length(listeSorties) == 0}">
+					<tr>
+						<td colspan="8">
+							<p class="font-weight-bold">Aucun résultat</p>
+						</td>
+					</tr>
+				</c:if>
 				<c:forEach items="${ listeSorties }" var="sortie">
 			    <tr>
-			      <td> ${ sortie.getNom() }</td>
+			      <td class="col-nom"> ${ sortie.getNom() }</td>
 			      <td>
 			      	<fmt:formatDate value="${ sortie.getDateDebut() }" pattern="dd/MM/yyyy HH'h'mm" />
 			      </td>
@@ -171,9 +177,24 @@
 			      <td>${fn:length(sortie.getInscriptions())}<b>/</b>${ sortie.getNbInscriptionsMax() }</td>
 			      <td>${ sortie.getEtat().getLibelle() }</td>
 			      <td>
-			      	<div class="form-check">
-					  <input class="form-check-input" type="checkbox" value="on" id="inscrit" name="inscrit">
-					</div>
+	     			<c:set var="isInscrit" value="false" />
+				      <c:forEach items="${ sortie.getInscriptions() }" var="inscription">
+				      	  <c:if test="${ inscription.participant.getNoParticipant() ==  participant.getNoParticipant()}">
+	     				  	<c:set var="isInscrit" value="true" />
+				      	  </c:if>
+				      </c:forEach>
+				      <c:choose>
+						<c:when test="${ isInscrit == true }">
+					      	<div class="form-check">
+							  <input class="form-check-input checkbox-inscrit" type="checkbox" value="on" id="${ sortie.getNoSortie() })" name="inscrit" checked>
+							</div>
+						</c:when>
+						<c:otherwise>
+					      	<div class="form-check">
+							  <input class="form-check-input checkbox-inscrit" type="checkbox" value="on" id="${ sortie.getNoSortie() }" name="inscrit">
+							</div>
+					 	</c:otherwise>
+				 	  </c:choose>
 			      </td>
 			      <td>${ sortie.getOrganisateur().getPrenom() } ${ sortie.getOrganisateur().getNom() }</td>
 			      <td>
@@ -197,3 +218,31 @@
 
 <!-- ####### FOOTER ######## -->
 <%@include file="includes/footer.jsp"%>
+
+
+<!-- ####### SCRIPTS ######## -->
+<script>
+$(document).ready(function(){
+	  $("#recherche").on("keyup", function() {
+	    var value = $(this).val().toLowerCase();
+	    $("#table-sorties tr .col-nom").filter(function() {
+	      $(this).parent().toggle($(this).text().toLowerCase().indexOf(value) > -1)
+	    });
+	  });
+	  
+	  $('#recherche').on('keyup keypress', function(e) {
+		  var keyCode = e.keyCode || e.which;
+		  if (keyCode === 13) { 
+		    e.preventDefault();
+		    return false;
+		  }
+		});
+	  
+	  $("#checkbox-inscrit").click(function() {
+			console.log(this.attr(id));
+		});
+	});
+	
+	
+
+</script>
