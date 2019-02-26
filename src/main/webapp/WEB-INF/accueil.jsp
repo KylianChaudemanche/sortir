@@ -6,6 +6,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+<%@ page import="fr.eni.sortir.utils.State" %>
  
 <!-- ####### NAVBAR ######## -->
 <%@include file="includes/navbar.jsp"%>
@@ -154,7 +156,7 @@
 			      <th scope="col">État</th>
 			      <th scope="col">Inscrit</th>
 			      <th scope="col">Organisateur</th>
-			      <th scope="col">Détail</th>
+			      <th scope="col">Actions</th>
 			    </tr>
 			  </thead>
 			  <tbody id="table-sorties">
@@ -188,10 +190,51 @@
 					  </c:if>
 			      </td>
 			      <td>${ sortie.getOrganisateur().getPrenom() } ${ sortie.getOrganisateur().getNom() }</td>
-			      <td>
-			      	<a href="<%=request.getContextPath()%>/sortie/${sortie.getNoSortie()}">
-			      		<i class="grow text-dark" data-feather="external-link"></i>
-			      	</a>
+			      <td>		      	
+			      	<c:choose>
+				    	<c:when test="${ sessionScope.participant != null}">
+							<c:choose>
+						    	<c:when test="${ participant.getNoParticipant() == sortie.getOrganisateur().getNoParticipant()}">
+									<a href="<%=request.getContextPath()%>/updateSortie/${sortie.getNoSortie()}">
+							      		Modifier -
+							      	</a>
+						    	</c:when>    
+						    	<c:otherwise>
+									<a href="<%=request.getContextPath()%>/sortie/${sortie.getNoSortie()}">
+					      				Afficher -
+					      			</a>
+						   	 	</c:otherwise>
+							</c:choose>
+							
+							<c:choose>
+								<c:when test="${sortie.getEtat().getLibelle() eq State.CREATED.toString() and participant.getNoParticipant() == sortie.getOrganisateur().getNoParticipant() }">
+									<a href="#">
+							      		Publier
+							      	</a>
+						    	</c:when> 
+						    	<c:when test="${ participant.getNoParticipant() == sortie.getOrganisateur().getNoParticipant() }">
+									<a href="#">
+							      		Annuler
+							      	</a>
+						    	</c:when> 
+								<c:when test="${ isInscrit == true }">
+									<a href="#">
+							      		Se désister
+							      	</a>
+						    	</c:when>    
+						    	<c:otherwise>
+									<a href="<%=request.getContextPath()%>/inscription/${sortie.getNoSortie()}">
+							      		S'inscrire
+							      	</a>
+						   	 	</c:otherwise>
+							</c:choose>
+				    	</c:when>    
+				    	<c:otherwise>
+							<a href="<%=request.getContextPath()%>/sortie/${sortie.getNoSortie()}">
+			      				Afficher
+			      			</a>
+				   	 	</c:otherwise>
+					</c:choose>
 			      </td>
 			    </tr>
 				</c:forEach>
@@ -228,12 +271,5 @@ $(document).ready(function(){
 		    return false;
 		  }
 		});
-	  
-	  $("#checkbox-inscrit").click(function() {
-			console.log(this.attr(id));
-		});
 	});
-	
-	
-
 </script>

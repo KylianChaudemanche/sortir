@@ -40,7 +40,7 @@ public class ServletCreateSortie extends HttpServlet {
     private static final int MAX_SUBSCRIPTION = 2;
     private static final int DURATION = 3;
     private static final String JSP_CREATE_SORTIE = "/WEB-INF/createSortie.jsp";
-    private static final String JSP_LOGIN = "/WEB-INF/login.jsp";
+    private static final String URL_SHOW_SORTIE = "/sortir/sortie/";
     private static final String SORTIE_CITY = "sortieCity";
     private static final String SORTIE_PLACE = "sortiePlace";
     private static final String SORTIE_NAME = "sortieName";
@@ -78,13 +78,14 @@ public class ServletCreateSortie extends HttpServlet {
 	    throws ServletException, IOException {
 	int[] parameters = checkParameter(request);
 	if (parameters == null) {
-	    response.sendError(HttpServletResponse.SC_FORBIDDEN);
+	    response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+	    return;
 	}
 
 	Ville ville = DaoFactory.getVilleDao().findVille(parameters[CITY]);
 	Lieu lieu = DaoFactory.getLieuDao().findLieu(parameters[PLACE]);
 	if (ville == null || lieu == null) {
-	    response.sendError(HttpServletResponse.SC_FORBIDDEN);
+	    response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 	    return;
 	}
 
@@ -97,16 +98,21 @@ public class ServletCreateSortie extends HttpServlet {
 	    dateCloseInscription = sdfDate.parse(request.getParameter(SORTIE_CLOSE_INSCRIPTION_DATE));
 	} catch (ParseException e) {
 	    e.printStackTrace();
-	    response.sendError(HttpServletResponse.SC_FORBIDDEN);
+	    response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 	    return;
 	}
 	if (dateBegin.compareTo(dateCloseInscription) < 0) {
-	    response.sendError(HttpServletResponse.SC_FORBIDDEN);
+	    response.sendError(HttpServletResponse.SC_BAD_REQUEST);
 	    return;
 	}
 
-	// TODO replace with the value of user connected
-	Participant organisateur = DaoFactory.getParticipantDao().findParticipant(2);
+	Participant organisateur = (Participant) request.getSession().getAttribute("participant");
+	
+	if (organisateur == null) {
+	    response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+	    return;
+	}
+	
 	Sortie sortie = new Sortie(request.getParameter(SORTIE_NAME), dateBegin, parameters[DURATION],
 		dateCloseInscription, parameters[MAX_SUBSCRIPTION], request.getParameter(SORTIE_DESCRIPTION), null,
 		null, lieu, new ArrayList<>(), organisateur);
@@ -118,14 +124,14 @@ public class ServletCreateSortie extends HttpServlet {
 	    sortie = saveSortie(sortie, State.OPENED);
 	    break;
 	default:
-	    response.sendError(HttpServletResponse.SC_FORBIDDEN);
+	    response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 	    return;
 	}
-	// TODO replace with correct page redirection
+	
 	if (sortie != null) {
-	    request.getRequestDispatcher(JSP_LOGIN).forward(request, response);
+	    response.sendRedirect(URL_SHOW_SORTIE + sortie.getNoSortie());
 	} else {
-	    response.sendError(HttpServletResponse.SC_FORBIDDEN);
+	    response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 	}
     }
 
