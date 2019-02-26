@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 
 import fr.eni.sortir.dao.DaoFactory;
 import fr.eni.sortir.entities.Participant;
+import fr.eni.sortir.utils.SaltedMD5;
 
 /**
  * Servlet implementation class ServletLogin
@@ -74,7 +75,7 @@ public class ServletLogin extends HttpServlet {
 		if (participant == null) {
 			// TODO : add msg
 		} else {
-			if (participant.getMotDePasse().equals(motDePasse)) {
+			if (participant.getMotDePasse().equals(SaltedMD5.getSecurePassword(motDePasse))) {
 				if (request.getParameter("seSouvenir") != null) {
 					Cookie cookie = new Cookie("mail", mail);
 					cookie.setSecure(true);

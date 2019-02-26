@@ -130,22 +130,22 @@ public class ServletCreateSortie extends HttpServlet {
     }
 
     private int[] checkParameter(HttpServletRequest request) {
-	for (String name : request.getParameterMap().keySet()) {
-	    if ("".equals(request.getParameter(name))) {
-		return null;
-	    }
-	}
-	int[] parameters = new int[4];
-	try {
-	    parameters[CITY] = Integer.parseInt(request.getParameter(SORTIE_CITY));
-	    parameters[PLACE] = Integer.parseInt(request.getParameter(SORTIE_PLACE));
-	    parameters[MAX_SUBSCRIPTION] = Integer.parseInt(request.getParameter(SORTIE_MAX_SUBSCRIPTION));
-	    parameters[DURATION] = Integer.parseInt(request.getParameter(SORTIE_DURATION));
-	} catch (NumberFormatException nfe) {
-	    nfe.printStackTrace();
-	    return null;
-	}
-	return parameters;
+		for (String name : request.getParameterMap().keySet()) {
+		    if ("".equals(request.getParameter(name))) {
+			return null;
+		    }
+		}
+		int[] parameters = new int[4];
+		try {
+		    parameters[CITY] = Integer.parseInt(request.getParameter(SORTIE_CITY));
+		    parameters[PLACE] = Integer.parseInt(request.getParameter(SORTIE_PLACE));
+		    parameters[MAX_SUBSCRIPTION] = Integer.parseInt(request.getParameter(SORTIE_MAX_SUBSCRIPTION));
+		    parameters[DURATION] = Integer.parseInt(request.getParameter(SORTIE_DURATION));
+		} catch (NumberFormatException nfe) {
+		    nfe.printStackTrace();
+		    return null;
+		}
+		return parameters;
     }
 
     private Sortie saveSortie(Sortie sortie, State state) {
