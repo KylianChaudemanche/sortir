@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import fr.eni.sortir.dao.DaoFactory;
 import fr.eni.sortir.entities.Sortie;
+import fr.eni.sortir.utils.State;
 
 /**
  * Servlet implementation class ServletAnnulerSortie
@@ -33,6 +34,8 @@ public class ServletAnnulerSortie extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 			Sortie sortie = DaoFactory.getSortieDao().findSortie(Integer.valueOf(request.getPathInfo().replace("/","")));
 			request.setAttribute("sortie", sortie);
+			String urlPrecedente = request.getHeader("referer");
+			request.setAttribute("urlPrecedente", urlPrecedente);
 			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/annulerSortie.jsp");
 			rd.forward(request, response);
 	}
@@ -41,7 +44,13 @@ public class ServletAnnulerSortie extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		Sortie sortie = DaoFactory.getSortieDao().findSortie(Integer.valueOf(request.getPathInfo().replace("/","")));
+		System.out.println(request.getParameter("motifAnnulation").toString());
+		if(!"".equals(request.getParameter("motifAnnulation").toString())) {
+		sortie.setMotifAnnulation(request.getAttribute("motifAnnulation").toString());
+		sortie.setEtat(DaoFactory.getEtatDao().findEtatByName(State.CANCELED.toString()));
+		DaoFactory.getSortieDao().updateSortie(sortie);
+		}
 		doGet(request, response);
 	}
 
