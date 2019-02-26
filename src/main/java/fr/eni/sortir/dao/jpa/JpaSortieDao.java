@@ -153,7 +153,7 @@ public class JpaSortieDao extends JpaDao implements SortieDao {
 		String queryPasInscrit = "";
 		if(inscrit ^ pasInscrit) {
 			queryInscrit = (inscrit) ? QUERY_SORTIE_ALL_BY_INSCRIT : "";
-			queryJoin = JOIN_SORTIE_ALL_BY_INSCRIT;
+			queryJoin = (inscrit) ? JOIN_SORTIE_ALL_BY_INSCRIT : "";
 			queryPasInscrit= (pasInscrit) ? QUERY_SORTIE_ALL_BY_PAS_INSCRIT : "";
 		}
 		String queryPassee = (passee) ? QUERY_SORTIE_ALL_PASSEE : "";
@@ -188,6 +188,9 @@ public class JpaSortieDao extends JpaDao implements SortieDao {
 		} finally {
 			em.close();
 		}
+		
+		System.out.println(QUERY_SORTIE_ALL+ queryJoin+QUERY_SORTIE_ALL_BY_SITE+queryOrganisateur
+					+queryInscrit+queryPasInscrit+queryPassee+queryDateDebut+queryDateFin+QUERY_SORTIE_ALL_BY_DATE_ARCHIVAGE_AND);
 		return listeSortie;
     }
 
