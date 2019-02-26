@@ -14,9 +14,9 @@
 	<div class="row">
 		<div class="col-md-6 mx-auto">
 			<h1 class="text-center">${participant.pseudo}</h1>	
-			<div class="card mx-auto shadow">
-				<object data="../image/${participant.noParticipant}" class="img-rounded" type="image/jpg">
-		      		<img src="../image/batman" class="img-thumbnail">
+			<div class="card shadow">
+				<object data="<%=request.getContextPath()%>/image/${participant.noParticipant}" class="img-thumbnail mx-auto" style="width:300px" type="image/jpg">
+		      		<img src="<%=request.getContextPath()%>/image/batman" style="width:300px" class="img-thumbnail mx-auto">
 		    	</object>
 				<hr>
 				<div class="card-body mx-auto">

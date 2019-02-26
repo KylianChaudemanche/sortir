@@ -177,7 +177,7 @@
 			      </td>
 			      <td>${ sortie.getOrganisateur().getPrenom() } ${ sortie.getOrganisateur().getNom() }</td>
 			      <td>
-			      	<a href="">
+			      	<a href="<%=request.getContextPath()%>/sortie/${sortie.getNoSortie()}">
 			      		<i class="grow text-dark" data-feather="external-link"></i>
 			      	</a>
 			      </td>
