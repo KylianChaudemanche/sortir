@@ -1,75 +1,36 @@
 <!-- ####### HEADER ######## -->
 <jsp:include page="includes/header.jsp">
-	<jsp:param value="${sortie.getNom()}" name="titre" />
+	<jsp:param value="Annuler une sortie" name="titre"/>
 </jsp:include>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!-- ####### NAVBAR ######## -->
 <%@include file="includes/navbar.jsp"%>
 
 
 <!-- ####### CONTENT ######## -->
+
 <div class="container">
 	<div class="row">
-		<div class="col-md-12">
-			<h1 class="mx-auto text-center my-3 ">Afficher une sortie</h1>
-				<div class="col-md-5 float-left bg-light rounded shadow p-3">
-					<div class="col-md-6 float-left">Nom : </div>
-					<div class="col-md-6 float-right font-weight-bold">${sortie.getNom()}</div>
-					<div class="col-md-12">&nbsp</div>
-					<div class="col-md-6 float-left">Date et heure : </div>
-					<div class="col-md-6 float-right font-weight-bold">${sortie.getDateDebut()}</div>
-					<div class="col-md-12">&nbsp</div>
-					<div class="col-md-6 float-left">Nombre de places : </div>
-					<div class="col-md-6 float-right font-weight-bold">${sortie.getNbInscriptionsMax()}</div>
-					<div class="col-md-12">&nbsp</div>
-					<div class="col-md-6 float-left">Durée : </div>
-					<div class="col-md-6 float-right font-weight-bold">${sortie.getDuree()} minutes</div>
-					<div class="col-md-12">&nbsp</div>
-					<div class="col-md-6 float-left">Description et infos : </div>
-					<div class="col-md-12 font-weight-bold overflow-auto" style="max-height: 300px !important">${sortie.getDescriptionInfos()}</div>
-				</div>
-				<div class="col-md-6 float-right bg-light rounded shadow p-3">
-					<div class="col-md-6 float-left">Ville organisatrice : </div>
-					<div class="col-md-6 float-right font-weight-bold">${sortie.getLieu().getVille().getNomVille() }</div>
-					<div class="col-md-12">&nbsp</div>
-					<div class="col-md-6 float-left">Lieu : </div>
-					<div class="col-md-6 float-right font-weight-bold">${sortie.getLieu().getNomLieu()}</div>
-					<div class="col-md-12">&nbsp</div>
-					<div class="col-md-6 float-left">Adresse : </div>
-					<div class="col-md-6 float-right font-weight-bold">${sortie.getLieu().getAdresse()}</div>
-					<div class="col-md-12">&nbsp</div>
-					<div class="col-md-6 float-left">Code postal : </div>
-					<div class="col-md-6 float-right font-weight-bold">${sortie.getLieu().getVille().getCodePostal()}</div>
-					<div class="col-md-12">&nbsp</div>
-					<div class="col-md-6 float-left">Latitude : </div>
-					<div class="col-md-6 float-right font-weight-bold">${sortie.getLieu().getLatitude()}</div>
-					<div class="col-md-12">&nbsp</div>
-					<div class="col-md-6 float-left">Longitude : </div>
-					<div class="col-md-6 float-right font-weight-bold">${sortie.getLieu().getLongitude()}</div>
-					<div class="col-md-12">&nbsp</div>
-					<div class="col-md-6 float-left">Liste des participants inscrits : </div>
-					<div class="col-md-12">
-						<table class="table bg-light rounded shadow viewTable mt-4">
-							<thead class="d-block theadData mx-auto">
-								<tr class="trData">
-									<th class="thData" scope="col">Pseudo</th>
-									<th class="thData" scope="col">Nom</th>
-								</tr>
-							</thead>
-							<tbody class="overflow-auto d-block tbodyData" style="height:200px !important">
-								<c:forEach var="inscription" items="${sortie.getInscriptions()}">
-								<tr class="trData">
-									<td class="tdData"><a href="<%=request.getContextPath()%>/profil/${inscription.getParticipant().getNoParticipant()}">${inscription.getParticipant().getPseudo()}</a></td>
-									<td class="tdData">${inscription.getParticipant().getPrenom()} ${inscription.getParticipant().getNom()}</td>
-								</tr>
-								</c:forEach>
-							</tbody>
-						</table>
+		<div class="col-md-6 mx-auto">
+			<h1 class="text-center">Annuler une sortie</h1>	
+				<form method="POST">
+				<div class="card shadow">
+					<div class="card-body mx-auto">
+						<p class="card-text">Nom de la sortie : ${sortie.getNom()}</p>
+						<p class="card-text">Date de la sortie : <fmt:formatDate value="${ sortie.getDateDebut() }" pattern="dd/MM/yyyy HH'h'mm" /></p>
+						<p class="card-text">Ville organisatrice : ${sortie.getLieu().getVille().getNomVille()}</p>
+						<p class="card-text">Lieu : ${sortie.getLieu().getAdresse()} ${sortie.getLieu().getVille().getCodePostal()} ${sortie.getLieu().getVille().getNomVille()}</p>
+						<div class="form-group">
+		  					<label for="motifAnnulation">Motif : </label>
+							<textarea class="form-control" id="motifAnnulation" name="motifAnnulation" rows="5"></textarea>
+						</div>
 					</div>
 				</div>
-			</div>
+				<a href="${urlPrecedente}" class="btn btn-primary m-3">Retour</a>
+				<input type="submit" class="btn btn-danger float-right m-3" value="Annuler la sortie">
+			</form>
 		</div>
 	</div>
 </div>

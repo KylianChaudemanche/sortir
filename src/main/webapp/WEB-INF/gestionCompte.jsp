@@ -11,8 +11,8 @@
 <div class="container">
 	<div class="row">
 	<div class="col-md-3 py-5">
-		<object data="<%=request.getContextPath()%>/image/${participant.noParticipant}" class="img-rounded" type="image/jpg">
-      		<img src="<%=request.getContextPath()%>/image/batman" class="img-thumbnail">
+		<object data="<%=request.getContextPath()%>/image/${participant.noParticipant}" style="width:200px" class="rounded" type="image/jpg">
+      		<img src="<%=request.getContextPath()%>/image/batman" style="width:200px" class="img-thumbnail">
     	</object>
 	</div>
 		<div class="col-md-6">
