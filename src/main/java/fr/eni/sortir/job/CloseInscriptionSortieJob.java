@@ -21,6 +21,7 @@ public class CloseInscriptionSortieJob implements Runnable {
 		Thread.sleep(1000);
 	    } catch (InterruptedException e) {
 		e.printStackTrace();
+		Thread.currentThread().interrupt();
 	    }
 	} finally {
 	    Calendar now = Calendar.getInstance();
