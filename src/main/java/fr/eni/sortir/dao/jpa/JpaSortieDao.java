@@ -10,13 +10,17 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.PersistenceException;
+import javax.persistence.Query;
 import javax.persistence.TransactionRequiredException;
 import javax.persistence.TypedQuery;
 
+import fr.eni.sortir.dao.DaoFactory;
 import fr.eni.sortir.dao.SortieDao;
+import fr.eni.sortir.entities.Etat;
 import fr.eni.sortir.entities.Participant;
 import fr.eni.sortir.entities.Site;
-import fr.eni.sortir.entities.Sortie;;
+import fr.eni.sortir.entities.Sortie;
+import fr.eni.sortir.utils.State;;
 
 public class JpaSortieDao extends JpaDao implements SortieDao {
     private static final Logger LOGGER = Logger.getLogger(JpaSortieDao.class.getName());
@@ -192,6 +196,39 @@ public class JpaSortieDao extends JpaDao implements SortieDao {
 		System.out.println(QUERY_SORTIE_ALL+ queryJoin+QUERY_SORTIE_ALL_BY_SITE+queryOrganisateur
 					+queryInscrit+queryPasInscrit+queryPassee+queryDateDebut+queryDateFin+QUERY_SORTIE_ALL_BY_DATE_ARCHIVAGE_AND);
 		return listeSortie;
+
     }
 
+    public int closeInscription() {
+	EntityManager em = getEntityManagerFactory().createEntityManager();
+	EntityTransaction transaction = em.getTransaction();
+	Calendar cal = Calendar.getInstance();
+	cal.set(Calendar.HOUR_OF_DAY, 0);
+	cal.set(Calendar.MINUTE, 0);
+	cal.set(Calendar.SECOND, 0);
+	cal.set(Calendar.MILLISECOND, 0);
+	int result = 0;
+	try {
+	    transaction.begin();
+	    Etat etatOpened = DaoFactory.getEtatDao().findEtatByName(State.OPENED.toString());
+	    Etat etatClosed = DaoFactory.getEtatDao().findEtatByName(State.CLOSED.toString());
+	    Query query = em
+		    .createQuery(
+			    "UPDATE Sortie SET etat = :etatClosed WHERE dateCloture < :date AND etat = :etatOpened")
+		    .setParameter("etatClosed", etatClosed).setParameter("date", cal.getTime())
+		    .setParameter("etatOpened", etatOpened);
+
+	    result = query.executeUpdate();
+	    transaction.commit();
+	} catch (IllegalStateException | IllegalArgumentException | TransactionRequiredException e) {
+	    LOGGER.log(Level.SEVERE, e.getMessage(), e);
+	    result = 0;
+	} finally {
+	    if (transaction.isActive()) {
+		transaction.rollback();
+	    }
+	    em.close();
+	}
+	return result;
+    }
 }
