@@ -5,8 +5,6 @@
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-
-
 <!-- ####### NAVBAR ######## -->
 <%@include file="includes/navbar.jsp"%>
 
@@ -15,59 +13,63 @@
 <div class="container">
 	<div class="row">
 		<div class="col-md-12">
-			<h1 class="mx-auto text-center">Afficher une sortie</h1>
-			<table class="table col-md-6 float-left bg-light">
-				<tr>
-					<td>Nom de la sortie : </td>
-					<td>${sortie.getNom()}</td>
-				</tr>
-				<tr>
-					<td>Date et heure de la sortie : </td>
-					<td>${sortie.getDateDebut()}</td>
-				</tr>
-				<tr>
-					<td>Date limite d'insctiption : </td>
-					<td>${sortie.getDateCloture()}</td>
-				</tr>
-				<tr>
-					<td>Nombre de places : </td>
-					<td>${sortie.getNbInscriptionsMax()}</td>
-				</tr>
-				<tr>
-					<td>Durée : </td>
-					<td>${sortie.getDuree()} minutes</td>
-				</tr>
-				<tr>
-					<td>Description et infos : </td>
-					<td>${sortie.getDescriptionInfos()}</td>
-				</tr>
-			</table>
-			<table class="table col-md-6 float-right bg-light">
-				<tr>
-					<td>Ville organisatrice : </td>
-					<td>${sortie.getLieu().getVille().getNomVille() }</td>
-				</tr>
-				<tr>
-					<td>Lieu : </td>
-					<td>${sortie.getLieu().getNomLieu()}</td>
-				</tr>
-				<tr>
-					<td>Adresse : </td>
-					<td>${sortie.getLieu().getAdresse()}</td>
-				</tr>
-				<tr>
-					<td>Code postal : </td>
-					<td>${sortie.getLieu().getVille().getCodePostal()}</td>
-				</tr>
-				<tr>
-					<td>Latitude : </td>
-					<td>${sortie.getLieu().getLatitude()}</td>
-				</tr>
-				<tr>
-					<td>Longitude : </td>
-					<td>${sortie.getLieu().getLongitude()}</td>
-				</tr>
-			</table>
+			<h1 class="mx-auto text-center my-3 ">Afficher une sortie</h1>
+				<div class="col-md-5 float-left bg-light rounded shadow p-3">
+					<div class="col-md-6 float-left">Nom : </div>
+					<div class="col-md-6 float-right font-weight-bold">${sortie.getNom()}</div>
+					<div class="col-md-12">&nbsp</div>
+					<div class="col-md-6 float-left">Date et heure : </div>
+					<div class="col-md-6 float-right font-weight-bold">${sortie.getDateDebut()}</div>
+					<div class="col-md-12">&nbsp</div>
+					<div class="col-md-6 float-left">Nombre de places : </div>
+					<div class="col-md-6 float-right font-weight-bold">${sortie.getNbInscriptionsMax()}</div>
+					<div class="col-md-12">&nbsp</div>
+					<div class="col-md-6 float-left">Durée : </div>
+					<div class="col-md-6 float-right font-weight-bold">${sortie.getDuree()} minutes</div>
+					<div class="col-md-12">&nbsp</div>
+					<div class="col-md-6 float-left">Description et infos : </div>
+					<div class="col-md-12 font-weight-bold overflow-auto" style="max-height: 300px !important">${sortie.getDescriptionInfos()}</div>
+				</div>
+				<div class="col-md-6 float-right bg-light rounded shadow p-3">
+					<div class="col-md-6 float-left">Ville organisatrice : </div>
+					<div class="col-md-6 float-right font-weight-bold">${sortie.getLieu().getVille().getNomVille() }</div>
+					<div class="col-md-12">&nbsp</div>
+					<div class="col-md-6 float-left">Lieu : </div>
+					<div class="col-md-6 float-right font-weight-bold">${sortie.getLieu().getNomLieu()}</div>
+					<div class="col-md-12">&nbsp</div>
+					<div class="col-md-6 float-left">Adresse : </div>
+					<div class="col-md-6 float-right font-weight-bold">${sortie.getLieu().getAdresse()}</div>
+					<div class="col-md-12">&nbsp</div>
+					<div class="col-md-6 float-left">Code postal : </div>
+					<div class="col-md-6 float-right font-weight-bold">${sortie.getLieu().getVille().getCodePostal()}</div>
+					<div class="col-md-12">&nbsp</div>
+					<div class="col-md-6 float-left">Latitude : </div>
+					<div class="col-md-6 float-right font-weight-bold">${sortie.getLieu().getLatitude()}</div>
+					<div class="col-md-12">&nbsp</div>
+					<div class="col-md-6 float-left">Longitude : </div>
+					<div class="col-md-6 float-right font-weight-bold">${sortie.getLieu().getLongitude()}</div>
+					<div class="col-md-12">&nbsp</div>
+					<div class="col-md-6 float-left">Liste des participants inscrits : </div>
+					<div class="col-md-12">
+						<table class="table bg-light rounded shadow viewTable mt-4">
+							<thead class="d-block theadData mx-auto">
+								<tr class="trData">
+									<th class="thData" scope="col">Pseudo</th>
+									<th class="thData" scope="col">Nom</th>
+								</tr>
+							</thead>
+							<tbody class="overflow-auto d-block tbodyData" style="height:200px !important">
+								<c:forEach var="inscription" items="${sortie.getInscriptions()}">
+								<tr class="trData">
+									<td class="tdData"><a href="../profil/${inscription.getParticipant().getNoParticipant()}">${inscription.getParticipant().getPseudo()}</a></td>
+									<td class="tdData">${inscription.getParticipant().getPrenom()} ${inscription.getParticipant().getNom()}</td>
+								</tr>
+								</c:forEach>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>

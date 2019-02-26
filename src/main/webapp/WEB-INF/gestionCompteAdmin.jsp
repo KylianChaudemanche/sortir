@@ -14,7 +14,6 @@
 			<object data="../image/${participant.noParticipant}" class="img-rounded" type="image/jpg">
 	      		<img src="../image/batman" class="img-thumbnail">
 	    	</object>
-			
 		</div>
 		<div class="col-md-6">
 			<c:choose>

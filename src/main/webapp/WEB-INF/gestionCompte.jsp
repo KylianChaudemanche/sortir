@@ -11,7 +11,9 @@
 <div class="container">
 	<div class="row">
 	<div class="col-md-3 py-5">
-		<img src="image/${participant.getNoParticipant()}" alt="${participant.getNom()}" class="img-thumbnail">
+		<object data="../image/${participant.noParticipant}" class="img-rounded" type="image/jpg">
+      		<img src="../image/batman" class="img-thumbnail">
+    	</object>
 	</div>
 		<div class="col-md-6">
 			<h1 class="text-center">Mon Profil</h1>

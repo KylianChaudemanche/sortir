@@ -53,3 +53,48 @@ input[type='checkbox'] {
   -webkit-transform: scale(1.1);
   transform: scale(1.1);
 }
+
+.viewTable {
+        table-layout:fixed;
+        margin:auto;
+    }
+    .thData, .tdData {
+        padding:8px;
+    text-align: center;
+    }
+    .theadData, tfoot {
+    background-color: #9ac9fb;
+        display:table;
+        width:100%;
+    }
+    .table-height .table .tdData {
+    vertical-align: middle !important; 
+    }
+    .viewTable .tbodyData {
+        max-height:250px;
+        overflow:auto;
+        overflow-x:hidden;
+        display:block;
+    width:100%;
+    }
+    .item-dist .tbodyData {
+        height:490px;
+        overflow:auto;
+        overflow-x:hidden;
+    width:100%;
+    }
+
+
+
+    .tbodyData .trData {
+        display:table;
+        width:100%;
+        table-layout:fixed;
+        border-bottom: 1px solid #ffffff !important;
+    }
+    .table .theadData .thData {
+    border: none !important;
+    width: 10% !important;
+        text-align: center;
+    padding: 10px;
+    }
