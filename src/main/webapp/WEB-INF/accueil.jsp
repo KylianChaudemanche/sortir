@@ -183,18 +183,9 @@
 	     				  	<c:set var="isInscrit" value="true" />
 				      	  </c:if>
 				      </c:forEach>
-				      <c:choose>
-						<c:when test="${ isInscrit == true }">
-					      	<div class="form-check">
-							  <input class="form-check-input checkbox-inscrit" type="checkbox" value="on" id="${ sortie.getNoSortie() })" name="inscrit" checked>
-							</div>
-						</c:when>
-						<c:otherwise>
-					      	<div class="form-check">
-							  <input class="form-check-input checkbox-inscrit" type="checkbox" value="on" id="${ sortie.getNoSortie() }" name="inscrit">
-							</div>
-					 	</c:otherwise>
-				 	  </c:choose>
+					  <c:if test="${ isInscrit == true }"> 
+						<i class="font-weight-bold text-success" data-feather="check"></i>
+					  </c:if>
 			      </td>
 			      <td>${ sortie.getOrganisateur().getPrenom() } ${ sortie.getOrganisateur().getNom() }</td>
 			      <td>
