@@ -29,7 +29,7 @@ import fr.eni.sortir.utils.SaltedMD5;
 /**
  * Servlet implementation class ServletGestionCompte
  */
-@WebServlet(name = "ServletGestionCompte", urlPatterns = { "/gestionCompte" })
+@WebServlet(name = "ServletGestionCompte", urlPatterns = { "/logged/gestionCompte" })
 public class ServletGestionCompte extends HttpServlet {
     private static final String ATTR_PARTICIPANT = "participant";
     private static final String ATTR_LIST_SITE = "listeSite";

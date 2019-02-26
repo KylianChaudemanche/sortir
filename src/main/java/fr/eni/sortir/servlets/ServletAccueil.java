@@ -26,7 +26,7 @@ import fr.eni.sortir.entities.Sortie;
 @WebServlet
 (
 		name="ServletAccueil",
-		urlPatterns= {"/accueil"}
+		urlPatterns= {"/logged/accueil"}
 		)
 public class ServletAccueil extends HttpServlet {
 	private static final long serialVersionUID = 1L;

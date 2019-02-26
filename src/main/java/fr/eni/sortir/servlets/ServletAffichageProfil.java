@@ -17,7 +17,7 @@ import fr.eni.sortir.dao.DaoFactory;
 @WebServlet
 (
 	name="ServletAffichageProfil",
-	urlPatterns= {"/profil/*"}
+	urlPatterns= {"/logged/profil/*"}
 )
 public class ServletAffichageProfil extends HttpServlet {
 	private static final long serialVersionUID = 1L;

@@ -200,7 +200,7 @@
 			</table>
 		</div>
 		<div class="col-md-12">
-			<a href="" class="btn btn-warning">Créer une sortie</a>
+			<a href="<%=request.getContextPath()%>/logged/createSortie" class="btn btn-warning">Créer une sortie</a>
 		</div>
 	</div>
 </div>

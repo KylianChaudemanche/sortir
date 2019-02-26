@@ -192,11 +192,7 @@ public class JpaSortieDao extends JpaDao implements SortieDao {
 		} finally {
 			em.close();
 		}
-		
-		System.out.println(QUERY_SORTIE_ALL+ queryJoin+QUERY_SORTIE_ALL_BY_SITE+queryOrganisateur
-					+queryInscrit+queryPasInscrit+queryPassee+queryDateDebut+queryDateFin+QUERY_SORTIE_ALL_BY_DATE_ARCHIVAGE_AND);
 		return listeSortie;
-
     }
 
     public int closeInscription() {

@@ -24,7 +24,7 @@ import fr.eni.sortir.utils.State;
 /**
  * Servlet implementation class ServletCreateSortie
  */
-@WebServlet(name = "ServletUpdateSortie", urlPatterns = { "/updateSortie", "/updateSortie/*" })
+@WebServlet(name = "ServletUpdateSortie", urlPatterns = { "/logged/updateSortie", "/logged/updateSortie/*" })
 public class ServletUpdateSortie extends HttpServlet {
     private static final Logger LOGGER = Logger.getLogger(ServletUpdateSortie.class.getName());
 

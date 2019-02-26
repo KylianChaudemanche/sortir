@@ -77,21 +77,22 @@ public class ServletLogin extends HttpServlet {
 		} else {
 			if (participant.getMotDePasse().equals(SaltedMD5.getSecurePassword(motDePasse))) {
 				if (request.getParameter("seSouvenir") != null) {
+					System.out.println(request.getParameter("seSouvenir"));
 					Cookie cookie = new Cookie("mail", mail);
-					cookie.setSecure(true);
 					cookie.setHttpOnly(true);
 					cookie.setMaxAge(99999);
 					response.addCookie(cookie);
 				} else {
 					Cookie cookie = new Cookie("mail", "");
-					cookie.setSecure(true);
 					cookie.setHttpOnly(true);
 					cookie.setMaxAge(0);
 					response.addCookie(cookie);
 				}
-				// redirect
+				
+				// add participant in session
 				session.setAttribute("participant", participant);
-				response.sendRedirect("/sortir/login");
+				// redirect
+				response.sendRedirect("/sortir/logged/accueil");
 			} else {
 				// login failed
 				response.sendRedirect("/sortir/login");
