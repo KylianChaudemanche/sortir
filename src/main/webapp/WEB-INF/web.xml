@@ -4,24 +4,4 @@
   <welcome-file-list>
     <welcome-file>accueil</welcome-file>
   </welcome-file-list>
-  <servlet>
-    <description></description>
-    <display-name>FiltreAdministration</display-name>
-    <servlet-name>FiltreAdministration</servlet-name>
-    <servlet-class>fr.eni.sortir.servlets.FiltreAdministration</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>FiltreAdministration</servlet-name>
-    <url-pattern>/FiltreAdministration</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <description></description>
-    <display-name>FiltreLogin</display-name>
-    <servlet-name>FiltreLogin</servlet-name>
-    <servlet-class>fr.eni.sortir.servlets.FiltreLogin</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>FiltreLogin</servlet-name>
-    <url-pattern>/FiltreLogin</url-pattern>
-  </servlet-mapping>
 </web-app>
