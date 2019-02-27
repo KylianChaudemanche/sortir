@@ -17,6 +17,7 @@ import fr.eni.sortir.entities.Lieu;
 import fr.eni.sortir.entities.Participant;
 import fr.eni.sortir.entities.Sortie;
 import fr.eni.sortir.entities.Ville;
+import fr.eni.sortir.messages.MsgReader;
 import fr.eni.sortir.utils.State;
 
 /**
@@ -35,12 +36,8 @@ public class ServletCreateSortie extends HttpServlet {
     private static final String ACTION = "action";
     private static final String SAVE = "save";
     private static final String PUBLISH = "publish";
-    private static final int CITY = 0;
-    private static final int PLACE = 1;
-    private static final int MAX_SUBSCRIPTION = 2;
-    private static final int DURATION = 3;
     private static final String JSP_CREATE_SORTIE = "/WEB-INF/createSortie.jsp";
-    private static final String URL_SHOW_SORTIE = "/sortir/sortie/";
+    private static final String URL_SHOW_SORTIE = "/sortir/logged/sortie/";
     private static final String SORTIE_CITY = "sortieCity";
     private static final String SORTIE_PLACE = "sortiePlace";
     private static final String SORTIE_NAME = "sortieName";
@@ -51,6 +48,7 @@ public class ServletCreateSortie extends HttpServlet {
     private static final String SORTIE_DESCRIPTION = "sortieDesc";
     private static final String FORMAT_DATE = "yyyy-MM-dd";
     private static final String FORMAT_DATETIME = "yyyy-MM-dd'T'hh:mm";
+    private static final String ERROR = "error";
 
     /**
      * @see HttpServlet#HttpServlet()
@@ -76,19 +74,23 @@ public class ServletCreateSortie extends HttpServlet {
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
 	    throws ServletException, IOException {
-	int[] parameters = checkParameter(request);
-	if (parameters == null) {
-	    response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+	String error = checkParameter(request);
+	if (error != null) {
+	    request.setAttribute(ERROR, error);
+	    request.setAttribute(SORTIE_NAME, request.getParameter(SORTIE_NAME));
+	    request.setAttribute(SORTIE_BEGIN_DATE, request.getParameter(SORTIE_BEGIN_DATE));
+	    request.setAttribute(SORTIE_CLOSE_INSCRIPTION_DATE, request.getParameter(SORTIE_CLOSE_INSCRIPTION_DATE));
+	    request.setAttribute(SORTIE_MAX_SUBSCRIPTION, request.getParameter(SORTIE_MAX_SUBSCRIPTION));
+	    request.setAttribute(SORTIE_DURATION, request.getParameter(SORTIE_DURATION));
+	    request.setAttribute(SORTIE_DESCRIPTION, request.getParameter(SORTIE_DESCRIPTION));
+	    request.setAttribute(SORTIE_PLACE, request.getParameter(SORTIE_PLACE));
+	    request.setAttribute(SORTIE_CITY, request.getParameter(SORTIE_CITY));
+	    doGet(request, response);
 	    return;
 	}
 
-	Ville ville = DaoFactory.getVilleDao().findVille(parameters[CITY]);
-	Lieu lieu = DaoFactory.getLieuDao().findLieu(parameters[PLACE]);
-	if (ville == null || lieu == null) {
-	    response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-	    return;
-	}
-
+	Lieu lieu = DaoFactory.getLieuDao().findLieu(Integer.valueOf(request.getParameter(SORTIE_PLACE)));
+	Participant organisateur = (Participant) request.getSession().getAttribute("participant");
 	SimpleDateFormat sdfDateTime = new SimpleDateFormat(FORMAT_DATETIME);
 	SimpleDateFormat sdfDate = new SimpleDateFormat(FORMAT_DATE);
 	Date dateBegin = null;
@@ -98,24 +100,12 @@ public class ServletCreateSortie extends HttpServlet {
 	    dateCloseInscription = sdfDate.parse(request.getParameter(SORTIE_CLOSE_INSCRIPTION_DATE));
 	} catch (ParseException e) {
 	    e.printStackTrace();
-	    response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-	    return;
-	}
-	if (dateBegin.compareTo(dateCloseInscription) < 0) {
-	    response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-	    return;
 	}
 
-	Participant organisateur = (Participant) request.getSession().getAttribute("participant");
-	
-	if (organisateur == null) {
-	    response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-	    return;
-	}
-	
-	Sortie sortie = new Sortie(request.getParameter(SORTIE_NAME), dateBegin, parameters[DURATION],
-		dateCloseInscription, parameters[MAX_SUBSCRIPTION], request.getParameter(SORTIE_DESCRIPTION), null,
-		null, lieu, new ArrayList<>(), organisateur);
+	Sortie sortie = new Sortie(request.getParameter(SORTIE_NAME), dateBegin,
+		Integer.valueOf(request.getParameter(SORTIE_DURATION)), dateCloseInscription,
+		Integer.valueOf(request.getParameter(SORTIE_MAX_SUBSCRIPTION)),
+		request.getParameter(SORTIE_DESCRIPTION), null, null, lieu, new ArrayList<>(), organisateur);
 	switch (request.getParameter(ACTION)) {
 	case SAVE:
 	    sortie = saveSortie(sortie, State.CREATED);
@@ -127,7 +117,7 @@ public class ServletCreateSortie extends HttpServlet {
 	    response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 	    return;
 	}
-	
+
 	if (sortie != null) {
 	    response.sendRedirect(URL_SHOW_SORTIE + sortie.getNoSortie());
 	} else {
@@ -135,23 +125,214 @@ public class ServletCreateSortie extends HttpServlet {
 	}
     }
 
-    private int[] checkParameter(HttpServletRequest request) {
-		for (String name : request.getParameterMap().keySet()) {
-		    if ("".equals(request.getParameter(name))) {
-			return null;
-		    }
-		}
-		int[] parameters = new int[4];
-		try {
-		    parameters[CITY] = Integer.parseInt(request.getParameter(SORTIE_CITY));
-		    parameters[PLACE] = Integer.parseInt(request.getParameter(SORTIE_PLACE));
-		    parameters[MAX_SUBSCRIPTION] = Integer.parseInt(request.getParameter(SORTIE_MAX_SUBSCRIPTION));
-		    parameters[DURATION] = Integer.parseInt(request.getParameter(SORTIE_DURATION));
-		} catch (NumberFormatException nfe) {
-		    nfe.printStackTrace();
-		    return null;
-		}
-		return parameters;
+    private String checkParameter(HttpServletRequest request) {
+	String error = null;
+	error = checkSortieName(request.getParameter(SORTIE_NAME));
+	if (error != null) {
+	    return error;
+	}
+	error = checkBeginDate(request.getParameter(SORTIE_BEGIN_DATE));
+	if (error != null) {
+	    return error;
+	}
+	error = checkCloseInscriptionDate(request.getParameter(SORTIE_CLOSE_INSCRIPTION_DATE));
+	if (error != null) {
+	    return error;
+	}
+	error = checkBeginIsAfterCloseInscription(request.getParameter(SORTIE_BEGIN_DATE),
+		request.getParameter(SORTIE_CLOSE_INSCRIPTION_DATE));
+	if (error != null) {
+	    return error;
+	}
+	error = checkMaxSubscription(request.getParameter(SORTIE_DURATION));
+	if (error != null) {
+	    return error;
+	}
+	error = checkDuration(request.getParameter(SORTIE_MAX_SUBSCRIPTION));
+	if (error != null) {
+	    return error;
+	}
+	error = checkDescription(request.getParameter(SORTIE_DESCRIPTION));
+	if (error != null) {
+	    return error;
+	}
+	error = checkCity(request.getParameter(SORTIE_CITY));
+	if (error != null) {
+	    return error;
+	}
+	error = checkLieu(request.getParameter(SORTIE_PLACE));
+	if (error != null) {
+	    return error;
+	}
+	if (request.getSession().getAttribute("participant") == null) {
+	    return MsgReader.getMessage("create.user.not_connected");
+	}
+	return error;
+    }
+
+    private String checkCity(String strNoCity) {
+	if (strNoCity != null) {
+	    Integer noSortie = null;
+	    try {
+		noSortie = Integer.valueOf(strNoCity);
+	    } catch (NumberFormatException nfe) {
+		nfe.printStackTrace();
+	    }
+	    if (noSortie == null) {
+		return MsgReader.getMessage("create.city.nan");
+	    }
+	    Ville ville = DaoFactory.getVilleDao().findVille(noSortie);
+	    if (ville == null) {
+		return MsgReader.getMessage("create.city.not_found");
+	    }
+	} else {
+	    return MsgReader.getMessage("create.city.is_empty");
+	}
+	return null;
+    }
+
+    private String checkLieu(String strNoLieu) {
+	if (strNoLieu != null) {
+	    Integer noLieu = null;
+	    try {
+		noLieu = Integer.valueOf(strNoLieu);
+	    } catch (NumberFormatException nfe) {
+		nfe.printStackTrace();
+	    }
+	    if (noLieu == null) {
+		return MsgReader.getMessage("create.place.nan");
+	    }
+	    Lieu lieu = DaoFactory.getLieuDao().findLieu(noLieu);
+	    if (lieu == null) {
+		return MsgReader.getMessage("create.place.not_found");
+	    }
+	} else {
+	    return MsgReader.getMessage("create.place.is_empty");
+	}
+	return null;
+    }
+
+    private String checkDescription(String desc) {
+	if (desc != null) {
+	    if (desc.length() > 500) {
+		return MsgReader.getMessage("create.desc.max_length");
+	    }
+	} else {
+	    return MsgReader.getMessage("create.desc.is_empty");
+	}
+	return null;
+    }
+
+    private String checkMaxSubscription(String strN) {
+	if (strN != null) {
+	    Integer n = null;
+	    try {
+		n = Integer.valueOf(strN);
+	    } catch (NumberFormatException nfe) {
+		nfe.printStackTrace();
+	    }
+	    if (n == null) {
+		return MsgReader.getMessage("create.max_subscription.nan");
+	    }
+	    if (n <= 0) {
+		return MsgReader.getMessage("create.max_subscription.bad_value");
+	    }
+	} else {
+	    return MsgReader.getMessage("create.max_subscription.is_empty");
+	}
+	return null;
+    }
+
+    private String checkDuration(String strN) {
+	if (strN != null) {
+	    Integer n = null;
+	    try {
+		n = Integer.valueOf(strN);
+	    } catch (NumberFormatException nfe) {
+		nfe.printStackTrace();
+	    }
+	    if (n == null) {
+		return MsgReader.getMessage("create.duration.nan");
+	    }
+	    if (n <= 0) {
+		return MsgReader.getMessage("create.duration.bad_value");
+	    }
+	} else {
+	    return MsgReader.getMessage("create.duration.is_empty");
+	}
+	return null;
+    }
+
+    private String checkSortieName(String name) {
+	if (name != null) {
+	    if (name.length() > 30) {
+		return MsgReader.getMessage("create.name.max_length");
+	    }
+	} else {
+	    return MsgReader.getMessage("create.name.is_empty");
+	}
+	return null;
+    }
+
+    private String checkBeginIsAfterCloseInscription(String strBeginDate, String strCloseInscriptionDate) {
+	SimpleDateFormat sdfDateTime = new SimpleDateFormat(FORMAT_DATETIME);
+	SimpleDateFormat sdfDate = new SimpleDateFormat(FORMAT_DATE);
+	Date beginDate = null;
+	Date closeInscriptionDate = null;
+	try {
+	    beginDate = sdfDateTime.parse(strBeginDate);
+	    closeInscriptionDate = sdfDate.parse(strCloseInscriptionDate);
+	} catch (ParseException e) {
+	    e.printStackTrace();
+	}
+	if (beginDate.before(closeInscriptionDate)) {
+	    return MsgReader.getMessage("create.subscription.over_begin_date");
+	}
+	return null;
+    }
+
+    private String checkBeginDate(String strDate) {
+	SimpleDateFormat sdf = new SimpleDateFormat(FORMAT_DATETIME);
+	if (strDate == null) {
+	    return MsgReader.getMessage("create.begin_date.is_empty");
+	}
+	Date today = new Date();
+	Date date = null;
+	try {
+	    date = sdf.parse(strDate);
+	} catch (ParseException e) {
+	    e.printStackTrace();
+	}
+	if (date != null) {
+	    if (date.before(today)) {
+		return MsgReader.getMessage("create.begin_date.in_past");
+	    }
+	} else {
+	    return MsgReader.getMessage("create.begin_date.bad_format");
+	}
+	return null;
+    }
+
+    private String checkCloseInscriptionDate(String strDate) {
+	SimpleDateFormat sdf = new SimpleDateFormat(FORMAT_DATE);
+	if (strDate == null) {
+	    return MsgReader.getMessage("create.close_inscription_date.is_empty");
+	}
+	Date today = new Date();
+	Date date = null;
+	try {
+	    date = sdf.parse(strDate);
+	} catch (ParseException e) {
+	    e.printStackTrace();
+	}
+	if (date != null) {
+	    if (date.before(today)) {
+		return MsgReader.getMessage("create.close_inscription_date.in_past");
+	    }
+	} else {
+	    return MsgReader.getMessage("create.close_inscription_date.bad_format");
+	}
+	return null;
     }
 
     private Sortie saveSortie(Sortie sortie, State state) {

@@ -8,6 +8,13 @@
 
 <!-- ####### CONTENT ######## -->
 
+<c:if test = "${error != null}">
+    <div class="alert alert-danger" role="alert">
+  	<c:out value = "${error}"/>
+	</div>
+</c:if>
+
+
 <div class="container">
 	<h1 class="text-center mb-4 mt-4">Créer une sortie</h1>
 	
@@ -17,38 +24,38 @@
 				<div class="form-group row">
 					<label class="col-sm-4 col-form-label">Nom de la sortie</label>
 					<div class="col-sm-8">
-						<input class="form-control" type="text" name="sortieName" required>
+						<input class="form-control" type="text" name="sortieName" value="${sortieName}" required>
 					</div>
 				</div>
 				<div class="form-group row">
 					<label class="col-sm-4 col-form-label">Date et heure de la sortie</label>
 					<div class="col-sm-8">
-						<input class="form-control" type="datetime-local" name="sortieBeginDate" required>
+						<input class="form-control" type="datetime-local" name="sortieBeginDate" value="${sortieBeginDate}" required>
 					</div>
 				</div>
 				<div class="form-group row">
 					<label class="col-sm-4 col-form-label">Date limite d'inscription</label>
 					<div class="col-sm-8">
-						<input class="form-control" type="date" name="sortieCloseInscriptionDate" required>
+						<input class="form-control" type="date" name="sortieCloseInscriptionDate" value="${sortieCloseInscriptionDate}" required>
 					</div>
 				</div>
 				<div class="form-group row">
 					<label class="col-sm-4 col-form-label">Nombre de place</label>
 					<div class="col-sm-8">
-						<input class="form-control" type="number" name="sortieNbMaxPlace" required>
+						<input class="form-control" type="number" name="sortieNbMaxPlace" value="${sortieNbMaxPlace}" required>
 					</div>
 				</div>
 				<div class="form-group row">
 					<label class="col-sm-4 col-form-label">Durée</label>
 					<div class="col-sm-8">
-						<input class="form-control col-sm-3 d-inline" name="sortieDuration" type="number" min="1" max="999" step="1" required>
+						<input class="form-control col-sm-3 d-inline" name="sortieDuration" value="${sortieDuration}" type="number" min="1" max="999" step="1" required>
 						<p class="d-inline ml-3">minutes</p>
 					</div>
 				</div>
 				<div class="form-group row">
 					<label class="col-sm-4 col-form-label">Description et infos</label>
 					<div class="col-sm-8">
-						<textarea class="form-control" name="sortieDesc" rows="3" required></textarea>
+						<textarea class="form-control" name="sortieDesc" rows="3" value="${sortieDesc}" required></textarea>
 					</div>
 				</div>
 			</div>
