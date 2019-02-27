@@ -9,7 +9,6 @@ import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -30,8 +29,8 @@ import fr.eni.sortir.utils.SaltedMD5;
 /**
  * Servlet implementation class ServletGestionCompte
  */
-@WebServlet(name = "ServletGestionCompte", urlPatterns = { "/gestionCompte" })
-public class ServletGestionCompte extends HttpServlet {
+@WebServlet(name = "ServletGestionCompte", urlPatterns = { "/logged/gestionCompte" })
+public class ServletGestionCompte extends ServletParent {
     private static final String ATTR_PARTICIPANT = "participant";
     private static final String ATTR_LIST_SITE = "listeSite";
 
@@ -39,6 +38,7 @@ public class ServletGestionCompte extends HttpServlet {
      * 
      */
     private static final long serialVersionUID = 2978411438742435566L;
+
 
     /**
      * @see HttpServlet#HttpServlet()
@@ -53,6 +53,7 @@ public class ServletGestionCompte extends HttpServlet {
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
 	    throws ServletException, IOException {
+	super.doGet(request, response);
 	HttpSession session = request.getSession();
 	session.setAttribute(ATTR_PARTICIPANT, DaoFactory.getParticipantDao().findParticipant(7));
 	Participant participant = (Participant) session.getAttribute(ATTR_PARTICIPANT);

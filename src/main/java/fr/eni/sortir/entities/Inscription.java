@@ -7,11 +7,12 @@ import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.Table;
+
+import org.codehaus.jackson.annotate.JsonBackReference;
 
 @Entity
 @Table(name = "INSCRIPTIONS")
@@ -23,11 +24,12 @@ public class Inscription implements Serializable {
 
     @EmbeddedId
     private InscriptionId id;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @MapsId("noParticipant")
     @JoinColumn(name = "participants_no_participant")
     private Participant participant;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonBackReference
+    @ManyToOne
     @MapsId("noSortie")
     @JoinColumn(name = "sorties_no_sortie")
     private Sortie sortie;

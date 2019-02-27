@@ -1,10 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns="http://java.sun.com/xml/ns/javaee"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
-	version="2.5">
-	<display-name>sortir</display-name>
-	<welcome-file-list>
-		<welcome-file>login.jsp</welcome-file>
-	</welcome-file-list>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
+  <display-name>sortir</display-name>
+  <welcome-file-list>
+    <welcome-file>accueil</welcome-file>
+  </welcome-file-list>
+  <servlet>
+    <description></description>
+    <display-name>FiltreAdministration</display-name>
+    <servlet-name>FiltreAdministration</servlet-name>
+    <servlet-class>fr.eni.sortir.servlets.FiltreAdministration</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>FiltreAdministration</servlet-name>
+    <url-pattern>/FiltreAdministration</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>FiltreLogin</display-name>
+    <servlet-name>FiltreLogin</servlet-name>
+    <servlet-class>fr.eni.sortir.servlets.FiltreLogin</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>FiltreLogin</servlet-name>
+    <url-pattern>/FiltreLogin</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>ServletAccueilMobile</display-name>
+    <servlet-name>ServletAccueilMobile</servlet-name>
+    <servlet-class>fr.eni.sortir.servlets.ServletAccueilMobile</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ServletAccueilMobile</servlet-name>
+    <url-pattern>/ServletAccueilMobile</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>ServletParent</display-name>
+    <servlet-name>ServletParent</servlet-name>
+    <servlet-class>fr.eni.sortir.servlets.ServletParent</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ServletParent</servlet-name>
+    <url-pattern>/ServletParent</url-pattern>
+  </servlet-mapping>
 </web-app>

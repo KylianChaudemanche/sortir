@@ -10,6 +10,7 @@ import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -19,6 +20,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.codehaus.jackson.annotate.JsonBackReference;
+import org.codehaus.jackson.annotate.JsonManagedReference;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -47,17 +50,21 @@ public class Sortie implements Serializable {
     private Integer nbInscriptionsMax;
     @Column(name = "descriptioninfos")
     private String descriptionInfos;
-    @Column(name = "urlPhoto")
-    private String urlPhoto;
-    @ManyToOne
+    @Column(name = "motifAnnulation")
+    private String motifAnnulation;
+    @JsonBackReference
+    @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name = "etats_no_etat")
     private Etat etat;
-    @ManyToOne
+    @JsonBackReference
+    @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name = "lieux_no_lieu")
     private Lieu lieu;
-    @OneToMany(mappedBy = "sortie", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    @OneToMany(fetch=FetchType.EAGER, mappedBy = "sortie", cascade = CascadeType.ALL, orphanRemoval = true)
     private Collection<Inscription> inscriptions = new ArrayList<>();
-    @ManyToOne
+    @JsonBackReference
+    @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name = "organisateur")
     private Participant organisateur;
 
@@ -66,7 +73,7 @@ public class Sortie implements Serializable {
     }
 
     public Sortie(String nom, Date dateDebut, Integer duree, Date dateCloture, Integer nbInscriptionsMax,
-	    String descriptionInfos, String urlPhoto, Etat etat, Lieu lieu, Collection<Inscription> inscriptions,
+	    String descriptionInfos, String motifAnnulation, Etat etat, Lieu lieu, Collection<Inscription> inscriptions,
 	    Participant organisateur) {
 	super();
 	this.nom = nom;
@@ -75,7 +82,7 @@ public class Sortie implements Serializable {
 	this.dateCloture = dateCloture;
 	this.nbInscriptionsMax = nbInscriptionsMax;
 	this.descriptionInfos = descriptionInfos;
-	this.urlPhoto = urlPhoto;
+	this.motifAnnulation = motifAnnulation;
 	this.etat = etat;
 	this.lieu = lieu;
 	this.inscriptions = inscriptions;
@@ -138,12 +145,12 @@ public class Sortie implements Serializable {
 	this.descriptionInfos = descriptionInfos;
     }
 
-    public String getUrlPhoto() {
-	return urlPhoto;
+    public String getMotifAnnulation() {
+	return motifAnnulation;
     }
 
-    public void setUrlPhoto(String urlPhoto) {
-	this.urlPhoto = urlPhoto;
+    public void setMotifAnnulation(String motifAnnulation) {
+	this.motifAnnulation = motifAnnulation;
     }
 
     public Etat getEtat() {
@@ -215,19 +222,20 @@ public class Sortie implements Serializable {
 	return Objects.equals(nom, that.nom) && Objects.equals(dateDebut, that.dateDebut)
 		&& Objects.equals(duree, that.duree) && Objects.equals(dateCloture, that.dateCloture)
 		&& Objects.equals(nbInscriptionsMax, that.nbInscriptionsMax)
-		&& Objects.equals(descriptionInfos, that.descriptionInfos) && Objects.equals(urlPhoto, that.urlPhoto);
+		&& Objects.equals(descriptionInfos, that.descriptionInfos) && Objects.equals(motifAnnulation, that.motifAnnulation);
     }
 
     @Override
     public int hashCode() {
-	return Objects.hash(nom, dateDebut, duree, dateCloture, nbInscriptionsMax, descriptionInfos, urlPhoto);
+	return Objects.hash(nom, dateDebut, duree, dateCloture, nbInscriptionsMax, descriptionInfos, motifAnnulation);
     }
 
     @Override
     public String toString() {
 	return "Sortie [noSortie=" + noSortie + ", nom=" + nom + ", dateDebut=" + dateDebut + ", duree=" + duree
 		+ ", dateCloture=" + dateCloture + ", nbInscriptionsMax=" + nbInscriptionsMax + ", descriptionInfos="
-		+ descriptionInfos + ", urlPhoto=" + urlPhoto + ", etat=" + etat + ", lieu=" + lieu + ", inscriptions="
-		+ inscriptions + ", organisateur=" + organisateur + "]";
+		+ descriptionInfos + ", motifAnnulation=" + motifAnnulation + ", etat=" + etat + ", lieu=" + lieu + ", inscriptions="
+		+ inscriptions + ", organisateur=" + organisateur + "]\r";
     }
+
 }

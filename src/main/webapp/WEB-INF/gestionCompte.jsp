@@ -11,30 +11,32 @@
 <div class="container">
 	<div class="row">
 	<div class="col-md-3 py-5">
-		<img src="image/${participant.noParticipant}" alt="${participant.nom}" class="img-thumbnail">
+		<object data="<%=request.getContextPath()%>/image/${participant.noParticipant}" style="width:200px" class="rounded" type="image/jpg">
+      		<img src="<%=request.getContextPath()%>/image/batman" style="width:200px" class="img-thumbnail">
+    	</object>
 	</div>
 		<div class="col-md-6">
 			<h1 class="text-center">Mon Profil</h1>
 			<form action="gestionCompte" method="post" enctype="multipart/form-data">
 				<div class="form-group">
 					<label for="pseudo">Pseudo :</label> 
-					<input type="text" class="form-control" id="pseudo" name="pseudo" placeholder="Ex : XxDaRkSaSuKeDu72xX" value="${participant.pseudo}"> 
+					<input type="text" class="form-control" id="pseudo" name="pseudo" required placeholder="Ex : XxDaRkSaSuKeDu72xX" value="${participant.getPseudo()}"> 
 				</div>
 				<div class="form-group">
 					<label for="prenom">Prénom :</label> 
-					<input type="text" class="form-control" id="prenom" name="prenom" placeholder="Prénom" value="${participant.prenom}"> 
+					<input type="text" class="form-control" id="prenom" name="prenom" required placeholder="Prénom" value="${participant.getPrenom()}"> 
 				</div>
 				<div class="form-group">
 					<label for="nom">Nom :</label> 
-					<input type="text" class="form-control" id="nom" name="nom" placeholder="Nom" value="${participant.nom}"> 
+					<input type="text" class="form-control" id="nom" name="nom" required placeholder="Nom" value="${participant.getNom()}"> 
 				</div>
 				<div class="form-group">
 					<label for="telephone">Téléphone :</label> 
-					<input type="text" class="form-control" id="telephone" name="telephone" placeholder="Numéro de téléphone" maxlength="10" value="${participant.telephone}"> 
+					<input type="text" class="form-control" id="telephone" name="telephone" required placeholder="Numéro de téléphone" maxlength="10" value="${participant.getTelephone()}"> 
 				</div>
 				<div class="form-group">
 					<label for="mail">Mail :</label> 
-					<input type="text" class="form-control" id="mail" name="mail" placeholder="Mail" value="${participant.mail}"> 
+					<input type="text" class="form-control" id="mail" name="mail" required placeholder="Mail" value="${participant.getMail()}"> 
 				</div>
 				<div class="form-group">
 					<label for="motDePasse">Mot de passe :</label> 
@@ -48,7 +50,7 @@
 				    <label for="site">Site de rattachement :</label>
 				    <select class="form-control" id="site" name="site">
 				    	<c:forEach var="site" items="${listeSite}">
-				    		<option value="${site.noSite}" <c:if test="${participant.site.noSite == site.noSite}"> selected </c:if>> ${site.nomSite}</option>
+				    		<option value="${site.getNoSite()}" <c:if test="${participant.getSite().getNoSite() == site.getNoSite()}"> selected </c:if>> ${site.getNomSite()}</option>
 				    	</c:forEach>
 				    </select>
 				 </div>
@@ -57,7 +59,7 @@
 					<input type="file" class="form-control-file" id="photo" name="photo">
 			 	</div>
 			 	<div>
-			 		<a href="#" class="btn btn-danger float-left">Annuler</a>
+			 		<a href="<%=request.getContextPath()%>/accueil" class="btn btn-danger float-left">Annuler</a>
 					<button type="submit" class="btn btn-primary float-right">Enregistrer</button>
 				</div>
 			</form>

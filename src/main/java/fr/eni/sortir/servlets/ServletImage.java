@@ -16,8 +16,8 @@ import fr.eni.sortir.utils.Constantes;
 /**
  * Servlet implementation class ServletImage
  */
-@WebServlet(name = "ServletImage", urlPatterns = { "/image/*" })
-public class ServletImage extends HttpServlet {
+@WebServlet(name = "ServletImage", urlPatterns = { "/logged/image/*" })
+public class ServletImage extends ServletParent {
 
     /**
      * 
@@ -37,7 +37,7 @@ public class ServletImage extends HttpServlet {
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
 	    throws ServletException, IOException {
-
+	super.doGet(request, response);
 	File file = new File(Constantes.DATA_PATH + request.getPathInfo() + ".jpg");
 	BufferedImage image = ImageIO.read(file);
 	ImageIO.write(image, "JPG", response.getOutputStream());

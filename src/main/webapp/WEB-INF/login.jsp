@@ -5,10 +5,8 @@
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-
-
 <!-- ####### NAVBAR ######## -->
-<%@include file="includes/navbar.jsp"%>
+<%@include file="includes/navbar-login.jsp"%>
 
 
 <!-- ####### CONTENT ######## -->
@@ -43,9 +41,10 @@
 				</c:choose>
 			    <label class="form-check-label" for="seSouvenir">Se souvenir de moi</label>
 			  </div>
+			  <input type="hidden" id="media-width" name="media-width" value="">
 			  <button type="submit" class="btn btn-success mt-3">Connexion</button>
 			</form>
-
+			
 		</div>
 	</div>
 </div>
@@ -54,3 +53,11 @@
 
 <!-- ####### FOOTER ######## -->
 <%@include file="includes/footer.jsp"%>
+
+<script>
+$( document ).ready(function() {
+	var width = (window.innerWidth > 0) ? window.innerWidth : screen.width;
+	$('#media-width').val(width);
+	console.log(width);
+});
+</script>

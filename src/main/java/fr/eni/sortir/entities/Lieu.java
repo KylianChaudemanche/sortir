@@ -14,6 +14,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.codehaus.jackson.annotate.JsonBackReference;
+import org.codehaus.jackson.annotate.JsonManagedReference;
+
 @Entity
 @Table(name = "LIEUX")
 public class Lieu implements Serializable {
@@ -31,10 +34,12 @@ public class Lieu implements Serializable {
     private String adresse;
     private Float latitude;
     private Float longitude;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonBackReference
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "villes_no_ville")
     private Ville ville;
-    @OneToMany(mappedBy = "lieu")
+    @JsonManagedReference
+    @OneToMany(mappedBy = "lieu", fetch=FetchType.LAZY)
     private Collection<Sortie> listSortie = new ArrayList<>();
 
     public Lieu() {
