@@ -102,7 +102,8 @@ public class ServletLogin extends HttpServlet {
 				response.sendRedirect("/sortir/logged/accueil");
 			} else {
 				// login failed
-				response.sendRedirect("/sortir/login");
+				request.setAttribute("loginFailed", true);
+				doGet(request, response);
 			}
 		}
 	}

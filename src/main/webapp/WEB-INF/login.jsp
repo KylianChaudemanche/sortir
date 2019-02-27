@@ -10,10 +10,15 @@
 
 
 <!-- ####### CONTENT ######## -->
+<c:if test="${ (loginFailed != null) && loginFailed }">
+	<div class="col-12 alert alert-danger text-center" role="alert">
+		<b>Informations de connexion invalides</b>
+	</div>
+</c:if>
+		
 <div class="container">
 	<div class="row">
-		<div class="col-md-4 mx-auto mt-4">
-		
+		<div class="col-md-4 mx-auto mt-4 bg-light rounded shadow p-3">
 			<form method="POST" action="">
 			  <div class="form-group">
 			    <label for="mail"><strong>Mail / Pseudo</strong></label>
