@@ -10,9 +10,9 @@
 
 
 <!-- ####### CONTENT ######## -->
-<c:if test="${ (!empty loginFailed) && loginFailed }">
+<c:if test="${ !empty message }">
 	<div class="col-12 alert alert-danger text-center" role="alert">
-		<b>Informations de connexion invalides</b>
+		<b>${ message }</b>
 	</div>
 </c:if>
 		
