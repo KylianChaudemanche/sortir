@@ -29,7 +29,7 @@ import fr.eni.sortir.utils.SaltedMD5;
 /**
  * Servlet implementation class ServletGestionCompte
  */
-@WebServlet(name = "ServletGestionCompte", urlPatterns = { "/gestionCompte" })
+@WebServlet(name = "ServletGestionCompte", urlPatterns = { "/logged/gestionCompte" })
 public class ServletGestionCompte extends HttpServlet {
     private static final String ATTR_PARTICIPANT = "participant";
     private static final String ATTR_LIST_SITE = "listeSite";
@@ -51,8 +51,7 @@ public class ServletGestionCompte extends HttpServlet {
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
      *      response)
      */
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-	    throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
 	HttpSession session = request.getSession();
 	session.setAttribute(ATTR_PARTICIPANT, DaoFactory.getParticipantDao().findParticipant(7));
 	Participant participant = (Participant) session.getAttribute(ATTR_PARTICIPANT);
@@ -67,8 +66,7 @@ public class ServletGestionCompte extends HttpServlet {
      * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
      *      response)
      */
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-	    throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
 	HttpSession session = request.getSession();
 	Participant participant = (Participant) session.getAttribute("participant");
 	DiskFileItemFactory factory = new DiskFileItemFactory();

@@ -28,7 +28,7 @@ import fr.eni.sortir.utils.SaltedMD5;
 /**
  * Servlet implementation class ServletCreationCompte
  */
-@WebServlet(name = "ServletGestionCompteAdmin", urlPatterns = { "/gestionCompteAdmin/*" })
+@WebServlet(name = "ServletGestionCompteAdmin", urlPatterns = { "/administration/gestionCompte/*" })
 public class ServletGestionCompteAdmin extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        

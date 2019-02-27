@@ -22,7 +22,7 @@ import fr.eni.sortir.utils.State;
 /**
  * Servlet implementation class ServletCreateSortie
  */
-@WebServlet(name = "ServletCreateSortie", urlPatterns = { "/createSortie" })
+@WebServlet(name = "ServletCreateSortie", urlPatterns = { "/logged/createSortie" })
 public class ServletCreateSortie extends HttpServlet {
 
     /**

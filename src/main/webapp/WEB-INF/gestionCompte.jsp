@@ -11,8 +11,8 @@
 <div class="container">
 	<div class="row">
 	<div class="col-md-3 py-5">
-		<object data="<%=request.getContextPath()%>/image/${participant.noParticipant}" style="width:200px" class="rounded" type="image/jpg">
-      		<img src="<%=request.getContextPath()%>/image/batman" style="width:200px" class="img-thumbnail">
+		<object data="<%=request.getContextPath()%>/logged/image/${participant.noParticipant}" style="width:200px" class="rounded" type="image/jpg">
+      		<img src="<%=request.getContextPath()%>/logged/image/batman" style="width:200px" class="img-thumbnail">
     	</object>
 	</div>
 		<div class="col-md-6">
@@ -59,7 +59,7 @@
 					<input type="file" class="form-control-file" id="photo" name="photo">
 			 	</div>
 			 	<div>
-			 		<a href="<%=request.getContextPath()%>/accueil" class="btn btn-danger float-left">Annuler</a>
+			 		<a href="<%=request.getContextPath()%>/logged/accueil" class="btn btn-danger float-left">Annuler</a>
 					<button type="submit" class="btn btn-primary float-right">Enregistrer</button>
 				</div>
 			</form>

@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceException;
 import javax.persistence.TransactionRequiredException;
 
@@ -17,7 +18,10 @@ public class JpaParticipantDao extends JpaDao implements ParticipantDao {
     private static final Logger LOGGER = Logger.getLogger(JpaParticipantDao.class.getName());
     private final String QUERY_PARTICIPANT_ALL = "SELECT p FROM Participant AS p";
     private final String QUERY_PARTICIPANT_BY_MAIL = "SELECT p FROM Participant AS p WHERE mail = :mail";
+    private final String QUERY_IS_PSEUDO_DISPO = "SELECT p FROM Participant AS p WHERE pseudo = :pseudo";
+    private final String QUERY_IS_MAIL_DISPO = "SELECT p FROM Participant AS p WHERE mail = :mail";
     private final String MAIL = "mail";
+    private final String PSEUDO = "pseudo";
 
     public JpaParticipantDao(EntityManagerFactory emf) {
 	super(emf);
@@ -134,5 +138,42 @@ public class JpaParticipantDao extends JpaDao implements ParticipantDao {
 	}
 	return participant;
     }
+
+	@Override
+	public Boolean isPseudoDispo(String pseudo) throws NoResultException {
+		EntityManager em = getEntityManagerFactory().createEntityManager();
+		Participant participant = null;
+		try {
+		    participant = em.createQuery(QUERY_IS_PSEUDO_DISPO, Participant.class).setParameter(PSEUDO, pseudo).getSingleResult();
+		} catch (IllegalStateException | IllegalArgumentException e) {
+		    LOGGER.log(Level.SEVERE, e.getMessage(), e);
+		}catch(PersistenceException e) {
+			if(javax.persistence.NoResultException.class.equals(e.getClass())) {
+			return true;
+			}
+		} finally {
+		    em.close();
+		}
+		return participant == null?true:false;
+	}
+	
+	@Override
+	public Boolean isMailDispo(String mail) throws NoResultException {
+		EntityManager em = getEntityManagerFactory().createEntityManager();
+		Participant participant = null;
+		try {
+		    participant = em.createQuery(QUERY_IS_MAIL_DISPO, Participant.class).setParameter(MAIL, mail).getSingleResult();
+		} catch (IllegalStateException | IllegalArgumentException e) {
+		    LOGGER.log(Level.SEVERE, e.getMessage(), e);
+		}catch(PersistenceException e) {
+			if(javax.persistence.NoResultException.class.equals(e.getClass())) {
+			return true;
+			}
+		}
+		finally {
+		    em.close();
+		}
+		return participant == null?true:false;
+	}
 
 }
