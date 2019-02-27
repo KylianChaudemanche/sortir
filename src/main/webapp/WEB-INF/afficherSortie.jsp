@@ -61,7 +61,7 @@
 							<tbody class="overflow-auto d-block tbodyData" style="height:200px !important">
 								<c:forEach var="inscription" items="${sortie.getInscriptions()}">
 								<tr class="trData">
-									<td class="tdData"><a href="<%=request.getContextPath()%>/profil/${inscription.getParticipant().getNoParticipant()}">${inscription.getParticipant().getPseudo()}</a></td>
+									<td class="tdData"><a href="<%=request.getContextPath()%>/logged/profil/${inscription.getParticipant().getNoParticipant()}">${inscription.getParticipant().getPseudo()}</a></td>
 									<td class="tdData">${inscription.getParticipant().getPrenom()} ${inscription.getParticipant().getNom()}</td>
 								</tr>
 								</c:forEach>

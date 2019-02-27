@@ -8,13 +8,13 @@
     <div class="text-right ml-auto">
     <ul class="navbar-nav">
 	    <li class="nav-item">
-	    	<a class="nav-link" href="<%=request.getContextPath()%>/gestionSites">Sites</a>
+	    	<a class="nav-link" href="<%=request.getContextPath()%>/administration/gestionSites">Sites</a>
 	    </li>
 	    <li class="nav-item">
-	    	<a class="nav-link" href="<%=request.getContextPath()%>/accueil">Accueil</a>
+	    	<a class="nav-link" href="<%=request.getContextPath()%>/logged/accueil">Accueil</a>
 	    </li>
 	    <li class="nav-item">
-	    	<a class="nav-link" href="<%=request.getContextPath()%>/gestionCompte">Mon Profil</a>
+	    	<a class="nav-link" href="<%=request.getContextPath()%>/logged/gestionCompte">Mon Profil</a>
 	    </li>
 	    <li class="nav-item">
 	    	<a class="btn btn-danger" href="<%=request.getContextPath()%>/logout">Déconnexion</a>
