@@ -16,8 +16,8 @@ import fr.eni.sortir.entities.Sortie;
  * Servlet implementation class ServletAccueil
  */
 @WebServlet(name = "ServletAffichageSortie", urlPatterns = { "/logged/sortie/*" })
-public class ServletAffichageSortie extends HttpServlet {
 
+public class ServletAffichageSortie extends ServletParent {
     /**
      * 
      */
@@ -35,6 +35,7 @@ public class ServletAffichageSortie extends HttpServlet {
      *      response)
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		super.doGet(request, response);
     	Sortie sortie = DaoFactory.getSortieDao().findSortie(Integer.valueOf(request.getPathInfo().replace("/", "")));
     	request.setAttribute("sortie", sortie);
     	RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/afficherSortie.jsp");

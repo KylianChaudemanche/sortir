@@ -18,7 +18,7 @@ import fr.eni.sortir.utils.State;
  * Servlet implementation class ServletInscription
  */
 @WebServlet(name = "ServletDesinscription", urlPatterns = { "/desinscription/*" })
-public class ServletDesinscription extends HttpServlet {
+public class ServletDesinscription extends ServletParent {
 
     /**
      * 
@@ -38,6 +38,7 @@ public class ServletDesinscription extends HttpServlet {
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
 	    throws ServletException, IOException {
+		super.doGet(request, response);
     	Sortie sortie = DaoFactory.getSortieDao().findSortie(Integer.valueOf(request.getPathInfo().replace("/", "")));
     	Participant participant = (Participant) request.getSession().getAttribute("participant");
 

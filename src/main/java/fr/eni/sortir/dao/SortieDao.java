@@ -21,5 +21,7 @@ public interface SortieDao {
     Collection<Sortie> getAllSortieFiltre(Site site, Boolean organisateur, Boolean inscrit, Boolean pasInscrit,
 	    Boolean passee, Date dateDebut, Date dateFin, Participant participant);
     
+	public Collection<Sortie> getAllSortieInscrit(Participant participant); 
+    
     int closeInscription();
 }

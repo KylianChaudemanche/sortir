@@ -14,7 +14,7 @@
 <div class="container">
 	<div class="row">
 		<div class="col-md-6 mx-auto">
-			<h1 class="text-center">Annuler une sortie</h1>	
+			<h1 class="text-center my-4">Annuler une sortie</h1>	
 				<form method="POST">
 				<div class="card shadow">
 					<div class="card-body mx-auto">

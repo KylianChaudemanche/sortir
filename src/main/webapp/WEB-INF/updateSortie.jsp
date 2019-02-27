@@ -98,7 +98,6 @@
 				</div>
 			</div>
 		</div>
-		
 		<div class="form-group row">
 			<div class="mx-auto mt-2">
 		      	<button type="submit" name="action" class="btn btn-secondary btn-align" value="save">Enregistrer</button>

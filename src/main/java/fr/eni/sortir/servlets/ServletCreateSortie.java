@@ -24,7 +24,8 @@ import fr.eni.sortir.utils.State;
  * Servlet implementation class ServletCreateSortie
  */
 @WebServlet(name = "ServletCreateSortie", urlPatterns = { "/logged/createSortie" })
-public class ServletCreateSortie extends HttpServlet {
+
+public class ServletCreateSortie extends ServletParent {
 
     /**
      * 
@@ -63,6 +64,7 @@ public class ServletCreateSortie extends HttpServlet {
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
 	    throws ServletException, IOException {
+	super.doGet(request, response);
 	request.setAttribute(CITIES, DaoFactory.getVilleDao().getAllVille());
 	request.setAttribute(PLACES, DaoFactory.getLieuDao().getAllLieu());
 	request.getRequestDispatcher(JSP_CREATE_SORTIE).forward(request, response);

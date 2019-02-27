@@ -17,7 +17,7 @@ import fr.eni.sortir.utils.State;
  * Servlet implementation class ServletInscription
  */
 @WebServlet(name = "ServletInscription", urlPatterns = { "/inscription/*" })
-public class ServletInscription extends HttpServlet {
+public class ServletInscription extends ServletParent {
 
     /**
      * 
@@ -37,6 +37,7 @@ public class ServletInscription extends HttpServlet {
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
 	    throws ServletException, IOException {
+		super.doGet(request, response);
     	Sortie sortie = DaoFactory.getSortieDao().findSortie(Integer.valueOf(request.getPathInfo().replace("/", "")));
     	
     	if (!sortie.getEtat().getLibelle().equals(State.OPENED.toString())) {

@@ -16,7 +16,6 @@
 <div class="container card mt-4 p-3">
 	<form id="form" method="POST">
 		<div class="row">
-			
 			<div class="col-md-6">
 				<div class="form-group row">
 					<label for="site" class="col-sm-5 col-form-label col-form-label-sm">Site: </label>
@@ -143,9 +142,9 @@
     </form>
 </div>
 
-<div class="container mt-5">
+<div class="container mt-5 desktop-only">
 	<div class="row">
-		<div class="col-md-12">
+		<div class="col-md-12 table-responsive">
 			<table class="table table-striped table-bordered text-center">
 			  <thead class="thead-dark">
 			    <tr>
@@ -249,7 +248,6 @@
 		</div>
 	</div>
 </div>
-
 <!-- ####### </>CONTENT ######## -->
 
 <!-- ####### FOOTER ######## -->
@@ -258,7 +256,7 @@
 
 <!-- ####### SCRIPTS ######## -->
 <script>
-$(document).ready(function(){
+$(document).ready(function(){	
 	  $("#recherche").on("keyup", function() {
 	    var value = $(this).val().toLowerCase();
 	    $("#table-sorties tr .col-nom").filter(function() {
