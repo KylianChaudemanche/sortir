@@ -207,13 +207,14 @@
 							</c:choose>
 							
 							<c:choose>
-							<%--  TODO Need to implement this --%>
+								<%--  TODO Need to implement this --%>
 								<c:when test="${sortie.getEtat().getLibelle() eq State.CREATED.toString() and participant.getNoParticipant() == sortie.getOrganisateur().getNoParticipant() }">
 									<a href="#">
 							      		Publier
 							      	</a>
 						    	</c:when> 
-						    	<c:when test="${ participant.getNoParticipant() == sortie.getOrganisateur().getNoParticipant() }">
+						    	<%--  TODO Need to implement this --%>
+						    	<c:when test="${sortie.getEtat().getLibelle() eq State.OPENED.toString() and participant.getNoParticipant() == sortie.getOrganisateur().getNoParticipant() }">
 									<a href="#">
 							      		Annuler
 							      	</a>
