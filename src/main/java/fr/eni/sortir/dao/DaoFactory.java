@@ -1,6 +1,7 @@
 package fr.eni.sortir.dao;
 
 import fr.eni.sortir.dao.jpa.JpaEtatDao;
+import fr.eni.sortir.dao.jpa.JpaInscriptionDao;
 import fr.eni.sortir.dao.jpa.JpaLieuDao;
 import fr.eni.sortir.dao.jpa.JpaParticipantDao;
 import fr.eni.sortir.dao.jpa.JpaSiteDao;
@@ -31,5 +32,9 @@ public class DaoFactory {
 
     public static VilleDao getVilleDao() {
 	return new JpaVilleDao(PersistenceManager.getEntityManagerFactory());
+    }
+    
+    public static InscriptionDao getInscriptionDao() {
+	return new JpaInscriptionDao(PersistenceManager.getEntityManagerFactory());
     }
 }
