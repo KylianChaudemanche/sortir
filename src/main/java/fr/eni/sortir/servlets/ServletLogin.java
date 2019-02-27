@@ -25,7 +25,8 @@ public class ServletLogin extends HttpServlet {
 	 * 
 	 */
 	private static final long serialVersionUID = -7926787715554177925L;
-
+	private final String LOGIN_INVALIDE = "Informations de connexion invalides";
+	private final String COMPTE_NON_ACTIF  = "Votre compte a été désactivé";
 	/**
 	 * Default constructor.
 	 */
@@ -82,27 +83,34 @@ public class ServletLogin extends HttpServlet {
 			// TODO : add msg
 		} else {
 			if (participant.getMotDePasse().equals(SaltedMD5.getSecurePassword(motDePasse))) {
-				if (request.getParameter("seSouvenir") != null) {
-					Cookie cookie = new Cookie("mail", mail);
-					cookie.setHttpOnly(true);
-					cookie.setMaxAge(99999);
-					response.addCookie(cookie);
-				} else {
-					Cookie cookie = new Cookie("mail", "");
-					cookie.setHttpOnly(true);
-					cookie.setMaxAge(0);
-					response.addCookie(cookie);
+				if(participant.getActif()) {
+
+					if (request.getParameter("seSouvenir") != null) {
+						Cookie cookie = new Cookie("mail", mail);
+						cookie.setHttpOnly(true);
+						cookie.setMaxAge(99999);
+						response.addCookie(cookie);
+					} else {
+						Cookie cookie = new Cookie("mail", "");
+						cookie.setHttpOnly(true);
+						cookie.setMaxAge(0);
+						response.addCookie(cookie);
+					}
+
+					// add participant in session
+					session.setAttribute("participant", participant);
+					// add isMobile
+					session.setAttribute("isMobile", isMobile);
+					// redirect
+					response.sendRedirect("/sortir/logged/accueil");
+				}else {
+					// compte  non actif
+					request.setAttribute("message", COMPTE_NON_ACTIF);
+					doGet(request, response);
 				}
-				
-				// add participant in session
-				session.setAttribute("participant", participant);
-				// add isMobile
-				session.setAttribute("isMobile", isMobile);
-				// redirect
-				response.sendRedirect("/sortir/logged/accueil");
 			} else {
 				// login failed
-				request.setAttribute("loginFailed", true);
+				request.setAttribute("message", LOGIN_INVALIDE);
 				doGet(request, response);
 			}
 		}
