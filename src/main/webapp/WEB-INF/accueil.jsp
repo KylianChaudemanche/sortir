@@ -207,6 +207,7 @@
 							</c:choose>
 							
 							<c:choose>
+							<%--  TODO Need to implement this --%>
 								<c:when test="${sortie.getEtat().getLibelle() eq State.CREATED.toString() and participant.getNoParticipant() == sortie.getOrganisateur().getNoParticipant() }">
 									<a href="#">
 							      		Publier
@@ -216,9 +217,9 @@
 									<a href="#">
 							      		Annuler
 							      	</a>
-						    	</c:when> 
+						    	</c:when>
 								<c:when test="${ isInscrit == true }">
-									<a href="#">
+									<a href="<%=request.getContextPath()%>/desinscription/${sortie.getNoSortie()}">
 							      		Se désister
 							      	</a>
 						    	</c:when>    

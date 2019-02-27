@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import fr.eni.sortir.dao.DaoFactory;
+import fr.eni.sortir.entities.Inscription;
 import fr.eni.sortir.entities.Participant;
 import fr.eni.sortir.entities.Sortie;
 import fr.eni.sortir.utils.State;
@@ -38,15 +39,15 @@ public class ServletDesinscription extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
 	    throws ServletException, IOException {
     	Sortie sortie = DaoFactory.getSortieDao().findSortie(Integer.valueOf(request.getPathInfo().replace("/", "")));
-    	
+    	Participant participant = (Participant) request.getSession().getAttribute("participant");
+
     	if (!sortie.getEtat().getLibelle().equals(State.OPENED.toString())) {
     	    response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
     	    return;
     	}
     	
-    	Participant participant = (Participant) request.getSession().getAttribute("participant");
-    	sortie.removeParticipant(participant);
-    	System.out.println(DaoFactory.getSortieDao().updateSortie(sortie));
+    	Inscription inscription = DaoFactory.getInscriptionDao().findInscription(participant, sortie);
+    	DaoFactory.getInscriptionDao().removeInscription(inscription);
     	response.sendRedirect("/sortir/accueil");
     }
 
