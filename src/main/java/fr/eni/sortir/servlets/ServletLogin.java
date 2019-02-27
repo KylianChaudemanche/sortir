@@ -68,8 +68,14 @@ public class ServletLogin extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		HttpSession session = request.getSession();
+		// TODO: check pseudo/mail
 		String mail = request.getParameter("mail").trim();
 		String motDePasse = request.getParameter("motDePasse").trim();
+		String mediaWidth = request.getParameter("media-width");
+		Boolean isMobile = null;
+		if(!"".equals(mediaWidth)) {
+			isMobile = (Integer.parseInt(mediaWidth) <=425) ? true : false;
+		}
 
 		Participant participant = DaoFactory.getParticipantDao().findParticipantByMail(mail);
 		if (participant == null) {
@@ -77,7 +83,6 @@ public class ServletLogin extends HttpServlet {
 		} else {
 			if (participant.getMotDePasse().equals(SaltedMD5.getSecurePassword(motDePasse))) {
 				if (request.getParameter("seSouvenir") != null) {
-					System.out.println(request.getParameter("seSouvenir"));
 					Cookie cookie = new Cookie("mail", mail);
 					cookie.setHttpOnly(true);
 					cookie.setMaxAge(99999);
@@ -91,6 +96,8 @@ public class ServletLogin extends HttpServlet {
 				
 				// add participant in session
 				session.setAttribute("participant", participant);
+				// add isMobile
+				session.setAttribute("isMobile", isMobile);
 				// redirect
 				response.sendRedirect("/sortir/logged/accueil");
 			} else {

@@ -143,9 +143,9 @@
     </form>
 </div>
 
-<div class="container mt-5">
+<div class="container mt-5 desktop-only">
 	<div class="row">
-		<div class="col-md-12">
+		<div class="col-md-12 table-responsive">
 			<table class="table table-striped table-bordered text-center">
 			  <thead class="thead-dark">
 			    <tr>
@@ -247,7 +247,6 @@
 		</div>
 	</div>
 </div>
-
 <!-- ####### </>CONTENT ######## -->
 
 <!-- ####### FOOTER ######## -->
@@ -256,7 +255,7 @@
 
 <!-- ####### SCRIPTS ######## -->
 <script>
-$(document).ready(function(){
+$(document).ready(function(){	
 	  $("#recherche").on("keyup", function() {
 	    var value = $(this).val().toLowerCase();
 	    $("#table-sorties tr .col-nom").filter(function() {

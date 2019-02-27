@@ -24,4 +24,14 @@
     <servlet-name>FiltreLogin</servlet-name>
     <url-pattern>/FiltreLogin</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>ServletAccueilMobile</display-name>
+    <servlet-name>ServletAccueilMobile</servlet-name>
+    <servlet-class>fr.eni.sortir.servlets.ServletAccueilMobile</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ServletAccueilMobile</servlet-name>
+    <url-pattern>/ServletAccueilMobile</url-pattern>
+  </servlet-mapping>
 </web-app>
