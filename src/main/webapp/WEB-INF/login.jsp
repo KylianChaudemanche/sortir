@@ -6,14 +6,19 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <!-- ####### NAVBAR ######## -->
-<%@include file="includes/navbar.jsp"%>
+<%@include file="includes/navbar-login.jsp"%>
 
 
 <!-- ####### CONTENT ######## -->
-<div class="container">
-	<div class="row">
-		<div class="col-md-4 mx-auto mt-4">
+<c:if test="${ !empty message }">
+	<div class="col-12 alert alert-danger text-center" role="alert">
+		<b>${ message }</b>
+	</div>
+</c:if>
 		
+<div class="container mt-5">
+	<div class="row">
+		<div class="col-md-4 mx-auto mt-4 bg-light rounded shadow p-3">
 			<form method="POST" action="">
 			  <div class="form-group">
 			    <label for="mail"><strong>Mail / Pseudo</strong></label>
@@ -29,6 +34,7 @@
 			  <div class="form-group">
 			    <label for="motDePasse"><strong>Mot de Passe</strong></label>
 			    <input type="password" class="form-control" id="motDePasse" name="motDePasse" required>
+			  	<a href="#" class="text-muted text-secondary small ml-1">Mot de passe oublié</a>
 			  </div>
 			  <div class="form-check">
 			  	<c:choose>
@@ -41,6 +47,7 @@
 				</c:choose>
 			    <label class="form-check-label" for="seSouvenir">Se souvenir de moi</label>
 			  </div>
+			  <input type="hidden" id="media-width" name="media-width" value="">
 			  <button type="submit" class="btn btn-success mt-3">Connexion</button>
 			</form>
 			
@@ -52,3 +59,11 @@
 
 <!-- ####### FOOTER ######## -->
 <%@include file="includes/footer.jsp"%>
+
+<script>
+$( document ).ready(function() {
+	var width = (window.innerWidth > 0) ? window.innerWidth : screen.width;
+	$('#media-width').val(width);
+	console.log(width);
+});
+</script>

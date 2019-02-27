@@ -16,8 +16,9 @@ import fr.eni.sortir.utils.State;
 /**
  * Servlet implementation class ServletAnnulerSortie
  */
-@WebServlet(name = "ServletAnnulerSortie", urlPatterns = { "/logged/annulerSortie/*" })
-public class ServletAnnulerSortie extends HttpServlet {
+
+@WebServlet(name = "ServletAnnulerSortie", urlPatterns = { "/annulerSortie/*" })
+public class ServletAnnulerSortie extends ServletParent {
 	private static final long serialVersionUID = 1L;
        
     /**
@@ -32,6 +33,7 @@ public class ServletAnnulerSortie extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		super.doGet(request, response);
 			Sortie sortie = DaoFactory.getSortieDao().findSortie(Integer.valueOf(request.getPathInfo().replace("/","")));
 			request.setAttribute("sortie", sortie);
 			String urlPrecedente = request.getHeader("referer");

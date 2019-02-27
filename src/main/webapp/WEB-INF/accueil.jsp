@@ -6,6 +6,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+<%@ page import="fr.eni.sortir.utils.State" %>
  
 <!-- ####### NAVBAR ######## -->
 <%@include file="includes/navbar.jsp"%>
@@ -14,7 +16,6 @@
 <div class="container card mt-4 p-3">
 	<form id="form" method="POST">
 		<div class="row">
-			
 			<div class="col-md-6">
 				<div class="form-group row">
 					<label for="site" class="col-sm-5 col-form-label col-form-label-sm">Site: </label>
@@ -141,9 +142,9 @@
     </form>
 </div>
 
-<div class="container mt-5">
+<div class="container mt-5 desktop-only">
 	<div class="row">
-		<div class="col-md-12">
+		<div class="col-md-12 table-responsive">
 			<table class="table table-striped table-bordered text-center">
 			  <thead class="thead-dark">
 			    <tr>
@@ -154,7 +155,7 @@
 			      <th scope="col">État</th>
 			      <th scope="col">Inscrit</th>
 			      <th scope="col">Organisateur</th>
-			      <th scope="col">Détail</th>
+			      <th scope="col">Actions</th>
 			    </tr>
 			  </thead>
 			  <tbody id="table-sorties">
@@ -188,10 +189,53 @@
 					  </c:if>
 			      </td>
 			      <td>${ sortie.getOrganisateur().getPrenom() } ${ sortie.getOrganisateur().getNom() }</td>
-			      <td>
-			      	<a href="<%=request.getContextPath()%>/sortie/${sortie.getNoSortie()}">
-			      		<i class="grow text-dark" data-feather="external-link"></i>
-			      	</a>
+			      <td>		      	
+			      	<c:choose>
+				    	<c:when test="${ sessionScope.participant != null}">
+							<c:choose>
+						    	<c:when test="${ participant.getNoParticipant() == sortie.getOrganisateur().getNoParticipant()}">
+									<a href="<%=request.getContextPath()%>/updateSortie/${sortie.getNoSortie()}">
+							      		Modifier -
+							      	</a>
+						    	</c:when>    
+						    	<c:otherwise>
+									<a href="<%=request.getContextPath()%>/sortie/${sortie.getNoSortie()}">
+					      				Afficher -
+					      			</a>
+						   	 	</c:otherwise>
+							</c:choose>
+							
+							<c:choose>
+								<%--  TODO Need to implement this --%>
+								<c:when test="${sortie.getEtat().getLibelle() eq State.CREATED.toString() and participant.getNoParticipant() == sortie.getOrganisateur().getNoParticipant() }">
+									<a href="#">
+							      		Publier
+							      	</a>
+						    	</c:when> 
+						    	<%--  TODO Need to implement this --%>
+						    	<c:when test="${sortie.getEtat().getLibelle() eq State.OPENED.toString() and participant.getNoParticipant() == sortie.getOrganisateur().getNoParticipant() }">
+									<a href="#">
+							      		Annuler
+							      	</a>
+						    	</c:when>
+								<c:when test="${ isInscrit == true }">
+									<a href="<%=request.getContextPath()%>/desinscription/${sortie.getNoSortie()}">
+							      		Se désister
+							      	</a>
+						    	</c:when>    
+						    	<c:otherwise>
+									<a href="<%=request.getContextPath()%>/inscription/${sortie.getNoSortie()}">
+							      		S'inscrire
+							      	</a>
+						   	 	</c:otherwise>
+							</c:choose>
+				    	</c:when>    
+				    	<c:otherwise>
+							<a href="<%=request.getContextPath()%>/sortie/${sortie.getNoSortie()}">
+			      				Afficher
+			      			</a>
+				   	 	</c:otherwise>
+					</c:choose>
 			      </td>
 			    </tr>
 				</c:forEach>
@@ -200,11 +244,10 @@
 			</table>
 		</div>
 		<div class="col-md-12">
-			<a href="" class="btn btn-warning">Créer une sortie</a>
+			<a href="<%=request.getContextPath()%>/logged/createSortie" class="btn btn-warning">Créer une sortie</a>
 		</div>
 	</div>
 </div>
-
 <!-- ####### </>CONTENT ######## -->
 
 <!-- ####### FOOTER ######## -->
@@ -213,7 +256,7 @@
 
 <!-- ####### SCRIPTS ######## -->
 <script>
-$(document).ready(function(){
+$(document).ready(function(){	
 	  $("#recherche").on("keyup", function() {
 	    var value = $(this).val().toLowerCase();
 	    $("#table-sorties tr .col-nom").filter(function() {
@@ -228,12 +271,5 @@ $(document).ready(function(){
 		    return false;
 		  }
 		});
-	  
-	  $("#checkbox-inscrit").click(function() {
-			console.log(this.attr(id));
-		});
 	});
-	
-	
-
 </script>

@@ -19,7 +19,7 @@ import fr.eni.sortir.dao.DaoFactory;
 	name="ServletAffichageProfil",
 	urlPatterns= {"/logged/profil/*"}
 )
-public class ServletAffichageProfil extends HttpServlet {
+public class ServletAffichageProfil extends ServletParent {
 	private static final long serialVersionUID = 1L;
        
     /**
@@ -34,6 +34,7 @@ public class ServletAffichageProfil extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		super.doGet(request, response);
 		String numeroParticipant = request.getPathInfo().replace("/", "");
 		request.setAttribute("participant", DaoFactory.getParticipantDao().findParticipant(Integer.valueOf(numeroParticipant)));
 		String urlPrecedente = request.getHeader("referer");
