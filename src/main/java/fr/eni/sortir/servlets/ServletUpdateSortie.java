@@ -26,7 +26,7 @@ import fr.eni.sortir.utils.State;
  * Servlet implementation class ServletCreateSortie
  */
 @WebServlet(name = "ServletUpdateSortie", urlPatterns = { "/logged/updateSortie", "/logged/updateSortie/*" })
-public class ServletUpdateSortie extends HttpServlet {
+public class ServletUpdateSortie extends ServletParent {
 	private static final Logger LOGGER = Logger.getLogger(ServletUpdateSortie.class.getName());
 
 	/**
@@ -72,6 +72,7 @@ public class ServletUpdateSortie extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		super.doGet(request, response);
 		Integer noSortie = null;
 		try {
 			noSortie = Integer.valueOf(request.getPathInfo().replace("/", ""));

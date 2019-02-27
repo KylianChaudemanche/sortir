@@ -16,7 +16,6 @@
 <div class="container card mt-4 p-3">
 	<form id="form" method="POST">
 		<div class="row">
-			
 			<div class="col-md-6">
 				<div class="form-group row">
 					<label for="site" class="col-sm-5 col-form-label col-form-label-sm">Site: </label>

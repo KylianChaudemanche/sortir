@@ -28,7 +28,7 @@ import fr.eni.sortir.entities.Sortie;
 		name="ServletAccueil",
 		urlPatterns= {"/logged/accueil"}
 		)
-public class ServletAccueil extends HttpServlet {
+public class ServletAccueil extends ServletParent  {
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -43,6 +43,7 @@ public class ServletAccueil extends HttpServlet {
 	 *      response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+		super.doGet(request, response);
 		Collection<Sortie> listeSorties = null;
 		Participant participant = null;
 		Boolean isMobile = null;

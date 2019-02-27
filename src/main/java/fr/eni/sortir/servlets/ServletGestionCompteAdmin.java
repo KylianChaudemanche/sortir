@@ -29,7 +29,7 @@ import fr.eni.sortir.utils.SaltedMD5;
  * Servlet implementation class ServletCreationCompte
  */
 @WebServlet(name = "ServletGestionCompteAdmin", urlPatterns = { "/administration/gestionComptes/*" })
-public class ServletGestionCompteAdmin extends HttpServlet {
+public class ServletGestionCompteAdmin extends ServletParent {
 	private static final long serialVersionUID = 1L;
        
     /**
@@ -44,7 +44,7 @@ public class ServletGestionCompteAdmin extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+		super.doGet(request, response);
 		Collection<Site> listeSite = DaoFactory.getSiteDao().getAllSite();
 		request.setAttribute("listeSite", listeSite);
 		if("/nouveau".equals(request.getPathInfo())){

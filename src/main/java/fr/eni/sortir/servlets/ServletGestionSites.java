@@ -17,7 +17,7 @@ import fr.eni.sortir.entities.Site;
  * Servlet implementation class ServletGestionSites
  */
 @WebServlet(name = "ServletGestionSites", urlPatterns = { "/administration/gestionSites" })
-public class ServletGestionSites extends HttpServlet {
+public class ServletGestionSites extends ServletParent {
 	private static final long serialVersionUID = 1L;
        
     /**
@@ -32,6 +32,7 @@ public class ServletGestionSites extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		super.doGet(request, response);
 		request.setAttribute("listeSites", DaoFactory.getSiteDao().getAllSite());
 		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/gestionSites.jsp");
 		rd.forward(request, response);
