@@ -16,4 +16,6 @@ public interface TokenDao {
     Collection<Token> getAllToken();
 
     Token findTokenByMailAndToken(String mail, String strToken);
+    
+    int supprimerTokenExpire();
 }

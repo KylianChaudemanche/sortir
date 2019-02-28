@@ -33,5 +33,10 @@ public final class Constantes {
      */
     public static final String MSG_MDP_REINITIALISE = "votre mot de passe a été modifié avec succès";
     public static final String MSG_MAIL_ENVOYE = "Un lien à été envoyé à votre adresse pour réinitialiser votre mot de passe";
+
+    /*
+     *  ---  AUTRES CONSTANTES
+     */
+    public static final long ONE_MINUTE_IN_MILLIS=60000;//millisecs
     
 }

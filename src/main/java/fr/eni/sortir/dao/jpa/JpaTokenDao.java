@@ -1,6 +1,8 @@
 package fr.eni.sortir.dao.jpa;
 
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -8,11 +10,16 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.PersistenceException;
+import javax.persistence.Query;
 import javax.persistence.TransactionRequiredException;
 import javax.persistence.TypedQuery;
 
+import fr.eni.sortir.dao.DaoFactory;
 import fr.eni.sortir.dao.TokenDao;
+import fr.eni.sortir.entities.Etat;
 import fr.eni.sortir.entities.Token;
+import fr.eni.sortir.utils.Constantes;
+import fr.eni.sortir.utils.State;
 
 public class JpaTokenDao extends JpaDao implements TokenDao {
 	private static final Logger LOGGER = Logger.getLogger(JpaTokenDao.class.getName());
@@ -138,6 +145,27 @@ public class JpaTokenDao extends JpaDao implements TokenDao {
 		return token;
 	}
 	
-	
+	public int supprimerTokenExpire() {
+		EntityManager em = getEntityManagerFactory().createEntityManager();
+		EntityTransaction transaction = em.getTransaction();
+		Date now = new Date();
+		int result = 0;
+		try {
+			transaction.begin();
+			Query query = em.createQuery("DELETE Token WHERE dateExpiration > :now")
+					.setParameter("now", now);
 
+			result = query.executeUpdate();
+			transaction.commit();
+		} catch (IllegalStateException | IllegalArgumentException | TransactionRequiredException e) {
+			LOGGER.log(Level.SEVERE, e.getMessage(), e);
+			result = 0;
+		} finally {
+			if (transaction.isActive()) {
+				transaction.rollback();
+			}
+			em.close();
+		}
+		return result;
+	}
 }

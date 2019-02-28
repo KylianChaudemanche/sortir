@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import fr.eni.sortir.dao.DaoFactory;
 import fr.eni.sortir.entities.Participant;
 import fr.eni.sortir.entities.Token;
+import fr.eni.sortir.utils.Constantes;
 
 /**
  * Servlet implementation class ServletMdpOublie
@@ -22,7 +23,6 @@ import fr.eni.sortir.entities.Token;
 @WebServlet(name = "ServletMdpOublie", urlPatterns = { "/mdpOublie" })
 public class ServletMdpOublie extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	static final long ONE_MINUTE_IN_MILLIS=60000;//millisecs
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -48,7 +48,7 @@ public class ServletMdpOublie extends HttpServlet {
 		Token token = null;
 		Calendar date = Calendar.getInstance();
 		long time= date.getTimeInMillis();
-		Date expirationDate=new Date(time + (20 * ONE_MINUTE_IN_MILLIS));
+		Date expirationDate=new Date(time + (20 * Constantes.ONE_MINUTE_IN_MILLIS));
 		
 		if(participant != null) {
 			String uuid = UUID.randomUUID().toString().replace("-", "").substring(0, 16);
