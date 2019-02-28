@@ -13,13 +13,13 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import fr.eni.sortir.dao.DaoFactory;
 import fr.eni.sortir.entities.Lieu;
 import fr.eni.sortir.entities.Participant;
 import fr.eni.sortir.entities.Sortie;
 import fr.eni.sortir.entities.Ville;
+import fr.eni.sortir.messages.MsgReader;
 import fr.eni.sortir.utils.State;
 
 /**
@@ -27,173 +27,375 @@ import fr.eni.sortir.utils.State;
  */
 @WebServlet(name = "ServletUpdateSortie", urlPatterns = { "/logged/updateSortie", "/logged/updateSortie/*" })
 public class ServletUpdateSortie extends ServletParent {
-	private static final Logger LOGGER = Logger.getLogger(ServletUpdateSortie.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(ServletUpdateSortie.class.getName());
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -6076039526658978701L;
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -6076039526658978701L;
 
-	private static final String CITIES = "cities";
-	private static final String PLACES = "places";
-	private static final String SORTIE = "sortie";
-	private static final String ACTION = "action";
-	private static final String SAVE = "save";
-	private static final String PUBLISH = "publish";
-	private static final String DELETE = "delete";
-	private static final int CITY = 0;
-	private static final int PLACE = 1;
-	private static final int MAX_SUBSCRIPTION = 2;
-	private static final int DURATION = 3;
-	private static final int NO_SORTIE = 4;
-	private static final String JSP_UPDATE_SORTIE = "/WEB-INF/updateSortie.jsp";
-	private static final String SORTIE_NO_SORTIE = "sortieNoSortie";
-	private static final String SORTIE_CITY = "sortieCity";
-	private static final String SORTIE_PLACE = "sortiePlace";
-	private static final String SORTIE_NAME = "sortieName";
-	private static final String SORTIE_BEGIN_DATE = "sortieBeginDate";
-	private static final String SORTIE_CLOSE_INSCRIPTION_DATE = "sortieCloseInscriptionDate";
-	private static final String SORTIE_MAX_SUBSCRIPTION = "sortieNbMaxPlace";
-	private static final String SORTIE_DURATION = "sortieDuration";
-	private static final String SORTIE_DESCRIPTION = "sortieDesc";
-	private static final String FORMAT_DATE = "yyyy-MM-dd";
-	private static final String FORMAT_DATETIME = "yyyy-MM-dd'T'hh:mm";
+    private static final String CITIES = "cities";
+    private static final String PLACES = "places";
+    private static final String SORTIE = "sortie";
+    private static final String ACTION = "action";
+    private static final String SAVE = "save";
+    private static final String PUBLISH = "publish";
+    private static final String DELETE = "delete";
+    private static final String JSP_UPDATE_SORTIE = "/WEB-INF/updateSortie.jsp";
+    private static final String SORTIE_NO_SORTIE = "sortieNoSortie";
+    private static final String SORTIE_CITY = "sortieCity";
+    private static final String SORTIE_PLACE = "sortiePlace";
+    private static final String SORTIE_NAME = "sortieName";
+    private static final String SORTIE_BEGIN_DATE = "sortieBeginDate";
+    private static final String SORTIE_CLOSE_INSCRIPTION_DATE = "sortieCloseInscriptionDate";
+    private static final String SORTIE_MAX_SUBSCRIPTION = "sortieNbMaxPlace";
+    private static final String SORTIE_DURATION = "sortieDuration";
+    private static final String SORTIE_DESCRIPTION = "sortieDesc";
+    private static final String FORMAT_DATE = "yyyy-MM-dd";
+    private static final String FORMAT_DATETIME = "yyyy-MM-dd'T'hh:mm";
+    private static final String ERROR = "error";
 
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
-	public ServletUpdateSortie() {
-		super();
+
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public ServletUpdateSortie() {
+	super();
+    }
+
+    /**
+     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+     *      response)
+     */
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+	    throws ServletException, IOException {
+	super.doGet(request, response);
+	Integer noSortie = null;
+	try {
+	    if (request.getParameter(SORTIE_NO_SORTIE) != null) {
+		noSortie = Integer.valueOf(request.getParameter(SORTIE_NO_SORTIE));
+	    } else {
+		noSortie = Integer.valueOf(request.getPathInfo().replace("/", ""));
+	    }
+	} catch (NumberFormatException nfe) {
+	    LOGGER.log(Level.SEVERE, nfe.getMessage(), nfe);
+	}
+	if (noSortie == null) {
+	    response.sendError(HttpServletResponse.SC_NOT_FOUND);
+	    return;
+	}
+	Sortie sortie = DaoFactory.getSortieDao().findSortie(noSortie);
+	if (sortie == null) {
+	    response.sendError(HttpServletResponse.SC_NOT_FOUND);
+	    return;
+	}
+	request.setAttribute(SORTIE, sortie);
+	request.setAttribute(CITIES, DaoFactory.getVilleDao().getAllVille());
+	request.setAttribute(PLACES, DaoFactory.getLieuDao().getAllLieu());
+	request.getRequestDispatcher(JSP_UPDATE_SORTIE).forward(request, response);
+    }
+
+    /**
+     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+     *      response)
+     */
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+	    throws ServletException, IOException {
+	String error = checkParameter(request);
+	if (error != null) {
+	    request.setAttribute(ERROR, error);
+	    doGet(request, response);
+	    return;
 	}
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		super.doGet(request, response);
-		Integer noSortie = null;
-		try {
-			noSortie = Integer.valueOf(request.getPathInfo().replace("/", ""));
-		} catch(NumberFormatException nfe) {
-			LOGGER.log(Level.SEVERE, nfe.getMessage(), nfe);
-		}
-		if (noSortie == null) {
-			response.sendError(HttpServletResponse.SC_FORBIDDEN);
-			return;
-		}
-		Sortie sortie = DaoFactory.getSortieDao().findSortie(noSortie);
-		if (sortie == null) {
-			response.sendError(HttpServletResponse.SC_FORBIDDEN);
-			return;
-		}
-		request.setAttribute(SORTIE, sortie);
-		request.setAttribute(CITIES, DaoFactory.getVilleDao().getAllVille());
-		request.setAttribute(PLACES, DaoFactory.getLieuDao().getAllLieu());
-		request.getRequestDispatcher(JSP_UPDATE_SORTIE).forward(request, response);
+	Lieu lieu = DaoFactory.getLieuDao().findLieu(Integer.valueOf(request.getParameter(SORTIE_PLACE)));
+	Participant organisateur = (Participant) request.getSession().getAttribute("participant");
+	SimpleDateFormat sdfDateTime = new SimpleDateFormat(FORMAT_DATETIME);
+	SimpleDateFormat sdfDate = new SimpleDateFormat(FORMAT_DATE);
+	Date dateBegin = null;
+	Date dateCloseInscription = null;
+	try {
+	    dateBegin = sdfDateTime.parse(request.getParameter(SORTIE_BEGIN_DATE));
+	    dateCloseInscription = sdfDate.parse(request.getParameter(SORTIE_CLOSE_INSCRIPTION_DATE));
+	} catch (ParseException e) {
+	    e.printStackTrace();
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		int[] parameters = checkParameter(request);
-		if (parameters == null) {
-			response.sendError(HttpServletResponse.SC_FORBIDDEN);
-		}
+	Sortie sortie = new Sortie(
+		request.getParameter(SORTIE_NAME), 
+		dateBegin, 
+		Integer.valueOf(request.getParameter(SORTIE_DURATION)),
+		dateCloseInscription, 
+		Integer.valueOf(request.getParameter(SORTIE_MAX_SUBSCRIPTION)), 
+		request.getParameter(SORTIE_DESCRIPTION), null,
+		null, lieu, new ArrayList<>(), organisateur);
 
-		Ville ville = DaoFactory.getVilleDao().findVille(parameters[CITY]);
-		Lieu lieu = DaoFactory.getLieuDao().findLieu(parameters[PLACE]);
-		if (ville == null || lieu == null) {
-			response.sendError(HttpServletResponse.SC_FORBIDDEN);
-			return;
-		}
+	sortie.setNoSortie(Integer.valueOf(request.getParameter(SORTIE_NO_SORTIE)));
 
-		SimpleDateFormat sdfDateTime = new SimpleDateFormat(FORMAT_DATETIME);
-		SimpleDateFormat sdfDate = new SimpleDateFormat(FORMAT_DATE);
-		Date dateBegin = null;
-		Date dateCloseInscription = null;
-		try {
-			dateBegin = sdfDateTime.parse(request.getParameter(SORTIE_BEGIN_DATE));
-			dateCloseInscription = sdfDate.parse(request.getParameter(SORTIE_CLOSE_INSCRIPTION_DATE));
-		} catch (ParseException e) {
-			e.printStackTrace();
-			response.sendError(HttpServletResponse.SC_FORBIDDEN);
-			return;
-		}
-		if (dateBegin.compareTo(dateCloseInscription) < 0) {
-			response.sendError(HttpServletResponse.SC_FORBIDDEN);
-			return;
-		}
-
-		// Prend l'utilisateur de la session courante
-		HttpSession session = request.getSession();
-		Participant organisateur = (Participant) session.getAttribute("participant");
-		Sortie sortie = new Sortie(request.getParameter(SORTIE_NAME), dateBegin, parameters[DURATION],
-				dateCloseInscription, parameters[MAX_SUBSCRIPTION], request.getParameter(SORTIE_DESCRIPTION), null,
-				null, lieu, new ArrayList<>(), organisateur);
-
-		if(DaoFactory.getSortieDao().findSortie(parameters[NO_SORTIE]) == null) {
-			response.sendError(HttpServletResponse.SC_FORBIDDEN);
-			return;
-		}
-
-		sortie.setNoSortie(parameters[NO_SORTIE]);
-
-		switch (request.getParameter(ACTION)) {
-		case SAVE:
-			sortie = updateSortie(sortie, State.CREATED);
-			break;
-		case PUBLISH:
-			sortie = updateSortie(sortie, State.OPENED);
-			break;
-		case DELETE:
-			if(!deleteSortie(sortie.getNoSortie())) {
-				sortie = null;
-			}
-			break;
-		default:
-			response.sendError(HttpServletResponse.SC_FORBIDDEN);
-			return;
-		}
-		// TODO replace with correct page redirection
-		if (sortie != null) {
-			response.sendRedirect("/sortir/updateSortie?noSortie=" + String.valueOf(parameters[NO_SORTIE]));
-		} else {
-			response.sendError(HttpServletResponse.SC_FORBIDDEN);
-		}
+	switch (request.getParameter(ACTION)) {
+	case SAVE:
+	    sortie = updateSortie(sortie, State.CREATED);
+	    break;
+	case PUBLISH:
+	    sortie = updateSortie(sortie, State.OPENED);
+	    break;
+	case DELETE:
+	    if (!deleteSortie(sortie.getNoSortie())) {
+		sortie = null;
+	    }
+	    break;
+	default:
+	    response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+	    return;
 	}
-
-	private int[] checkParameter(HttpServletRequest request) {
-		for (String name : request.getParameterMap().keySet()) {
-			if ("".equals(request.getParameter(name))) {
-				return null;
-			}
-		}
-		int[] parameters = new int[5];
-		System.out.println(request.getParameter(SORTIE_NO_SORTIE));
-		try {
-			parameters[CITY] = Integer.parseInt(request.getParameter(SORTIE_CITY));
-			parameters[PLACE] = Integer.parseInt(request.getParameter(SORTIE_PLACE));
-			parameters[MAX_SUBSCRIPTION] = Integer.parseInt(request.getParameter(SORTIE_MAX_SUBSCRIPTION));
-			parameters[DURATION] = Integer.parseInt(request.getParameter(SORTIE_DURATION));
-			parameters[NO_SORTIE] = Integer.parseInt(request.getParameter(SORTIE_NO_SORTIE));
-		} catch (NumberFormatException nfe) {
-			nfe.printStackTrace();
-			return null;
-		}
-		return parameters;
+	
+	if (sortie != null) {
+	    response.sendRedirect("/sortir/logged/sortie/" + request.getParameter(SORTIE_NO_SORTIE));
+	} else {
+	    response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 	}
+    }
 
-	private boolean deleteSortie(int noSortie) {
-		return DaoFactory.getSortieDao().removeSortie(noSortie);
+    private String checkParameter(HttpServletRequest request) {
+	String error = null;
+	error = checkSortieName(request.getParameter(SORTIE_NAME));
+	if (error != null) {
+	    return error;
 	}
+	error = checkBeginDate(request.getParameter(SORTIE_BEGIN_DATE));
+	if (error != null) {
+	    return error;
+	}
+	error = checkCloseInscriptionDate(request.getParameter(SORTIE_CLOSE_INSCRIPTION_DATE));
+	if (error != null) {
+	    return error;
+	}
+	error = checkBeginIsAfterCloseInscription(request.getParameter(SORTIE_BEGIN_DATE),
+		request.getParameter(SORTIE_CLOSE_INSCRIPTION_DATE));
+	if (error != null) {
+	    return error;
+	}
+	error = checkMaxSubscription(request.getParameter(SORTIE_DURATION));
+	if (error != null) {
+	    return error;
+	}
+	error = checkDuration(request.getParameter(SORTIE_MAX_SUBSCRIPTION));
+	if (error != null) {
+	    return error;
+	}
+	error = checkDescription(request.getParameter(SORTIE_DESCRIPTION));
+	if (error != null) {
+	    return error;
+	}
+	error = checkCity(request.getParameter(SORTIE_CITY));
+	if (error != null) {
+	    return error;
+	}
+	error = checkLieu(request.getParameter(SORTIE_PLACE));
+	if (error != null) {
+	    return error;
+	}
+	error = checkSortie(request.getParameter(SORTIE_NO_SORTIE));
+	if (error != null) {
+	    return error;
+	}
+	if (request.getSession().getAttribute("participant") == null) {
+	    return MsgReader.getMessage("create.user.not_connected");
+	}
+	return error;
+    }
+    private String checkSortie(String strNoSortie) {
+	if (strNoSortie != null) {
+	    Integer noSortie = null;
+	    try {
+		noSortie = Integer.valueOf(strNoSortie);
+	    } catch (NumberFormatException nfe) {
+		nfe.printStackTrace();
+	    }
+	    if (noSortie == null) {
+		return MsgReader.getMessage("update.sortie.nan");
+	    }
+	    Sortie sortie = DaoFactory.getSortieDao().findSortie(noSortie);
+	    if (sortie == null) {
+		return MsgReader.getMessage("update.sortie.not_found");
+	    }
+	} else {
+	    return MsgReader.getMessage("update.sortie.is_empty");
+	}
+	return null;
+    }
 
-	private Sortie updateSortie(Sortie sortie, State state) {
-		sortie.setEtat(DaoFactory.getEtatDao().findEtatByName(state.toString()));
-		return DaoFactory.getSortieDao().updateSortie(sortie);
+    private String checkCity(String strNoCity) {
+	if (strNoCity != null) {
+	    Integer noSortie = null;
+	    try {
+		noSortie = Integer.valueOf(strNoCity);
+	    } catch (NumberFormatException nfe) {
+		nfe.printStackTrace();
+	    }
+	    if (noSortie == null) {
+		return MsgReader.getMessage("create.city.nan");
+	    }
+	    Ville ville = DaoFactory.getVilleDao().findVille(noSortie);
+	    if (ville == null) {
+		return MsgReader.getMessage("create.city.not_found");
+	    }
+	} else {
+	    return MsgReader.getMessage("create.city.is_empty");
 	}
+	return null;
+    }
+
+    private String checkLieu(String strNoLieu) {
+	if (strNoLieu != null) {
+	    Integer noLieu = null;
+	    try {
+		noLieu = Integer.valueOf(strNoLieu);
+	    } catch (NumberFormatException nfe) {
+		nfe.printStackTrace();
+	    }
+	    if (noLieu == null) {
+		return MsgReader.getMessage("create.place.nan");
+	    }
+	    Lieu lieu = DaoFactory.getLieuDao().findLieu(noLieu);
+	    if (lieu == null) {
+		return MsgReader.getMessage("create.place.not_found");
+	    }
+	} else {
+	    return MsgReader.getMessage("create.place.is_empty");
+	}
+	return null;
+    }
+
+    private String checkDescription(String desc) {
+	if (desc != null) {
+	    if (desc.length() > 500) {
+		return MsgReader.getMessage("create.desc.max_length");
+	    }
+	} else {
+	    return MsgReader.getMessage("create.desc.is_empty");
+	}
+	return null;
+    }
+
+    private String checkMaxSubscription(String strN) {
+	if (strN != null) {
+	    Integer n = null;
+	    try {
+		n = Integer.valueOf(strN);
+	    } catch (NumberFormatException nfe) {
+		nfe.printStackTrace();
+	    }
+	    if (n == null) {
+		return MsgReader.getMessage("create.max_subscription.nan");
+	    }
+	    if (n <= 0) {
+		return MsgReader.getMessage("create.max_subscription.bad_value");
+	    }
+	} else {
+	    return MsgReader.getMessage("create.max_subscription.is_empty");
+	}
+	return null;
+    }
+
+    private String checkDuration(String strN) {
+	if (strN != null) {
+	    Integer n = null;
+	    try {
+		n = Integer.valueOf(strN);
+	    } catch (NumberFormatException nfe) {
+		nfe.printStackTrace();
+	    }
+	    if (n == null) {
+		return MsgReader.getMessage("create.duration.nan");
+	    }
+	    if (n <= 0) {
+		return MsgReader.getMessage("create.duration.bad_value");
+	    }
+	} else {
+	    return MsgReader.getMessage("create.duration.is_empty");
+	}
+	return null;
+    }
+
+    private String checkSortieName(String name) {
+	if (name != null) {
+	    if (name.length() > 30) {
+		return MsgReader.getMessage("create.name.max_length");
+	    }
+	} else {
+	    return MsgReader.getMessage("create.name.is_empty");
+	}
+	return null;
+    }
+
+    private String checkBeginIsAfterCloseInscription(String strBeginDate, String strCloseInscriptionDate) {
+	SimpleDateFormat sdfDateTime = new SimpleDateFormat(FORMAT_DATETIME);
+	SimpleDateFormat sdfDate = new SimpleDateFormat(FORMAT_DATE);
+	Date beginDate = null;
+	Date closeInscriptionDate = null;
+	try {
+	    beginDate = sdfDateTime.parse(strBeginDate);
+	    closeInscriptionDate = sdfDate.parse(strCloseInscriptionDate);
+	} catch (ParseException e) {
+	    e.printStackTrace();
+	}
+	if (beginDate.before(closeInscriptionDate)) {
+	    return MsgReader.getMessage("create.subscription.over_begin_date");
+	}
+	return null;
+    }
+
+    private String checkBeginDate(String strDate) {
+	SimpleDateFormat sdf = new SimpleDateFormat(FORMAT_DATETIME);
+	if (strDate == null) {
+	    return MsgReader.getMessage("create.begin_date.is_empty");
+	}
+	Date today = new Date();
+	Date date = null;
+	try {
+	    date = sdf.parse(strDate);
+	} catch (ParseException e) {
+	    e.printStackTrace();
+	}
+	if (date != null) {
+	    if (date.before(today)) {
+		return MsgReader.getMessage("create.begin_date.in_past");
+	    }
+	} else {
+	    return MsgReader.getMessage("create.begin_date.bad_format");
+	}
+	return null;
+    }
+
+    private String checkCloseInscriptionDate(String strDate) {
+	SimpleDateFormat sdf = new SimpleDateFormat(FORMAT_DATE);
+	if (strDate == null) {
+	    return MsgReader.getMessage("create.close_inscription_date.is_empty");
+	}
+	Date today = new Date();
+	Date date = null;
+	try {
+	    date = sdf.parse(strDate);
+	} catch (ParseException e) {
+	    e.printStackTrace();
+	}
+	if (date != null) {
+	    if (date.before(today)) {
+		return MsgReader.getMessage("create.close_inscription_date.in_past");
+	    }
+	} else {
+	    return MsgReader.getMessage("create.close_inscription_date.bad_format");
+	}
+	return null;
+    }
+
+    private boolean deleteSortie(int noSortie) {
+	return DaoFactory.getSortieDao().removeSortie(noSortie);
+    }
+
+    private Sortie updateSortie(Sortie sortie, State state) {
+	sortie.setEtat(DaoFactory.getEtatDao().findEtatByName(state.toString()));
+	return DaoFactory.getSortieDao().updateSortie(sortie);
+    }
 }

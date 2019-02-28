@@ -55,7 +55,7 @@
 				<div class="form-group row">
 					<label class="col-sm-4 col-form-label">Description et infos</label>
 					<div class="col-sm-8">
-						<textarea class="form-control" name="sortieDesc" rows="3" value="${sortieDesc}" required></textarea>
+						<textarea class="form-control" name="sortieDesc" rows="3" required>${sortieDesc}</textarea>
 					</div>
 				</div>
 			</div>
@@ -70,15 +70,27 @@
 				<div class="form-group row">
 					<label class="col-sm-4 col-form-label">Ville</label>
 					<div class="col-sm-8">
-						<select id="sortieCity" name="sortieCity" required>
-						</select>
-					</div>
+						<input type='text'
+					       class='form-control'
+					       data-min-length='3'
+					       data-search-in='name'
+					       data-selection-required='true'
+					       data-value-property='id'
+					       id="sortieCity"
+					       name='sortieCity'>
+			        </div>
 				</div>
 				<div class="form-group row">
 					<label class="col-sm-4 col-form-label">Lieu</label>
 					<div class="col-sm-8">
-						<select id="sortiePlace" name="sortiePlace" required>
-						</select>
+						<input type='text'
+					       class='flexdatalist form-control'
+					       data-min-length='2'
+					       data-search-in='name'
+					       data-selection-required='true'
+					       data-value-property='id'
+					       id="sortiePlace"
+					       name='sortiePlace'>
 					</div>
 				</div>
 				<div class="form-group row">
@@ -148,7 +160,36 @@
 			</c:forEach> 
 		];
 		
-		initSelectize(cities);
-		handleOnChangeCity(cities, places, true);
+		$('#sortieCity').flexdatalist({
+		     minLength: 3,
+		     searchIn: 'name',
+		     data: cities,
+		     valueProperty: 'id',
+		     selectionRequired: true
+		});		
+		
+		$('#sortieCity').on("change", function() {
+			var cityId = $('#sortieCity').val();
+			var city = cities.filter(city => city.id == cityId)[0];
+			if (city) {
+				$("#sortieCodePostal").val(city.codePostal);
+				$("#sortieCityOrganizing").val(city.name)
+				var placeFiltred = places.filter(place => place.cityId == cityId)
+				$('#sortiePlace').flexdatalist({
+				     minLength: 2,
+				     searchIn: 'name',
+				     data: placeFiltred,
+				     valueProperty: 'id',
+				     selectionRequired: true
+				});
+				$('#sortiePlace').on("change", function() {
+					var placeId = $('#sortiePlace').val();
+					var place = places.filter(place => place.id == placeId)[0];
+					$("#sortieAddress").val(place.address);
+					$("#sortieLongitude").val(place.longitude);
+					$("#sortieLatitude").val(place.latitude);
+				});
+			}
+		});
 	});
 </script>

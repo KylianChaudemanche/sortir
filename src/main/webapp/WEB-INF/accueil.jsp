@@ -198,16 +198,16 @@
 							<c:choose>
 						    	<c:when test="${ participant.getNoParticipant() == sortie.getOrganisateur().getNoParticipant()}">
 									<a href="<%=request.getContextPath()%>/logged/updateSortie/${sortie.getNoSortie()}">
-							      		Modifier -
+							      		Modifier
 							      	</a>
 						    	</c:when>    
 						    	<c:otherwise>
 									<a href="<%=request.getContextPath()%>/logged/sortie/${sortie.getNoSortie()}">
-					      				Afficher -
+					      				Afficher
 					      			</a>
 						   	 	</c:otherwise>
 							</c:choose>
-							
+							-
 							<c:choose>
 								<%--  TODO Need to implement this --%>
 								<c:when test="${sortie.getEtat().getLibelle() eq State.CREATED.toString() and participant.getNoParticipant() == sortie.getOrganisateur().getNoParticipant() }">

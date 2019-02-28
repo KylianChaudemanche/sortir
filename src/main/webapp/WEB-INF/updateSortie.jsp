@@ -9,6 +9,12 @@
 
 <!-- ####### CONTENT ######## -->
 
+<c:if test = "${error != null}">
+    <div class="alert alert-danger" role="alert">
+  	<c:out value = "${error}"/>
+	</div>
+</c:if>
+
 <div class="container">
 	<h1 class="text-center mb-4 mt-4">Modifier une sortie</h1>
 	
@@ -59,17 +65,29 @@
 				<div class="form-group row">
 					<label class="col-sm-4 col-form-label">Ville organisatrice</label>
 					<div class="col-sm-8">
-						<select id="sortieCity" name="sortieCity" required>
-							<option selected value="${sortie.lieu.ville.noVille}">${sortie.lieu.ville.nomVille}</option>
-						</select>
+						<input type='text'
+						       class='form-control'
+						       data-min-length='3'
+						       data-search-in='name'
+						       data-selection-required='true'
+						       data-value-property='id'
+						       id="sortieCity"
+						       name='sortieCity'
+						       value="${sortie.lieu.ville.nomVille}">
 					</div>
 				</div>
 				<div class="form-group row">
 					<label class="col-sm-4 col-form-label">Lieu</label>
 					<div class="col-sm-8">
-						<select id="sortiePlace" name="sortiePlace" required>
-							<option selected value="${sortie.lieu.noLieu}">${sortie.lieu.nomLieu}</option>
-						</select>
+						<input type='text'
+					       class='form-control'
+					       data-min-length='2'
+					       data-search-in='name'
+					       data-selection-required='true'
+					       data-value-property='id'
+					       id="sortiePlace"
+					       name='sortiePlace'
+					       value="${sortie.lieu.nomLieu}">
 					</div>
 				</div>
 				<div class="form-group row">
@@ -115,31 +133,72 @@
 <%@include file="includes/footer.jsp"%>
 
 <script>
-	$(function() {
-		var cities = [
-			<c:forEach items="${cities}" var="city">
-				{
-					name: "${city.nomVille}",
-					id: "${city.noVille}",
-					codePostal: "${city.codePostal}"
-				},
-			</c:forEach> 
-		];
-		
-		var places = [
-			<c:forEach items="${places}" var="place">
-				{
-					name: "${place.nomLieu}",
-					id: "${place.noLieu}",
-					address: "${place.adresse}",
-					latitude: "${place.latitude}",
-					longitude: "${place.longitude}",
-					cityId: "${place.ville.noVille}"
-				},
-			</c:forEach> 
-		];
-		
-		initSelectize(cities);
-		handleOnChangeCity(cities, places, false);
+$(function() {
+	var cities = [
+		<c:forEach items="${cities}" var="city">
+			{
+				name: "${city.nomVille}",
+				id: "${city.noVille}",
+				codePostal: "${city.codePostal}"
+			},
+		</c:forEach> 
+	];
+	
+	var places = [
+		<c:forEach items="${places}" var="place">
+			{
+				name: "${place.nomLieu}",
+				id: "${place.noLieu}",
+				address: "${place.adresse}",
+				latitude: "${place.latitude}",
+				longitude: "${place.longitude}",
+				cityId: "${place.ville.noVille}"
+			},
+		</c:forEach> 
+	];
+	
+	$('#sortieCity').flexdatalist({
+	     minLength: 3,
+	     searchIn: 'name',
+	     data: cities,
+	     valueProperty: 'id',
+	     selectionRequired: true
 	});
+	
+	var place = places.filter(place => place.id == "${sortie.lieu.noLieu}")
+	
+	$('#sortiePlace').flexdatalist({
+	     minLength: 2,
+	     searchIn: 'name',
+	     data: place,
+	     valueProperty: 'id',
+	     selectionRequired: true
+	});
+	
+	$('#sortieCity').val("${sortie.lieu.ville.noVille}");
+	$('#sortiePlace').val("${sortie.lieu.noLieu}");
+	
+	$('#sortieCity').on("change", function() {
+		var cityId = $('#sortieCity').val();
+		var city = cities.filter(city => city.id == cityId)[0];
+		if (city) {
+			$("#sortieCodePostal").val(city.codePostal);
+			var placeFiltred = places.filter(place => place.cityId == cityId)
+			$('#sortiePlace').flexdatalist({
+			     minLength: 2,
+			     searchIn: 'name',
+			     data: placeFiltred,
+			     valueProperty: 'id',
+			     selectionRequired: true
+			});
+			$('#sortiePlace').on("change", function() {
+				var placeId = $('#sortiePlace').val();
+				var place = places.filter(place => place.id == placeId)[0];
+				$("#sortieAddress").val(place.address);
+				$("#sortieLongitude").val(place.longitude);
+				$("#sortieLatitude").val(place.latitude);
+			});
+		}
+	});
+});
 </script>
