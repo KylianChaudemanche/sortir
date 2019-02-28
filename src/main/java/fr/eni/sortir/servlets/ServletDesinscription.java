@@ -17,7 +17,7 @@ import fr.eni.sortir.utils.State;
 /**
  * Servlet implementation class ServletInscription
  */
-@WebServlet(name = "ServletDesinscription", urlPatterns = { "/desinscription/*" })
+@WebServlet(name = "ServletDesinscription", urlPatterns = { "/logged/desinscription/*" })
 public class ServletDesinscription extends ServletParent {
 
     /**

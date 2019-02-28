@@ -2,6 +2,7 @@ package fr.eni.sortir.servlets;
 
 import java.io.IOException;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -16,7 +17,7 @@ import fr.eni.sortir.utils.State;
 /**
  * Servlet implementation class ServletInscription
  */
-@WebServlet(name = "ServletInscription", urlPatterns = { "/inscription/*" })
+@WebServlet(name = "ServletInscription", urlPatterns = { "/logged/inscription/*" })
 public class ServletInscription extends ServletParent {
 
     /**
@@ -41,14 +42,26 @@ public class ServletInscription extends ServletParent {
     	Sortie sortie = DaoFactory.getSortieDao().findSortie(Integer.valueOf(request.getPathInfo().replace("/", "")));
     	
     	if (!sortie.getEtat().getLibelle().equals(State.OPENED.toString())) {
-    	    response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-    	    return;
+    		request.setAttribute("typeMessage", "warning");
+    	    request.setAttribute("message", "Vous ne pouvez vous inscrire qu'aux sorties ayant le statut Ouvert.");
+    	    RequestDispatcher rd = request.getRequestDispatcher("/logged/accueil");
+    		rd.forward(request, response);
+    		return;
     	}
     	
     	Participant participant = (Participant) request.getSession().getAttribute("participant");
+    	if(sortie.getNbInscriptionsMax() >= sortie.getInscriptions().size()) {
     	sortie.addPartcipant(participant);
     	DaoFactory.getSortieDao().updateSortie(sortie);
-    	response.sendRedirect("/sortir/logged/accueil");
+    	request.setAttribute("typeMessage", "success");
+	    request.setAttribute("message", "Votre inscription a été enregistrée.");
+    	}
+    	else{
+    		request.setAttribute("typeMessage", "warning");
+    		request.setAttribute("message", "La sortie est pleine.");
+    	}
+    	RequestDispatcher rd = request.getRequestDispatcher("/logged/accueil");
+		rd.forward(request, response);
     }
 
     /**

@@ -186,7 +186,7 @@ public class ServletGestionCompteAdmin extends ServletParent {
 			DaoFactory.getParticipantDao().updateParticipant(participant);
 		}
 		
-		response.sendRedirect("../gestionCompteAdmin/"+participant.getNoParticipant());
+		response.sendRedirect("/sortir/administration/gestionComptes/"+participant.getNoParticipant());
 	}
 
 }

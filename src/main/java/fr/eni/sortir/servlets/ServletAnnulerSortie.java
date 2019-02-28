@@ -17,7 +17,7 @@ import fr.eni.sortir.utils.State;
  * Servlet implementation class ServletAnnulerSortie
  */
 
-@WebServlet(name = "ServletAnnulerSortie", urlPatterns = { "/annulerSortie/*" })
+@WebServlet(name = "ServletAnnulerSortie", urlPatterns = { "/logged/annulerSortie/*" })
 public class ServletAnnulerSortie extends ServletParent {
 	private static final long serialVersionUID = 1L;
        
@@ -53,7 +53,7 @@ public class ServletAnnulerSortie extends ServletParent {
 		sortie.setEtat(DaoFactory.getEtatDao().findEtatByName(State.CANCELED.toString()));
 		DaoFactory.getSortieDao().updateSortie(sortie);
 		}
-		response.sendRedirect(request.getContextPath()+"/accueil");
+		response.sendRedirect("/sortir/logged/accueil");
 	}
 
 }

@@ -6,6 +6,7 @@ import javax.servlet.DispatcherType;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -54,8 +55,10 @@ public class FiltreAdministration implements Filter {
 			}
 		}
 
-		//Renvoyons une 403 à l'utilisateur
-		httpResponse.sendError(HttpServletResponse.SC_FORBIDDEN);
+		request.setAttribute("typeMessage", "danger");
+	    request.setAttribute("message", "Accès non autorisé");
+	    RequestDispatcher rd = request.getRequestDispatcher("/logged/accueil");
+		rd.forward(request, response);
 		return;
 
 	}

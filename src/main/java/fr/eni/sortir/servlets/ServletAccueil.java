@@ -71,8 +71,6 @@ public class ServletAccueil extends ServletParent  {
 			Collection<Site> listeSites = (Collection<Site>) DaoFactory.getSiteDao().getAllSite();
 			request.setAttribute("listeSites", listeSites);
 
-			request.setAttribute("siteSelected", participant.getSite().getNoSite());
-			request.setAttribute("participant", participant);
 
 			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/accueil.jsp");
 			rd.forward(request, response);

@@ -11,7 +11,7 @@
 
 <!-- ####### CONTENT ######## -->
 <c:if test="${ !empty message }">
-	<div class="col-12 alert alert-danger text-center" role="alert">
+	<div class="col-12 alert alert-${ typeMessage } text-center" role="alert">
 		<b>${ message }</b>
 	</div>
 </c:if>

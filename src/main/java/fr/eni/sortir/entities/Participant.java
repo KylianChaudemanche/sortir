@@ -17,6 +17,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.codehaus.jackson.annotate.JsonManagedReference;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -49,7 +50,7 @@ public class Participant implements Serializable {
     @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name = "sites_no_site")
     private Site site;
-    @OneToMany(mappedBy = "organisateur", fetch=FetchType.LAZY)
+    @OneToMany(mappedBy = "organisateur", fetch=FetchType.LAZY,cascade = CascadeType.ALL)
     private Collection<Sortie> listSortie = new ArrayList<>();
 
     public Participant() {
