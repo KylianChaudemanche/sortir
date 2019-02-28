@@ -209,19 +209,26 @@
 							</c:choose>
 							
 							<c:choose>
-								<%--  TODO Need to implement this --%>
 								<c:when test="${sortie.getEtat().getLibelle() eq State.CREATED.toString() and participant.getNoParticipant() == sortie.getOrganisateur().getNoParticipant() }">
 									-
 									<a href="<%=request.getContextPath()%>/logged/publish/${sortie.getNoSortie()}">
 							      		Publier
 							      	</a>
 						    	</c:when> 
-						    	<%--  TODO Need to implement this --%>
-						    	<c:when test="${sortie.getEtat().getLibelle() eq State.OPENED.toString() and participant.getNoParticipant() == sortie.getOrganisateur().getNoParticipant() }">
+						    	<c:when test="${sortie.getEtat().getLibelle() eq State.OPENED.toString() }">
 									-
-									<a href="<%=request.getContextPath()%>/logged/annulerSortie/${sortie.getNoSortie()}">
-							      		Annuler
-							      	</a>
+									<c:choose>
+										<c:when test="${ participant.getNoParticipant() == sortie.getOrganisateur().getNoParticipant() }">
+											<a href="<%=request.getContextPath()%>/logged/annulerSortie/${sortie.getNoSortie()}">
+									      		Annuler
+									      	</a>
+										</c:when>
+										<c:when test="${ participant.getAdministrateur() }">
+											<a href="<%=request.getContextPath()%>/logged/annulerSortie/${sortie.getNoSortie()}">
+									      		Annuler
+									      	</a>
+										</c:when>
+									</c:choose>
 						    	</c:when>
 								<c:when test="${ isInscrit == true and sortie.getEtat().getLibelle() eq State.OPENED.toString()}">
 									-

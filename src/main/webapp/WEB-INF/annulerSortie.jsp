@@ -24,7 +24,7 @@
 						<p class="card-text">Lieu : ${sortie.getLieu().getAdresse()} ${sortie.getLieu().getVille().getCodePostal()} ${sortie.getLieu().getVille().getNomVille()}</p>
 						<div class="form-group">
 		  					<label for="motifAnnulation">Motif : </label>
-							<textarea class="form-control" id="motifAnnulation" name="motifAnnulation" rows="5"></textarea>
+							<textarea class="form-control" id="motifAnnulation" name="motifAnnulation" rows="5" required></textarea>
 						</div>
 					</div>
 				</div>
