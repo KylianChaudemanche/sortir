@@ -52,18 +52,14 @@ public class Sortie implements Serializable {
     private String descriptionInfos;
     @Column(name = "motifAnnulation")
     private String motifAnnulation;
-    @JsonBackReference
     @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name = "etats_no_etat")
     private Etat etat;
-    @JsonBackReference
     @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name = "lieux_no_lieu")
     private Lieu lieu;
-    @JsonManagedReference
-    @OneToMany(fetch=FetchType.EAGER, mappedBy = "sortie", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch=FetchType.EAGER, mappedBy = "sortie", cascade=CascadeType.ALL)
     private Collection<Inscription> inscriptions = new ArrayList<>();
-    @JsonBackReference
     @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name = "organisateur")
     private Participant organisateur;

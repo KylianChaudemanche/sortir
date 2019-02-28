@@ -23,7 +23,6 @@ public class Etat implements Serializable {
     @Column(name = "no_etat")
     private Integer noEtat;
     private String libelle;
-    @JsonManagedReference
     @OneToMany(mappedBy = "etat", fetch=FetchType.LAZY)
     private Collection<Sortie> listSortie = new ArrayList<>();
 

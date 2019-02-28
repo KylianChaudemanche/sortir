@@ -48,7 +48,7 @@ public class ServletInscription extends ServletParent {
     	Participant participant = (Participant) request.getSession().getAttribute("participant");
     	sortie.addPartcipant(participant);
     	DaoFactory.getSortieDao().updateSortie(sortie);
-    	response.sendRedirect("/sortir/accueil");
+    	response.sendRedirect("/sortir/logged/accueil");
     }
 
     /**

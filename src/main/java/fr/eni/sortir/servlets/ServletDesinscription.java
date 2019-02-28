@@ -49,7 +49,7 @@ public class ServletDesinscription extends ServletParent {
     	
     	Inscription inscription = DaoFactory.getInscriptionDao().findInscription(participant, sortie);
     	DaoFactory.getInscriptionDao().removeInscription(inscription);
-    	response.sendRedirect("/sortir/accueil");
+    	response.sendRedirect("/sortir/logged/accueil");
     }
 
     /**
