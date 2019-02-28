@@ -17,8 +17,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import org.codehaus.jackson.annotate.JsonBackReference;
-import org.codehaus.jackson.annotate.JsonManagedReference;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -35,23 +33,23 @@ public class Participant implements Serializable {
     @GeneratedValue
     @Column(name = "no_participant")
     private Integer noParticipant;
+    @Column(unique = true)
     private String pseudo;
     private String nom;
     private String prenom;
     private String telephone;
+    @Column(unique = true)
     private String mail;
     @Column(name = "mot_de_passe")
     private String motDePasse;
     private Boolean administrateur;
     private Boolean actif;
-    @OneToMany(fetch=FetchType.EAGER,mappedBy = "participant", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch=FetchType.EAGER, mappedBy = "participant", cascade=CascadeType.ALL)
     private Collection<Inscription> inscriptions = new ArrayList<>();
-    @JsonBackReference
     @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name = "sites_no_site")
     private Site site;
-    @JsonManagedReference
-    @OneToMany(mappedBy = "organisateur", fetch=FetchType.LAZY)
+    @OneToMany(mappedBy = "organisateur", fetch=FetchType.LAZY,cascade = CascadeType.ALL)
     private Collection<Sortie> listSortie = new ArrayList<>();
 
     public Participant() {

@@ -1,4 +1,4 @@
-package fr.eni.sortir.servlets;
+package fr.eni.sortir.filters;
 
 import java.io.IOException;
 
@@ -6,6 +6,7 @@ import javax.servlet.DispatcherType;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -13,8 +14,6 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import fr.eni.sortir.entities.Participant;
 
 /**
  * Servlet implementation class FiltreLogin
@@ -38,7 +37,7 @@ public class FiltreLogin implements Filter {
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)throws IOException, ServletException {
 		HttpSession session = ((HttpServletRequest) request).getSession();
 		HttpServletResponse httpResponse = (HttpServletResponse) response;
-		Participant participant = null;
+
 		
 		if ((session != null)) {
 			if ((session.getAttribute("participant") != null)) {
@@ -48,8 +47,10 @@ public class FiltreLogin implements Filter {
 			}
 		}
 
-		//Renvoyons une 403 à l'utilisateur
-		httpResponse.sendRedirect("/sortir/login");
+		request.setAttribute("typeMessage", "danger");
+	    request.setAttribute("message", "Merci de vous connecter pour accéder au site");
+	    RequestDispatcher rd = request.getRequestDispatcher("/login");
+		rd.forward(request, response);
 		return;
 	}
 

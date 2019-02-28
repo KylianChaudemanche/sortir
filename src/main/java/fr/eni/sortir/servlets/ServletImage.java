@@ -17,6 +17,7 @@ import fr.eni.sortir.utils.Constantes;
  * Servlet implementation class ServletImage
  */
 @WebServlet(name = "ServletImage", urlPatterns = { "/logged/image/*" })
+
 public class ServletImage extends ServletParent {
 
     /**

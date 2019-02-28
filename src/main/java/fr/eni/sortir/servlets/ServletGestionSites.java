@@ -17,6 +17,7 @@ import fr.eni.sortir.entities.Site;
  * Servlet implementation class ServletGestionSites
  */
 @WebServlet(name = "ServletGestionSites", urlPatterns = { "/administration/gestionSites" })
+
 public class ServletGestionSites extends ServletParent {
 	private static final long serialVersionUID = 1L;
        

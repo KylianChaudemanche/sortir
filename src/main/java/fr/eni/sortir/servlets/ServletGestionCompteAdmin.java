@@ -28,6 +28,7 @@ import fr.eni.sortir.utils.SaltedMD5;
 /**
  * Servlet implementation class ServletCreationCompte
  */
+
 @WebServlet(name = "ServletGestionCompteAdmin", urlPatterns = { "/administration/gestionComptes/*" })
 public class ServletGestionCompteAdmin extends ServletParent {
 	private static final long serialVersionUID = 1L;
@@ -185,7 +186,7 @@ public class ServletGestionCompteAdmin extends ServletParent {
 			DaoFactory.getParticipantDao().updateParticipant(participant);
 		}
 		
-		response.sendRedirect("../gestionCompteAdmin/"+participant.getNoParticipant());
+		response.sendRedirect("/sortir/administration/gestionComptes/"+participant.getNoParticipant());
 	}
 
 }

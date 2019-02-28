@@ -23,19 +23,20 @@ import fr.eni.sortir.entities.Sortie;
 import fr.eni.sortir.utils.State;
 
 public class JpaSortieDao extends JpaDao implements SortieDao {
-	private static final Logger LOGGER = Logger.getLogger(JpaSortieDao.class.getName());
-	private final String QUERY_SORTIE_ALL = "SELECT s FROM Sortie AS s";
-	private final String QUERY_SORTIE_WHERE_BY_SITE = " WHERE s.organisateur.site.noSite = :noSite";
-	private final String QUERY_SORTIE_AND_BY_ORGANISATEUR = " AND s.organisateur.noParticipant = :noParticipant";
-	private final String QUERY_SORTIE_WHERE_BY_INSCRIT = " WHERE i.participant.noParticipant = :noParticipant";
-	private final String QUERY_SORTIE_AND_BY_INSCRIT = " AND i.participant.noParticipant = :noParticipant";
-	private final String QUERY_SORTIE_JOIN_BY_INSCRIT = " INNER JOIN s.inscriptions AS i";
-	private final String QUERY_SORTIE_AND_BY_PAS_INSCRIT = " AND s.noSortie NOT IN(SELECT sortie.noSortie FROM Sortie as sortie INNER JOIN sortie.inscriptions as i WHERE i.participant.noParticipant = :noParticipant)";
-	private final String QUERY_SORTIE_AND_PASSEE = " AND s.dateDebut < :today";
-	private final String QUERY_SORTIE_AND_BY_DATE_DEBUT= " AND s.dateDebut >= :dateDebut";
-	private final String QUERY_SORTIE_AND_BY_DATE_FIN= " AND s.dateDebut <= :dateFin";
-	private final String QUERY_SORTIE_AND_BY_DATE_ARCHIVAGE = " AND s.dateDebut >= :dateArchivage";    
-	private final String QUERY_SORTIE_WHERE_BY_DATE_ARCHIVAGE = " WHERE s.dateDebut >= :dateArchivage";    
+    private static final Logger LOGGER = Logger.getLogger(JpaSortieDao.class.getName());
+    private final String QUERY_SORTIE_ALL = "SELECT s FROM Sortie AS s";
+    private final String QUERY_SORTIE_WHERE_BY_SITE = " WHERE s.organisateur.site.noSite = :noSite";
+    private final String QUERY_SORTIE_AND_BY_ORGANISATEUR = " AND s.organisateur.noParticipant = :noParticipant";
+    private final String QUERY_SORTIE_WHERE_BY_INSCRIT = " WHERE i.participant.noParticipant = :noParticipant";
+    private final String QUERY_SORTIE_AND_BY_INSCRIT = " AND i.participant.noParticipant = :noParticipant";
+    private final String QUERY_SORTIE_JOIN_BY_INSCRIT = " INNER JOIN s.inscriptions AS i";
+    private final String QUERY_SORTIE_AND_BY_PAS_INSCRIT = " AND s.noSortie NOT IN(SELECT sortie.noSortie FROM Sortie as sortie INNER JOIN sortie.inscriptions as i WHERE i.participant.noParticipant = :noParticipant)";
+    private final String QUERY_SORTIE_AND_PASSEE = " AND s.dateDebut < :today";
+    private final String QUERY_SORTIE_AND_BY_DATE_DEBUT= " AND s.dateDebut >= :dateDebut";
+    private final String QUERY_SORTIE_AND_BY_DATE_FIN= " AND s.dateDebut <= :dateFin";
+    private final String QUERY_SORTIE_AND_BY_DATE_ARCHIVAGE = " AND s.dateDebut >= :dateArchivage";    
+    private final String QUERY_SORTIE_WHERE_BY_DATE_ARCHIVAGE = " WHERE s.dateDebut >= :dateArchivage";    
+    private final String QUERY_SORTIE_WHERE_ONLY_CREATE = " AND s.noSortie NOT IN (SELECT noSortie FROM Sortie WHERE etat.libelle = :etat AND organisateur.noParticipant != :organisateur AND dateDebut >= :dateArchivage)";
 
 	private Date today = new Date();
 	private Date dateArchivage = new Date();
@@ -128,12 +129,15 @@ public class JpaSortieDao extends JpaDao implements SortieDao {
 	}
 
 	@Override
-	public Collection<Sortie> getAllSortie() {
+
+	public Collection<Sortie> getAllSortie(Participant participant) {
 		EntityManager em = getEntityManagerFactory().createEntityManager();
 		Collection<Sortie> listeSortie = null;
 		try {
-			TypedQuery<Sortie> query = em.createQuery("SELECT s FROM Sortie AS s"+QUERY_SORTIE_WHERE_BY_DATE_ARCHIVAGE , Sortie.class)
-					.setParameter("dateArchivage", dateArchivage);
+			TypedQuery<Sortie> query = em.createQuery("SELECT s FROM Sortie AS s"+QUERY_SORTIE_WHERE_BY_DATE_ARCHIVAGE+QUERY_SORTIE_WHERE_ONLY_CREATE , Sortie.class)
+					.setParameter("dateArchivage", dateArchivage)
+					.setParameter("etat", State.CREATED.toString())
+					.setParameter("organisateur", participant.getNoParticipant());
 
 			listeSortie = query.getResultList();
 

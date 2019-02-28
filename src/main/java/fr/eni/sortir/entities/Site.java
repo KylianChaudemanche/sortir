@@ -28,7 +28,6 @@ public class Site implements Serializable {
     private Integer noSite;
     @Column(name = "nom_site")
     private String nomSite;
-    @JsonManagedReference
     @OneToMany(mappedBy = "site", fetch=FetchType.LAZY)
     private Collection<Participant> listInscrit = new ArrayList<>();
 

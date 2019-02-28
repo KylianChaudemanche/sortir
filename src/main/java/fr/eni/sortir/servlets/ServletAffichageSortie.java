@@ -16,6 +16,7 @@ import fr.eni.sortir.entities.Sortie;
  * Servlet implementation class ServletAccueil
  */
 @WebServlet(name = "ServletAffichageSortie", urlPatterns = { "/logged/sortie/*" })
+
 public class ServletAffichageSortie extends ServletParent {
     /**
      * 

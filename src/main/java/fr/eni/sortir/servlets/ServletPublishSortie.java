@@ -2,6 +2,7 @@ package fr.eni.sortir.servlets;
 
 import java.io.IOException;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -9,16 +10,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import fr.eni.sortir.dao.DaoFactory;
-import fr.eni.sortir.entities.Inscription;
-import fr.eni.sortir.entities.Participant;
 import fr.eni.sortir.entities.Sortie;
 import fr.eni.sortir.utils.State;
 
 /**
  * Servlet implementation class ServletInscription
  */
-@WebServlet(name = "ServletDesinscription", urlPatterns = { "/logged/desinscription/*" })
-public class ServletDesinscription extends ServletParent {
+@WebServlet(name = "ServletPublishSortie", urlPatterns = { "/logged/publish/*" })
+public class ServletPublishSortie extends ServletParent {
 
     /**
      * 
@@ -28,7 +27,7 @@ public class ServletDesinscription extends ServletParent {
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public ServletDesinscription() {
+    public ServletPublishSortie() {
 	super();
     }
 
@@ -38,18 +37,12 @@ public class ServletDesinscription extends ServletParent {
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
 	    throws ServletException, IOException {
-		super.doGet(request, response);
-    	Sortie sortie = DaoFactory.getSortieDao().findSortie(Integer.valueOf(request.getPathInfo().replace("/", "")));
-    	Participant participant = (Participant) request.getSession().getAttribute("participant");
-
-    	if (!sortie.getEtat().getLibelle().equals(State.OPENED.toString())) {
-    	    response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-    	    return;
-    	}
-    	
-    	Inscription inscription = DaoFactory.getInscriptionDao().findInscription(participant, sortie);
-    	DaoFactory.getInscriptionDao().removeInscription(inscription);
-    	response.sendRedirect("/sortir/logged/accueil");
+	super.doGet(request, response);
+	Sortie sortie = DaoFactory.getSortieDao().findSortie(Integer.valueOf(request.getPathInfo().replace("/", "")));
+	sortie.setEtat(DaoFactory.getEtatDao().findEtatByName(State.OPENED.toString()));
+	DaoFactory.getSortieDao().updateSortie(sortie);
+	RequestDispatcher rd = request.getRequestDispatcher("/logged/accueil");
+	rd.forward(request, response);
     }
 
     /**

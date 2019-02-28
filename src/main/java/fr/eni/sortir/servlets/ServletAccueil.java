@@ -65,14 +65,12 @@ public class ServletAccueil extends ServletParent  {
 			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/accueil-mobile.jsp");
 			rd.forward(request, response);
 		}else {
-			listeSorties = (Collection<Sortie>) DaoFactory.getSortieDao().getAllSortie();
+			listeSorties = (Collection<Sortie>) DaoFactory.getSortieDao().getAllSortie(participant);
 			request.setAttribute("listeSorties", listeSorties);
 
 			Collection<Site> listeSites = (Collection<Site>) DaoFactory.getSiteDao().getAllSite();
 			request.setAttribute("listeSites", listeSites);
 
-			request.setAttribute("siteSelected", participant.getSite().getNoSite());
-			request.setAttribute("participant", participant);
 
 			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/accueil.jsp");
 			rd.forward(request, response);
