@@ -196,7 +196,7 @@
 			      	<c:choose>
 				    	<c:when test="${ sessionScope.participant != null}">
 							<c:choose>
-						    	<c:when test="${ participant.getNoParticipant() == sortie.getOrganisateur().getNoParticipant()}">
+						    	<c:when test="${ participant.getNoParticipant() == sortie.getOrganisateur().getNoParticipant() and (sortie.getEtat().getLibelle() eq State.OPENED.toString() or sortie.getEtat().getLibelle() eq State.CREATED.toString())}">
 									<a href="<%=request.getContextPath()%>/logged/updateSortie/${sortie.getNoSortie()}">
 							      		Modifier
 							      	</a>
@@ -207,30 +207,34 @@
 					      			</a>
 						   	 	</c:otherwise>
 							</c:choose>
-							-
+							
 							<c:choose>
 								<%--  TODO Need to implement this --%>
 								<c:when test="${sortie.getEtat().getLibelle() eq State.CREATED.toString() and participant.getNoParticipant() == sortie.getOrganisateur().getNoParticipant() }">
-									<a href="#">
+									-
+									<a href="<%=request.getContextPath()%>/logged/publish/${sortie.getNoSortie()}">
 							      		Publier
 							      	</a>
 						    	</c:when> 
 						    	<%--  TODO Need to implement this --%>
 						    	<c:when test="${sortie.getEtat().getLibelle() eq State.OPENED.toString() and participant.getNoParticipant() == sortie.getOrganisateur().getNoParticipant() }">
-									<a href="#">
+									-
+									<a href="<%=request.getContextPath()%>/logged/annulerSortie/${sortie.getNoSortie()}">
 							      		Annuler
 							      	</a>
 						    	</c:when>
-								<c:when test="${ isInscrit == true }">
+								<c:when test="${ isInscrit == true and sortie.getEtat().getLibelle() eq State.OPENED.toString()}">
+									-
 									<a href="<%=request.getContextPath()%>/logged/desinscription/${sortie.getNoSortie()}">
 							      		Se désister
 							      	</a>
 						    	</c:when>    
-						    	<c:otherwise>
+						    	<c:when test="${ isInscrit == false and sortie.getEtat().getLibelle() eq State.OPENED.toString() }">
+									-
 									<a href="<%=request.getContextPath()%>/logged/inscription/${sortie.getNoSortie()}">
 							      		S'inscrire
 							      	</a>
-						   	 	</c:otherwise>
+						   	 	</c:when>
 							</c:choose>
 				    	</c:when>    
 				    	<c:otherwise>
@@ -242,7 +246,6 @@
 			      </td>
 			    </tr>
 				</c:forEach>
-			   
 			  </tbody>
 			</table>
 		</div>
