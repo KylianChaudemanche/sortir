@@ -16,7 +16,9 @@ public interface ParticipantDao {
     Collection<Participant> getAllParticipant();
 
     Participant findParticipantByMail(String mail);
-    
+   
+    Participant findParticipantByPseudo(String pseudo);
+
     Boolean isPseudoDispo(String pseudo);
     Boolean isMailDispo(String mail);
 }

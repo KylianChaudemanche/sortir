@@ -43,9 +43,6 @@ public class SortieJPATest extends PersistenceTest {
 	    DaoFactory.getSortieDao().updateSortie(sortieUpdate);
 	    assertTrue(!sortie.equals(DaoFactory.getSortieDao().findSortie(sortie.getNoSortie())));
 
-	    // Test get all entities
-	    assertTrue(DaoFactory.getSortieDao().getAllSortie().size() == 1);
-
 	    // Test deletion
 	    DaoFactory.getSortieDao().removeSortie(sortie.getNoSortie());
 	    assertTrue(DaoFactory.getSortieDao().findSortie(sortie.getNoSortie()) == null);

@@ -27,6 +27,7 @@ public class ServletLogin extends HttpServlet {
 	private static final long serialVersionUID = -7926787715554177925L;
 	private final String LOGIN_INVALIDE = "Informations de connexion invalides";
 	private final String COMPTE_NON_ACTIF  = "Votre compte a été désactivé";
+	private final String COMPTE_INEXISTANT  = "Aucun compte n'éxiste pour cet identifiant";
 	/**
 	 * Default constructor.
 	 */
@@ -39,6 +40,7 @@ public class ServletLogin extends HttpServlet {
 	 */
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		System.out.println("GET");
 		HttpSession session = request.getSession();
 		if ((session != null)) {
 			if ((session.getAttribute("participant") != null)) {
@@ -52,8 +54,8 @@ public class ServletLogin extends HttpServlet {
 
 		if (cookies != null) {
 			for (Cookie cookie : cookies) {
-				if (cookie.getName().equals("mail")) {
-					request.setAttribute("mail", cookie.getValue());
+				if (cookie.getName().equals("identifiant")) {
+					request.setAttribute("identifiant", cookie.getValue());
 				}
 			}
 		}
@@ -69,8 +71,9 @@ public class ServletLogin extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		HttpSession session = request.getSession();
-		// TODO: check pseudo/mail
-		String mail = request.getParameter("identifiant").trim();
+		Participant participant = null;
+
+		String identifiant = request.getParameter("identifiant").trim();
 		String motDePasse = request.getParameter("motDePasse").trim();
 		String mediaWidth = request.getParameter("media-width");
 		Boolean isMobile = null;
@@ -78,45 +81,47 @@ public class ServletLogin extends HttpServlet {
 			isMobile = (Integer.parseInt(mediaWidth) <=425) ? true : false;
 		}
 
-		Participant participant = DaoFactory.getParticipantDao().findParticipantByMail(mail);
+		participant = DaoFactory.getParticipantDao().findParticipantByMail(identifiant);
 		if (participant == null) {
-			// TODO : add msg
-		} else {
-			if (participant.getMotDePasse().equals(SaltedMD5.getSecurePassword(motDePasse))) {
-				if(participant.getActif()) {
+			participant = DaoFactory.getParticipantDao().findParticipantByPseudo(identifiant);
+			if (participant == null ) {
+				// compte  inexistant
+				request.setAttribute("message", COMPTE_INEXISTANT);
+				doGet(request, response);
+				return;
+			}
+		} 
 
-					if (request.getParameter("seSouvenir") != null) {
-						Cookie cookie = new Cookie("mail", mail);
-						cookie.setHttpOnly(true);
-						cookie.setMaxAge(99999);
-						response.addCookie(cookie);
-					} else {
-						Cookie cookie = new Cookie("mail", "");
-						cookie.setHttpOnly(true);
-						cookie.setMaxAge(0);
-						response.addCookie(cookie);
-					}
+		if (participant.getMotDePasse().equals(SaltedMD5.getSecurePassword(motDePasse))) {
+			if(participant.getActif()) {
 
-					// add participant in session
-					session.setAttribute("participant", participant);
-					// add isMobile
-					session.setAttribute("isMobile", isMobile);
-					// redirect
-					response.sendRedirect("/sortir/logged/accueil");
-				}else {
-					// compte  non actif
-					request.setAttribute("typeMessage", "warning");
-					request.setAttribute("message", COMPTE_NON_ACTIF);
-					doGet(request, response);
+				if (request.getParameter("seSouvenir") != null) {
+					Cookie cookie = new Cookie("identifiant", identifiant);
+					cookie.setHttpOnly(true);
+					cookie.setMaxAge(99999);
+					response.addCookie(cookie);
+				} else {
+					Cookie cookie = new Cookie("identifiant", "");
+					cookie.setHttpOnly(true);
+					cookie.setMaxAge(0);
+					response.addCookie(cookie);
 				}
-			} else {
-				// login failed
-				request.setAttribute("typeMessage", "danger");
-				request.setAttribute("message", LOGIN_INVALIDE);
-				//request.setAttribute("identifiant", identifiant);
+
+				// add participant in session
+				session.setAttribute("participant", participant);
+				// add isMobile
+				session.setAttribute("isMobile", isMobile);
+				// redirect
+				response.sendRedirect("/sortir/logged/accueil");
+			}else {
+				// compte  non actif
+				request.setAttribute("message", COMPTE_NON_ACTIF);
 				doGet(request, response);
 			}
+		} else {
+			// login failed
+			request.setAttribute("message", LOGIN_INVALIDE);
+			doGet(request, response);
 		}
 	}
-
 }

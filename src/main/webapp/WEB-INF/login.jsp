@@ -21,7 +21,7 @@
 		<div class="col-md-4 mx-auto mt-4 bg-light rounded shadow p-3">
 			<form method="POST" action="">
 			  <div class="form-group">
-			    <label for="identifiant"><strong>Mail / Pseudo</strong></label>
+			    <label for="identifiant"><strong>Identifiant</strong></label>
 			    <c:choose>
 					<c:when test="${ empty identifiant }">  
 						<input type="text" class="form-control" id="identifiant" name="identifiant" aria-describedby="identifiantHelp" placeholder="ex : nom.prenom2020@campus-eni.fr" required>
@@ -30,15 +30,16 @@
 						<input type="text" class="form-control" id="identifiant" name="identifiant" aria-describedby="identifiantHelp" placeholder="ex : nom.prenom2020@campus-eni.fr" value="${ identifiant }" required>
   					</c:otherwise>
 				</c:choose>
+				<small class="text-muted">Mail ou pseudo</small>
 			   </div>
 			  <div class="form-group">
 			    <label for="motDePasse"><strong>Mot de Passe</strong></label>
 			    <input type="password" class="form-control" id="motDePasse" name="motDePasse" required>
-			  	<a href="#" class="text-muted text-secondary small ml-1">Mot de passe oublié</a>
+			  	<a href="<%=request.getContextPath()%>/mdpOublie" class="text-primary small ml-1">Mot de passe oublié</a>
 			  </div>
 			  <div class="form-check">
 			  	<c:choose>
-					<c:when test="${ empty mail }">  
+					<c:when test="${ empty identifiant }">  
 			    		<input type="checkbox" class="form-check-input" id="seSouvenir" name="seSouvenir" value="on">
   					</c:when>
 					<c:otherwise>  
@@ -50,7 +51,6 @@
 			  <input type="hidden" id="media-width" name="media-width" value="">
 			  <button type="submit" class="btn btn-success mt-3">Connexion</button>
 			</form>
-			
 		</div>
 	</div>
 </div>
