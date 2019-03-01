@@ -144,12 +144,12 @@
 
 <div class="container mt-5 desktop-only">
 	<div class="row">
-	<div class="col-md-12">
-			<a href="<%=request.getContextPath()%>/logged/createSortie" class="btn btn-warning">Créer une sortie</a>
-		</div>
 		<div class="col-md-12 table-responsive">
 			<div class="col-12 alert alert-${ typeMessage } text-center" role="alert">
 			  <b>${ message }</b>
+			</div>
+			<div class="col-md-12 mb-3">
+				<a href="<%=request.getContextPath()%>/logged/createSortie" class="btn btn-warning">Créer une sortie</a>
 			</div>
 			<table class="table table-striped table-bordered text-center">
 			  <thead class="thead-dark">
@@ -219,32 +219,35 @@
 							      	</a>
 						    	</c:when> 
 						    	<c:when test="${sortie.getEtat().getLibelle() eq State.OPENED.toString() }">
-									-
 									<c:choose>
 										<c:when test="${ participant.getNoParticipant() == sortie.getOrganisateur().getNoParticipant() }">
+											-
 											<a href="<%=request.getContextPath()%>/logged/annulerSortie/${sortie.getNoSortie()}">
 									      		Annuler
 									      	</a>
 										</c:when>
 										<c:when test="${ participant.getAdministrateur() }">
+											-
 											<a href="<%=request.getContextPath()%>/logged/annulerSortie/${sortie.getNoSortie()}">
 									      		Annuler
 									      	</a>
 										</c:when>
 									</c:choose>
+									<c:choose>
+										<c:when test="${ isInscrit == true and  sortie.getEtat().getLibelle() eq State.OPENED.toString()}">
+											-
+											<a href="<%=request.getContextPath()%>/logged/desinscription/${sortie.getNoSortie()}">
+								      			Se désister
+								      		</a>
+							    		</c:when>    
+							    		<c:when test="${ isInscrit == false and sortie.getEtat().getLibelle() eq State.OPENED.toString() }">
+											-
+											<a href="<%=request.getContextPath()%>/logged/inscription/${sortie.getNoSortie()}">
+								      			S'inscrire
+								      		</a>
+							   	 		</c:when>
+									</c:choose>
 						    	</c:when>
-								<c:when test="${ isInscrit == true and sortie.getEtat().getLibelle() eq State.OPENED.toString()}">
-									-
-									<a href="<%=request.getContextPath()%>/logged/desinscription/${sortie.getNoSortie()}">
-							      		Se désister
-							      	</a>
-						    	</c:when>    
-						    	<c:when test="${ isInscrit == false and sortie.getEtat().getLibelle() eq State.OPENED.toString() }">
-									-
-									<a href="<%=request.getContextPath()%>/logged/inscription/${sortie.getNoSortie()}">
-							      		S'inscrire
-							      	</a>
-						   	 	</c:when>
 							</c:choose>
 				    	</c:when>    
 				    	<c:otherwise>
