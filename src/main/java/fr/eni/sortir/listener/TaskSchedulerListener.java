@@ -8,6 +8,7 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
 import fr.eni.sortir.job.CloseInscriptionSortieJob;
+import fr.eni.sortir.job.SupprimerTokenExpireJob;
 
 /**
  * Application Lifecycle Listener implementation class archiveSortieListener
@@ -23,7 +24,8 @@ public class TaskSchedulerListener implements ServletContextListener {
 
     public void contextInitialized(ServletContextEvent sce) {
 	scheduler = Executors.newSingleThreadScheduledExecutor();
-	//new CloseInscriptionSortieJob(scheduler).run();
+	new CloseInscriptionSortieJob(scheduler).run();
+	new SupprimerTokenExpireJob(scheduler).run();
     }
 
     public void contextDestroyed(ServletContextEvent sce) {

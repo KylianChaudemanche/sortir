@@ -34,32 +34,32 @@
 				<input type="text" value="nouveau" id="action" name="action" hidden="true">
 				<div class="form-group">
 					<label for="pseudo">Pseudo :</label> 
-					<input type="text" class="form-control" id="pseudo" name="pseudo" required placeholder="Pseudo"  > 
+					<input type="text" class="form-control" id="pseudo" name="pseudo" required placeholder="ex: Batman35"  > 
 				</div>
 				<div class="form-group">
 					<label for="prenom">Prénom :</label> 
-					<input type="text" class="form-control" id="prenom" name="prenom" required placeholder="Prénom" > 
+					<input type="text" class="form-control" id="prenom" name="prenom" required placeholder="ex: Bruce" > 
 				</div>
 				<div class="form-group">
 					<label for="nom">Nom :</label> 
-					<input type="text" class="form-control" id="nom" name="nom" required placeholder="Nom" > 
+					<input type="text" class="form-control" id="nom" name="nom" required placeholder="ex: Wayne" > 
 				</div>
 				<div class="form-group">
 					<label for="telephone">Téléphone :</label> 
-					<input type="text" class="form-control" id="telephone" name="telephone"  required placeholder="Numéro de téléphone" maxlength="10" > 
+					<input type="text" class="form-control" id="telephone" name="telephone"  required placeholder="ex: 3630" maxlength="10" > 
 				</div>
 				<div class="form-group">
 					<label for="mail">Mail :</label> 
-					<input type="text" class="form-control" id="mail" name="mail" required placeholder="Mail" > 
+					<input type="text" class="form-control" id="mail" name="mail" required placeholder="ex: batman@batmail.bat" > 
 				</div>
 				
 				<div class="form-group">
 					<label for="motDePasse">Mot de passe :</label> 
-					<input type="password" class="form-control" id="motDePasse" name="motDePasse" required placeholder="Mot de passe" > 
+					<input type="password" class="form-control" id="motDePasse" name="motDePasse" required> 
 				</div>
 				<div class="form-group">
 					<label for="confirmationMotDePasse">Confirmation :</label> 
-					<input type="password" class="form-control" id="confirmationMotDePasse" name="confirmationMotDePasse" required placeholder="Confirmation du mot de passe"> 
+					<input type="password" class="form-control" id="confirmationMotDePasse" name="confirmationMotDePasse" required> 
 				</div>
 				<div class="form-group">
 				    <label for="site">Site de rattachement :</label>
