@@ -23,7 +23,7 @@ public class TaskSchedulerListener implements ServletContextListener {
 
     public void contextInitialized(ServletContextEvent sce) {
 	scheduler = Executors.newSingleThreadScheduledExecutor();
-	new CloseInscriptionSortieJob(scheduler).run();
+	//new CloseInscriptionSortieJob(scheduler).run();
     }
 
     public void contextDestroyed(ServletContextEvent sce) {
