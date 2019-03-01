@@ -41,7 +41,6 @@ public class ServletLogin extends HttpServlet {
 	 */
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("GET");
 		HttpSession session = request.getSession();
 		if ((session != null)) {
 			if ((session.getAttribute("participant") != null)) {
@@ -88,7 +87,7 @@ public class ServletLogin extends HttpServlet {
 			if (participant == null ) {
 				// compte  inexistant
 				request.setAttribute(Constantes.TYPE_MESSAGE, Constantes.MSG_TYPE_DANGER);
-				request.setAttribute(Constantes.MESSAGE, COMPTE_INEXISTANT);
+				request.setAttribute(Constantes.MESSAGE, LOGIN_INVALIDE);
 				doGet(request, response);
 				return;
 			}
@@ -122,9 +121,10 @@ public class ServletLogin extends HttpServlet {
 				doGet(request, response);
 			}
 		} else {
+			System.out.println("login failed");
 			// login failed
 			request.setAttribute(Constantes.TYPE_MESSAGE, Constantes.MSG_TYPE_DANGER);
-			request.setAttribute(Constantes.TYPE_MESSAGE, LOGIN_INVALIDE);
+			request.setAttribute(Constantes.MESSAGE, LOGIN_INVALIDE);
 			doGet(request, response);
 		}
 	}

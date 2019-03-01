@@ -263,6 +263,7 @@
             					cityId: data.ville.noVille
             				});
                         	$('#sortieCity').change();
+            				
                         }
                     },
                     error: function ()
