@@ -72,6 +72,7 @@ public class ServletGestionCompteAdmin extends ServletParent {
 		
 		Participant participant = null;
 		Boolean nouveau = false;
+		boolean isCree = false;
 		DiskFileItemFactory factory = new DiskFileItemFactory();
 		// Configure a repository (to ensure a secure temp location is used)
 		ServletContext servletContext = this.getServletConfig().getServletContext();
@@ -164,6 +165,14 @@ public class ServletGestionCompteAdmin extends ServletParent {
 					if (item.getName() != null && item.getSize() != 0) {
 						try
 						{
+							if(nouveau) {
+								participant.setActif(false);
+								participant.setAdministrateur(false);
+								DaoFactory.getParticipantDao().addParticipant(participant);
+								isCree = true;
+							}else {
+								DaoFactory.getParticipantDao().updateParticipant(participant);
+							}
 							String uploadName = participant.getNoParticipant().toString() + ".jpg";
 							File writeFile = new File(Constantes.DATA_PATH + uploadName);
 							item.write(writeFile);
@@ -183,7 +192,7 @@ public class ServletGestionCompteAdmin extends ServletParent {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		if(nouveau) {
+		if(nouveau && !isCree) {
 			DaoFactory.getParticipantDao().addParticipant(participant);
 		}else {
 			DaoFactory.getParticipantDao().updateParticipant(participant);
