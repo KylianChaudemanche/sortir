@@ -21,13 +21,13 @@
 		<div class="col-md-4 mx-auto mt-4 bg-light rounded shadow p-3">
 			<form method="POST" action="">
 			  <div class="form-group">
-			    <label for="mail"><strong>Mail / Pseudo</strong></label>
+			    <label for="identifiant"><strong>Mail / Pseudo</strong></label>
 			    <c:choose>
-					<c:when test="${ empty mail }">  
-						<input type="email" class="form-control" id="mail" name="mail" aria-describedby="emailHelp" placeholder="ex : nom.prenom2020@campus-eni.fr" required>
+					<c:when test="${ empty identifiant }">  
+						<input type="text" class="form-control" id="identifiant" name="identifiant" aria-describedby="identifiantHelp" placeholder="ex : nom.prenom2020@campus-eni.fr" required>
   					</c:when>
 					<c:otherwise>  
-						<input type="email" class="form-control" id="mail" name="mail" aria-describedby="emailHelp" placeholder="ex : nom.prenom2020@campus-eni.fr" value="${ mail }" required>
+						<input type="text" class="form-control" id="identifiant" name="identifiant" aria-describedby="identifiantHelp" placeholder="ex : nom.prenom2020@campus-eni.fr" value="${ identifiant }" required>
   					</c:otherwise>
 				</c:choose>
 			   </div>

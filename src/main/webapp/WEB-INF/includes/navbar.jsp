@@ -9,9 +9,12 @@
     
     <div class="text-right ml-auto">
     <ul class="navbar-nav">
-        <c:if test="${ participant.getAdministrateur() && !isMobile }">
+        <c:if test="${ utilisateur.getAdministrateur() && !isMobile }">
 	      <li class="nav-item">
 	    	  <a class="nav-link" href="<%=request.getContextPath()%>/administration/gestionSites">Sites</a>
+	      </li>
+	      <li class="nav-item">
+	    	  <a class="nav-link" href="<%=request.getContextPath()%>/administration/gestionParticipants">Participants</a>
 	      </li>
 	    </c:if>
 	    <li class="nav-item">

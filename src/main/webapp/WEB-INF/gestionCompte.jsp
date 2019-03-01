@@ -11,7 +11,7 @@
 <div class="container">
 	<div class="row">
 	<div class="col-md-3 py-5">
-		<object data="<%=request.getContextPath()%>/logged/image/${participant.noParticipant}" style="width:200px" class="rounded" type="image/jpg">
+		<object data="<%=request.getContextPath()%>/logged/image/${participant.noParticipant}" style="width:200px" class="img-thumbnail" type="image/jpg">
       		<img src="<%=request.getContextPath()%>/logged/image/batman" style="width:200px" class="img-thumbnail">
     	</object>
 	</div>

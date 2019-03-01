@@ -9,7 +9,7 @@
 <!-- ####### CONTENT ######## -->
 
 <c:if test = "${error != null}">
-    <div class="alert alert-danger" role="alert">
+    <div class="alert alert-danger text-center font-weight-bold" role="alert">
   	<c:out value = "${error}"/>
 	</div>
 </c:if>
@@ -82,7 +82,7 @@
 				</div>
 				<div class="form-group row">
 					<label class="col-sm-4 col-form-label">Lieu</label>
-					<div class="col-sm-8">
+					<div class="col-sm-6">
 						<input type='text'
 					       class='flexdatalist form-control'
 					       data-min-length='2'
@@ -91,6 +91,11 @@
 					       data-value-property='id'
 					       id="sortiePlace"
 					       name='sortiePlace'>
+					</div>
+					<div class="col-sm-2">
+						<button type="button" id="toggleModal" class="btn btn-primary" data-toggle="modal" data-target="#ajouterLieuModal">
+						  +
+						</button>
 					</div>
 				</div>
 				<div class="form-group row">
@@ -130,6 +135,43 @@
 	</form>
 </div>
 
+<div class="modal" id="ajouterLieuModal" tabindex="-1" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Ajouter un lieu</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="form-group">
+						<label for="modalNomLieu">Nom : </label> 
+						<input type="text" class="form-control" id="modalNomLieu" name="modalNomLieu" placeholder="Nom" required>
+					</div>
+					<div class="form-group">
+						<label for="modalAdresse">Adresse : </label> 
+						<input type="text" class="form-control" id="modalAdresse" name="modalAdresse" placeholder="Adresse" required>
+					</div>
+					<div class="form-group">
+						<label for="modalLatitude">Latitude : </label> 
+						<input type="text" class="form-control" id="modalLatitude" name="modalLatitude" placeholder="Latitude" required>
+					</div>
+					<div class="form-group">
+						<label for="modalLongitude">Longitude : </label> 
+						<input type="text" class="form-control" id="modalLongitude" name="modalLongitude" placeholder="Longitude" required>
+					</div>
+					<input type="text" id="modalNoVille" name="modalNoVille" hidden="true" required>
+
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+					<button class="btn btn-primary" id="ajouterLieu" data-toggle="modal" data-target="#ajouterLieuModal">Ajouter</button>
+				</div>
+		</div>
+	</div>
+</div>
+
 <!-- ####### </>CONTENT ######## -->
 
 <!-- ####### FOOTER ######## -->
@@ -146,7 +188,7 @@
 				},
 			</c:forEach> 
 		];
-		
+
 		var places = [
 			<c:forEach items="${places}" var="place">
 				{
@@ -190,6 +232,43 @@
 					$("#sortieLatitude").val(place.latitude);
 				});
 			}
+		});
+		$("#toggleModal").click(function(){
+			$("#modalNoVille").val($("#sortieCity").val());
+		});
+		
+		
+		$("#ajouterLieu").click(function(){
+            $.ajax({
+                type: 'POST',
+                url: 'creationLieu',
+                data : {
+                	modalNomLieu : $('#modalNomLieu').val(),
+                	modalAdresse : $('#modalAdresse').val(),
+                	modalLatitude : $('#modalLatitude').val(),
+                	modalLongitude : $('#modalLongitude').val(),
+                	modalNoVille : $('#modalNoVille').val()
+                	},
+                	success: function (data) {
+                        if (!data) {
+                            alert('Please check Code');
+                        } else {
+                        	places.push(
+                        	{
+            					name: data.nomLieu,
+            					id: data.noLieu,
+            					address: data.adresse,
+            					latitude: data.latitude,
+            					longitude: data.longitude,
+            					cityId: data.ville.noVille
+            				});
+                        	$('#sortieCity').change();
+            				
+                        }
+                    },
+                    error: function ()
+                    { alert('there is some error to get Rate'); }
+            });
 		});
 	});
 </script>

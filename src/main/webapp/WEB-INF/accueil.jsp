@@ -144,6 +144,9 @@
 
 <div class="container mt-5 desktop-only">
 	<div class="row">
+	<div class="col-md-12">
+			<a href="<%=request.getContextPath()%>/logged/createSortie" class="btn btn-warning">Créer une sortie</a>
+		</div>
 		<div class="col-md-12 table-responsive">
 			<div class="col-12 alert alert-${ typeMessage } text-center" role="alert">
 			  <b>${ message }</b>
@@ -246,9 +249,7 @@
 			  </tbody>
 			</table>
 		</div>
-		<div class="col-md-12">
-			<a href="<%=request.getContextPath()%>/logged/createSortie" class="btn btn-warning">Créer une sortie</a>
-		</div>
+		
 	</div>
 </div>
 <!-- ####### </>CONTENT ######## -->

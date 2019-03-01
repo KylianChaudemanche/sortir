@@ -49,14 +49,17 @@ public class ServletGestionCompteAdmin extends ServletParent {
 		Collection<Site> listeSite = DaoFactory.getSiteDao().getAllSite();
 		request.setAttribute("listeSite", listeSite);
 		if("/nouveau".equals(request.getPathInfo())){
+			request.setAttribute("nouveau", true);
 			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/gestionCompteAdmin.jsp");
 			rd.forward(request, response);
+			return;
 		}else {
 			try {
 			Participant participant = DaoFactory.getParticipantDao().findParticipant(Integer.valueOf(request.getPathInfo().replace("/","")));
 			request.setAttribute("participant", participant);
 			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/gestionCompteAdmin.jsp");
 			rd.forward(request, response);
+			return;
 			}catch(NumberFormatException e) {
 			}
 		}

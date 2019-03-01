@@ -70,7 +70,7 @@ public class ServletLogin extends HttpServlet {
 			throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		// TODO: check pseudo/mail
-		String mail = request.getParameter("mail").trim();
+		String mail = request.getParameter("identifiant").trim();
 		String motDePasse = request.getParameter("motDePasse").trim();
 		String mediaWidth = request.getParameter("media-width");
 		Boolean isMobile = null;
@@ -105,12 +105,15 @@ public class ServletLogin extends HttpServlet {
 					response.sendRedirect("/sortir/logged/accueil");
 				}else {
 					// compte  non actif
+					request.setAttribute("typeMessage", "warning");
 					request.setAttribute("message", COMPTE_NON_ACTIF);
 					doGet(request, response);
 				}
 			} else {
 				// login failed
+				request.setAttribute("typeMessage", "danger");
 				request.setAttribute("message", LOGIN_INVALIDE);
+				//request.setAttribute("identifiant", identifiant);
 				doGet(request, response);
 			}
 		}

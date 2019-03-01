@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonManagedReference;
 
 @Entity
@@ -30,7 +31,8 @@ public class Ville implements Serializable {
     private String nomVille;
     @Column(name = "code_postal")
     private String codePostal;
-    @OneToMany(mappedBy = "ville", fetch=FetchType.LAZY)
+    @OneToMany(mappedBy = "ville", fetch=FetchType.EAGER)
+    @JsonIgnore
     private Collection<Lieu> listLieu = new ArrayList<>();
 
     public Ville() {

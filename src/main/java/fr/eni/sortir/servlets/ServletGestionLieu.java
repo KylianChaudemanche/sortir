@@ -2,41 +2,40 @@ package fr.eni.sortir.servlets;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import fr.eni.sortir.entities.Participant;
 
 /**
- * Servlet implementation class ServletParent
+ * Servlet implementation class ServletGestionLieu
  */
-public class ServletParent extends HttpServlet {
+@WebServlet(name = "ServletGestionCompteAdmin", urlPatterns = { "/administration/gestionLieu/*" })
+public class ServletGestionLieu extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
-	public ServletParent() {
-		super();
-	}
+       
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public ServletGestionLieu() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		HttpSession session = request.getSession();
-
-		Participant participant = (Participant) session.getAttribute("participant");
-		request.setAttribute("utilisateur", participant);
-		Boolean isMobile = (Boolean) session.getAttribute("isMobile");
-		request.setAttribute("isMobile", isMobile);
+		// TODO Auto-generated method stub
+		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		doGet(request, response);
 	}
 
 }

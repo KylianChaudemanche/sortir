@@ -2,6 +2,7 @@ package fr.eni.sortir.servlets;
 
 import java.io.IOException;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -43,12 +44,17 @@ public class ServletDesinscription extends ServletParent {
     	Participant participant = (Participant) request.getSession().getAttribute("participant");
 
     	if (!sortie.getEtat().getLibelle().equals(State.OPENED.toString())) {
-    	    response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-    	    return;
+    		request.setAttribute("typeMessage", "warning");
+    	    request.setAttribute("message", "Vous ne pouvez vous désinscrire qu'aux sorties ayant le statut Ouvert.");
+    	    RequestDispatcher rd = request.getRequestDispatcher("/logged/accueil");
+    		rd.forward(request, response);
+    		return;
     	}
     	
     	Inscription inscription = DaoFactory.getInscriptionDao().findInscription(participant, sortie);
     	DaoFactory.getInscriptionDao().removeInscription(inscription);
+    	request.setAttribute("typeMessage", "success");
+	    request.setAttribute("message", "Vous avez été desinscrit");
     	response.sendRedirect("/sortir/logged/accueil");
     }
 

@@ -57,7 +57,6 @@ public class ServletGestionCompte extends ServletParent {
 	    throws ServletException, IOException {
 	super.doGet(request, response);
 	HttpSession session = request.getSession();
-	session.setAttribute(ATTR_PARTICIPANT, DaoFactory.getParticipantDao().findParticipant(7));
 	Participant participant = (Participant) session.getAttribute(ATTR_PARTICIPANT);
 	request.setAttribute(ATTR_PARTICIPANT, participant);
 	Collection<Site> listeSite = DaoFactory.getSiteDao().getAllSite();
