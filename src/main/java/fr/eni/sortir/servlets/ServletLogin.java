@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 
 import fr.eni.sortir.dao.DaoFactory;
 import fr.eni.sortir.entities.Participant;
+import fr.eni.sortir.utils.Constantes;
 import fr.eni.sortir.utils.SaltedMD5;
 
 /**
@@ -86,7 +87,8 @@ public class ServletLogin extends HttpServlet {
 			participant = DaoFactory.getParticipantDao().findParticipantByPseudo(identifiant);
 			if (participant == null ) {
 				// compte  inexistant
-				request.setAttribute("message", COMPTE_INEXISTANT);
+				request.setAttribute(Constantes.TYPE_MESSAGE, Constantes.MSG_TYPE_DANGER);
+				request.setAttribute(Constantes.MESSAGE, COMPTE_INEXISTANT);
 				doGet(request, response);
 				return;
 			}
@@ -115,12 +117,14 @@ public class ServletLogin extends HttpServlet {
 				response.sendRedirect("/sortir/logged/accueil");
 			}else {
 				// compte  non actif
-				request.setAttribute("message", COMPTE_NON_ACTIF);
+				request.setAttribute(Constantes.TYPE_MESSAGE, Constantes.MSG_TYPE_DANGER);
+				request.setAttribute(Constantes.MESSAGE, COMPTE_NON_ACTIF);
 				doGet(request, response);
 			}
 		} else {
 			// login failed
-			request.setAttribute("message", LOGIN_INVALIDE);
+			request.setAttribute(Constantes.TYPE_MESSAGE, Constantes.MSG_TYPE_DANGER);
+			request.setAttribute(Constantes.TYPE_MESSAGE, LOGIN_INVALIDE);
 			doGet(request, response);
 		}
 	}
